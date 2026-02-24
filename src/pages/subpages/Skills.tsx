@@ -1,48 +1,16 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { skills } from '../../constants';
+import { motion, AnimatePresence } from 'framer-motion';
+import SwipeReveal from '../../components/SwipeReveal';
 
 interface Skill {
     name: string;
     icon: string | React.ReactNode;
     type: number;
-    visible?: boolean;
 }
 
 const Skills = () => {
-    const [items, setItems] = useState<Skill[]>(
-        skills.map((item) => ({ ...item, visible: false })),
-    );
     const [activeSkill, setActiveSkill] = useState<Skill | null>(null);
-    const ref = useRef<HTMLDivElement>(null);
-    const [visible, setVisible] = useState(false);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => setVisible(true), 0);
-                }
-            },
-            { threshold: 0.1 },
-        );
-
-        if (ref.current) {
-            observer.observe(ref.current);
-        }
-        return () => observer.disconnect();
-    }, []);
-
-    useEffect(() => {
-        if (visible) {
-            items.forEach((_, index) => {
-                setTimeout(() => {
-                    setItems((prev) =>
-                        prev.map((item, i) => (i === index ? { ...item, visible: true } : item)),
-                    );
-                }, index * 25);
-            });
-        }
-    }, [visible]);
 
     const categoryColors: { [key: number]: string } = {
         0: 'border-blue-500',
@@ -58,48 +26,84 @@ const Skills = () => {
         3: 'bg-fuchsia-900',
     };
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.02,
+            },
+        },
+    };
+
+    const skillVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.3, ease: 'easeOut' },
+        },
+    };
+
     return (
-        <div ref={ref} className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 relative">
             <div className="mt-24"></div>
-            <img
+            <motion.img
+                initial={{ opacity: 0, scaleX: 0 }}
+                whileInView={{ opacity: 1, scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, ease: 'easeOut' }}
                 src="./assets/images/arrowBig.png"
-                className="custom-image mx-auto animate-pulsate"
+                className="custom-image mx-auto"
                 style={{ width: '1600px', height: '20px' }}
             />
-            <div className="pt-20"></div>
-
-            <h1 className="roles-text lg:mb-2 lg:pt-5 text-2xl lg:text-6xl font-bold pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative text-[#8580e7] bg-clip-text">
-                My Skills:
-            </h1>
-
-            <div className="flex justify-center mt-6 gap-4">
-                <div className="flex items-center">
-                    <div className="mr-2 min-w-[1rem] min-h-[1rem] bg-blue-500 rounded-full"></div>
-                    <span className="text-xs lg:text-sm text-white">Programming Languages</span>
-                </div>
-                <div className="flex items-center">
-                    <div className="mr-2 min-w-[1rem] min-h-[1rem] bg-green-500 rounded-full"></div>
-                    <span className="text-xs lg:text-sm text-white">Frameworks & Libraries</span>
-                </div>
-                <div className="flex items-center">
-                    <div className="mr-2 min-w-[1rem] min-h-[1rem] bg-yellow-500 rounded-full"></div>
-                    <span className="text-xs lg:text-sm text-white">Systems & Tools</span>
-                </div>
-                <div className="flex items-center">
-                    <div className="mr-2 min-w-[1rem] min-h-[1rem] bg-fuchsia-500 rounded-full"></div>
-                    <span className="text-xs lg:text-sm text-white">Core Concepts</span>
-                </div>
+            <div className="pt-20 text-center">
+                <SwipeReveal
+                    circleColor="bg-gradient-to-r from-[#8580e7] to-[#3c86ff]"
+                    shadowColor="shadow-[0_0_50px_rgba(133,128,231,0.8)]"
+                    duration={0.6}
+                >
+                    <h1 className="roles-text lg:mb-2 lg:pt-5 text-2xl lg:text-6xl font-bold pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative text-[#8580e7] bg-clip-text">
+                        My Skills:
+                    </h1>
+                </SwipeReveal>
             </div>
 
-            <div className="mt-10 grid grid-cols-8 lg:grid-cols-12">
-                {items.map((item, index) => (
-                    <div
+            <div className="flex justify-center mt-6 gap-4">
+                {[
+                    { color: 'bg-blue-500', label: 'Programming Languages' },
+                    { color: 'bg-green-500', label: 'Frameworks & Libraries' },
+                    { color: 'bg-yellow-500', label: 'Systems & Tools' },
+                    { color: 'bg-fuchsia-500', label: 'Core Concepts' },
+                ].map((cat, i) => (
+                    <div key={i} className="flex items-center">
+                        <div
+                            className={`mr-2 min-w-[1rem] min-h-[1rem] ${cat.color} rounded-full`}
+                        ></div>
+                        <span className="text-xs lg:text-sm text-white">{cat.label}</span>
+                    </div>
+                ))}
+            </div>
+
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-50px' }}
+                variants={containerVariants}
+                className="mt-10 grid grid-cols-8 lg:grid-cols-12"
+            >
+                {skills.map((item, index) => (
+                    <motion.div
                         key={index}
-                        className={`relative flex flex-col items-center justify-center mb-[0.25px] bg-opacity-50 transition-transform 
-                            hover:scale-[115%] hover:z-50 hover:shadow-lg hover:bg-opacity-100 border-2 
-                            ${categoryColors[item.type]} ${categoryBgColors[item.type]}
-                            ${item.visible ? 'opacity-100 translate-y-0 transition-all duration-300 ease-out' : 'opacity-0 translate-y-10'}`}
-                        onMouseEnter={() => setActiveSkill(item)}
+                        variants={skillVariants}
+                        whileHover={{
+                            scale: 1.15,
+                            zIndex: 50,
+                            backgroundColor: 'rgba(255,255,255,0.1)',
+                        }}
+                        className={`relative flex flex-col items-center justify-center mb-[0.25px] bg-opacity-50 border-2 
+                            ${categoryColors[item.type]} ${categoryBgColors[item.type]}`}
+                        onMouseEnter={() => setActiveSkill(item as Skill)}
                         onMouseLeave={() => setActiveSkill(null)}
                     >
                         <div className="w-8 h-8 lg:w-16 lg:h-16 text-white flex items-center justify-center mt-[1.5px] mb-[1.5px]">
@@ -114,29 +118,36 @@ const Skills = () => {
                                     }}
                                 />
                             ) : (
-                                item.icon
+                                (item.icon as React.ReactNode)
                             )}
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
-            </div>
+            </motion.div>
 
-            {activeSkill && (
-                <div className="flex justify-center mt-6">
-                    <div className="bg-blue-900/50 px-4 py-2 rounded-lg shadow-lg z-10">
-                        <h3
-                            className={`font-bold text-lg lg:text-2xl text-center
-                                ${activeSkill.type === 0 ? 'text-blue-500' : ''}
-                                ${activeSkill.type === 1 ? 'text-green-500' : ''}
-                                ${activeSkill.type === 2 ? 'text-yellow-500' : ''}
-                                ${activeSkill.type === 3 ? 'text-fuchsia-500' : ''}`}
+            <div className="h-20 mt-6 flex justify-center">
+                <AnimatePresence>
+                    {activeSkill && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.8, y: 10 }}
+                            className="bg-blue-900/50 px-4 py-2 rounded-lg shadow-lg z-10 self-center"
                         >
-                            <span className="text-[rgb(157,230,255)]">Skill: </span>
-                            {activeSkill.name}
-                        </h3>
-                    </div>
-                </div>
-            )}
+                            <h3
+                                className={`font-bold text-lg lg:text-2xl text-center
+                                    ${activeSkill.type === 0 ? 'text-blue-500' : ''}
+                                    ${activeSkill.type === 1 ? 'text-green-500' : ''}
+                                    ${activeSkill.type === 2 ? 'text-yellow-500' : ''}
+                                    ${activeSkill.type === 3 ? 'text-fuchsia-500' : ''}`}
+                            >
+                                <span className="text-[rgb(157,230,255)]">Skill: </span>
+                                {activeSkill.name}
+                            </h3>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import OpenTo from './OpenTo';
+import { motion } from 'framer-motion';
 
 interface PeriodTiming {
     month: number;
@@ -149,23 +149,35 @@ const Availability: React.FC = () => {
     return (
         <div>
             <div className="mt-20"></div>
-            <h1
-                className={`roles-text lg:mb-2 lg:pt-5 text-2xl lg:text-6xl font-bold pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative text-[#8580e7] bg-clip-text opacity-100`}
+            <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="roles-text lg:mb-2 lg:pt-5 text-2xl lg:text-6xl font-bold pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative text-[#8580e7] bg-clip-text"
             >
                 What Roles Am I Looking For?
-            </h1>
+            </motion.h1>
 
-            <p className="lg:pt-8 text-xs text-center lg:text-xl text-white">
+            <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="lg:pt-8 text-xs text-center lg:text-xl text-white"
+            >
                 I'm based in New Jersey, but am open to relocating nationwide without financial
                 assistance for the right opportunity.
                 <br />I am authorized to work in the U.S. without sponsorship.
-            </p>
+            </motion.p>
 
-            <OpenTo />
-
-            <h1 className="roles-text lg:mb-2 lg:pt-10 text-xl lg:text-5xl font-bold pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative text-[#a1aeff] bg-clip-text">
+            <motion.h1
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className="roles-text lg:mb-2 lg:pt-10 text-xl lg:text-5xl font-bold pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative text-[#a1aeff] bg-clip-text"
+            >
                 Availability Timeline:
-            </h1>
+            </motion.h1>
 
             <div className="lg:mt-3 container mx-auto px-4 lg:px-20">
                 <div className="relative mb-16">
@@ -190,9 +202,17 @@ const Availability: React.FC = () => {
                             }
 
                             return (
-                                <div
+                                <motion.div
                                     key={index}
-                                    className="absolute h-full flex items-center justify-center transition-all duration-300 hover:brightness-150"
+                                    initial={{ scaleX: 0 }}
+                                    whileInView={{ scaleX: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{
+                                        duration: 1,
+                                        delay: 0.5 + index * 0.1,
+                                        ease: 'easeOut',
+                                    }}
+                                    className="absolute h-full flex items-center justify-center origin-left"
                                     style={{
                                         width: block.width,
                                         left: block.left,
@@ -202,6 +222,7 @@ const Availability: React.FC = () => {
                                         borderRadius,
                                         zIndex: block.isPartial ? 5 : 1,
                                     }}
+                                    whileHover={{ filter: 'brightness(1.5)', zIndex: 10 }}
                                     onMouseEnter={() => setHoveredName(block.name)}
                                     onMouseLeave={() => setHoveredName('')}
                                 />
@@ -210,7 +231,13 @@ const Availability: React.FC = () => {
                     </div>
 
                     {/* Legend */}
-                    <div className="flex justify-center mt-6 gap-4">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 1 }}
+                        className="flex justify-center mt-6 gap-4"
+                    >
                         <div className="flex items-center">
                             <div className="mr-2 w-4 h-4 min-w-[1rem] min-h-[1rem] bg-yellow-500 rounded-full flex-shrink-0"></div>
                             <span className="text-xs lg:text-sm text-white">Summer Break</span>
@@ -231,17 +258,24 @@ const Availability: React.FC = () => {
                                 Spring Academic Semester
                             </span>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    {/* Availability */}
-                    <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4">
+                    {/* Availability Cards */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 1.2 }}
+                        className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4"
+                    >
                         {reorderedPeriods.map((period, index) => (
-                            <div
+                            <motion.div
                                 key={index}
+                                whileHover={{ scale: 1.02, filter: 'brightness(1.2)' }}
                                 className={`
-                                    ${period.name === hoveredName ? 'bg-[#2d416c]' : 'bg-gray-900'} bg-opacity-40 p-2 lg:p-4 rounded-2xl border-[3px] border-gray-600 
-                                    text-sm lg:text-base shadow-lg transition-all duration-300 hover:brightness-150 hover:scale-[1.02]
-                                    ${period.name === hoveredName ? 'border-white brightness-150 scale-[1.02]' : ''}
+                                    ${period.name === hoveredName ? 'bg-[#2d416c] border-white' : 'bg-gray-900 border-gray-600'} 
+                                    bg-opacity-40 p-2 lg:p-4 rounded-2xl border-[3px] 
+                                    text-sm lg:text-base shadow-lg transition-all duration-300
                                 `}
                             >
                                 <h3
@@ -259,9 +293,9 @@ const Availability: React.FC = () => {
                                     Availability:{' '}
                                     <span style={{ color: '#2ddede' }}>{period.type}</span>
                                 </p>
-                            </div>
+                            </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </div>

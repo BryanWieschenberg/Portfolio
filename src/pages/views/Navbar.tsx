@@ -88,18 +88,7 @@ const Navbar: React.FC = () => {
 
     const handleNavigation = (e: React.MouseEvent, path: string) => {
         e.preventDefault();
-
-        const toTopElement = document.getElementById('ToTop');
-
-        if (toTopElement && location.pathname !== path) {
-            toTopElement.scrollIntoView();
-
-            setTimeout(() => {
-                navigate(path);
-            }, 0);
-        } else {
-            navigate(path);
-        }
+        navigate(path);
     };
 
     return (
@@ -171,7 +160,7 @@ const Navbar: React.FC = () => {
                         />
                         <div className="ml-2 hidden lg:block">
                             <span className="text-blue-300">Bryan</span>
-                            <span className="block text-sm text-blue-300">Wieschenberg</span>
+                            <span className="block text-blue-300">Wieschenberg</span>
                         </div>
                     </div>
 

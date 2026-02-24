@@ -1,19 +1,3 @@
-import { FaLaptopCode, FaFileCode, FaGlobe, FaCloudUploadAlt } from 'react-icons/fa';
-import { TbMatrix, TbAtom2Filled, TbLogicAnd, TbStack2Filled } from 'react-icons/tb';
-import { IoHardwareChip } from 'react-icons/io5';
-import { HiDatabase, HiOutlineArrowsExpand } from 'react-icons/hi';
-import { PiGraphBold } from 'react-icons/pi';
-import { SlGraph } from 'react-icons/sl';
-import { RiFunctionFill } from 'react-icons/ri';
-import { LuAtom } from 'react-icons/lu';
-import { MdNetworkWifi, MdOutlineStorage } from 'react-icons/md';
-import { IoStatsChartSharp } from 'react-icons/io5';
-import { BiCodeBlock, BiPaintRoll } from 'react-icons/bi';
-import { IoIosInformationCircle } from 'react-icons/io';
-import { AiOutlineSolution } from 'react-icons/ai';
-import { SlChemistry } from 'react-icons/sl';
-import { GiArtificialIntelligence } from 'react-icons/gi';
-
 export interface Class {
     id: string;
     name: string;
@@ -54,145 +38,6 @@ export interface Project {
     skills: Record<string, number>;
     github: string;
 }
-
-export const classes: Class[] = [
-    {
-        id: 'CSC 415',
-        name: 'Software Engineering',
-        taken: 'Fall 2024',
-        click: 'Covers software engineering principles, emphasizing collaborative problem-solving, systematic development, and UML, to deliver high-quality software.',
-        color: 'text-cyan-400',
-        icon: <FaLaptopCode size={40} />,
-    },
-    {
-        id: 'CSC 315',
-        name: 'Database Systems',
-        taken: 'Spring 2024',
-        click: 'Covers database design, modeling, implementation, and management, utilizing PostgreSQL to develop and integrate a robust full-stack web application.',
-        color: 'text-cyan-400',
-        icon: <HiDatabase size={40} />,
-    },
-    {
-        id: 'CSC 470',
-        name: 'Data Science',
-        taken: 'Fall 2025',
-        click: 'Covers data science with a focus on analysis, cleaning, and modeling using Python, exploring real-world datasets with tools like Pandas, NumPy, scikit-learn, with a Jupyter Notebook workflow.',
-        color: 'text-cyan-400',
-        icon: <GiArtificialIntelligence size={40} />,
-    },
-    {
-        id: 'CSC 345',
-        name: 'Operating Systems',
-        taken: 'Spring 2025',
-        click: 'Explores operating system theory and implementation, covering memory, processor, file, and device management in the C language.',
-        color: 'text-cyan-400',
-        icon: <IoHardwareChip size={40} />,
-    },
-    {
-        id: 'CSC 325',
-        name: 'Computer Architecture',
-        taken: 'Spring 2024',
-        click: 'Explores computer architecture through hardware and software, focusing on instruction sets, processor design, logic circuits, assembly programming, and system components like memory, ALUs, and I/O interfaces.',
-        color: 'text-cyan-400',
-        icon: <TbLogicAnd size={40} />,
-    },
-    {
-        id: 'CSC 445',
-        name: 'Theory of Computation',
-        taken: 'Spring 2025',
-        click: 'Covers the algorithmic theory of computation, exploring computability, complexity, and formal languages through topics like automata, Turing machines, decidability, and NP-completeness.',
-        color: 'text-cyan-400',
-        icon: <PiGraphBold size={40} />,
-    },
-    {
-        id: 'CSC 335',
-        name: 'Analysis of Algorithms',
-        taken: 'Fall 2023',
-        click: 'Covers fundamental principles of algorithm design and analysis, exploring complexity, data structures, divide and conquer, graph algorithms, dynamic programming, and optimization techniques, in the C language.',
-        color: 'text-cyan-400',
-        icon: <SlGraph size={40} />,
-    },
-    {
-        id: 'CSC 230',
-        name: 'Data Structures',
-        taken: 'Spring 2023',
-        click: 'Covers data structures, algorithms, and implementation trade-offs, in lower-level object-oriented programming in C++.',
-        color: 'text-cyan-400',
-        icon: <TbStack2Filled size={40} />,
-    },
-    {
-        id: 'CSC 270',
-        name: 'Discrete Structures',
-        taken: 'Spring 2023',
-        click: 'Introduces fundamental CS concepts with a focus on algorithmic thinking, mathematical reasoning, logic, proofs, sets, functions, graphs, recursion, and finite-state machines.',
-        color: 'text-cyan-400',
-        icon: <RiFunctionFill size={40} />,
-    },
-    {
-        id: 'CSC 498',
-        name: 'Quantum Computing',
-        taken: 'Fall 2024 - 2025',
-        click: 'Explores quantum computing through PhD faculty-guided research, covering quantum algorithms, qubit manipulation, superposition, entanglement, and computational complexity.',
-        color: 'text-cyan-400',
-        icon: <LuAtom size={40} />,
-    },
-    {
-        id: 'CSC 360',
-        name: 'Computer Networking',
-        taken: 'Fall 2023',
-        click: 'Explores modern computer and telecommunication networks, covering the TCP/IP model, fiber-optic and mobile communications, multiple access protocols, TCP/UDP, ATM adaptation, HTTP, and network security.',
-        color: 'text-cyan-400',
-        icon: <MdNetworkWifi size={40} />,
-    },
-    {
-        id: 'CSC 220',
-        name: 'Computational Thinking',
-        taken: 'Fall 2022',
-        click: 'Introductory course focused on algorithmic design, problem-solving, and translating math concepts into code using object-oriented programming in Java.',
-        color: 'text-cyan-400',
-        icon: <FaFileCode size={40} />,
-    },
-    {
-        id: 'STA 215',
-        name: 'Statistics & Probability',
-        taken: 'Spring 2024',
-        click: 'Covers descriptive statistics, probability, and classical parametric inference, covering estimation, hypothesis testing, regression, and correlation, utilizing R and RStudio.',
-        color: 'text-red-400',
-        icon: <IoStatsChartSharp size={40} />,
-    },
-    {
-        id: 'MAT 205',
-        name: 'Linear Algebra',
-        taken: 'Fall 2023',
-        click: 'Explores vector spaces and linear systems, covering matrices, transformations, determinants, eigenvalues, and orthogonality, utilizing MATLAB.',
-        color: 'text-red-400',
-        icon: <TbMatrix size={40} />,
-    },
-    {
-        id: 'MAT 127',
-        name: 'Calculus',
-        taken: 'Fall 2022',
-        click: 'Explores calculus through covering limits, derivatives, differentiation rules, and integrals with real-world applications.',
-        color: 'text-red-400',
-        icon: <HiOutlineArrowsExpand size={40} />,
-    },
-    {
-        id: 'PHY 201',
-        name: 'Physics',
-        taken: 'Fall 2024',
-        click: 'A calculus-based physics course that covers kinematics, forces, energy, momentum, collisions, and rotational motion, emphasizing problem-solving and critical thinking.',
-        color: 'text-purple-400',
-        icon: <TbAtom2Filled size={40} />,
-    },
-    {
-        id: 'CHE 201',
-        name: 'Chemistry',
-        taken: 'Spring 2025',
-        click: 'A foundational course exploring atomic structure, chemical bonding, stoichiometry, gases, and energy in reactions.',
-        color: 'text-purple-400',
-        icon: <SlChemistry size={40} />,
-    },
-];
 
 export const skills: Skill[] = [
     {
@@ -535,22 +380,6 @@ export const skills: Skill[] = [
 
 export const work: Work[] = [
     {
-        role: 'Founder & Product Engineer',
-        company: 'AskJet',
-        date: 'Jan. 2026 – Present',
-        desc: '• Founded and building AskJet end-to-end, owning product vision, architecture, and UX for an AI-powered productivity platform that turns natural language it into clear, reviewable task and calendar actions, always with human approval, full transparency, and a privacy-first design\n• Designing core product systems including human-in-the-loop AI approvals, global undo/redo semantics, offline persistence, and constraint-aware daily planning using React, TypeScript, tRPC, PostgreSQL, and Cloudflare Workers\n• Leading full-stack implementation and prioritized low-friction automation with safety guardrails, designing for sustainable daily planning that reduces decision fatigue while maintaining user trust and control over their schedule',
-        skills: {
-            TypeScript: 0,
-            React: 1,
-            tRPC: 1,
-            PostgreSQL: 2,
-            'Cloudflare Workers': 3,
-            'System Design': 3,
-            'Database Design': 3,
-            'CI/CD': 3,
-        },
-    },
-    {
         role: 'Operations Manager',
         company: 'The College of New Jersey',
         date: 'Aug. 2025 – Present',
@@ -573,74 +402,9 @@ export const work: Work[] = [
             'Neural Networks': 3,
         },
     },
-    {
-        role: 'Software Engineer',
-        company: 'WorkWell Partnership',
-        date: 'Aug. 2024 – Dec. 2024',
-        desc: '• Spearheaded the development of company-wide system infrastructure as part of TCNJ Software Engineering course, integrating essential components to support a scalable user base\n• Optimized backend performance and integrating PostgreSQL to manage users and securely handle sensitive data\n• Implemented multi-layer encryption and tiered permissions to ensure strict access control at multiple levels\n• Structured the system architecture using UML to create standardized workflows, enhancing modularity, streamlining development processes, and improving long-term maintainability',
-        skills: { Ruby: 0, SQL: 0, Rails: 1, Bootstrap: 1, PostgreSQL: 2 },
-    },
-];
-
-export const roles: Role[] = [
-    {
-        text: 'Software Engineer',
-        icon: <BiCodeBlock size={40} />,
-        desc: '• Strong foundation in algorithms, data structures, and system design\n• Skilled at building secure, efficient, and maintainable applications across domains',
-    },
-    {
-        text: 'Full Stack Developer',
-        icon: <FaGlobe size={40} />,
-        desc: '• Experienced in modern web frameworks like Next.js, databases like PostgreSQL, and cloud platforms like AWS\n• Capable of delivering scalable, end-to-end solutions from concept to deployment',
-    },
-    {
-        text: 'Front-End Engineer',
-        icon: <BiPaintRoll size={40} />,
-        desc: '• Can design clean, responsive, and accessible interfaces with modern tools like React.js and Tailwind CSS\n• Focused on intuitive user experiences and performance-driven front-end code',
-    },
-    {
-        text: 'Back-End Engineer',
-        icon: <MdOutlineStorage size={40} />,
-        desc: '• Can develop robust RESTful APIs and server-side systems with security best practices\n• Skilled in data modeling, authentication, and scalable architectures',
-    },
-    {
-        text: 'DevOps Engineer',
-        icon: <FaCloudUploadAlt size={40} />,
-        desc: '• Can automate build, test, and deployment pipelines for reliability\n• Optimizes infrastructure with containerization and cloud-native workflows',
-    },
-    {
-        text: 'Product Engineer',
-        icon: <AiOutlineSolution size={40} />,
-        desc: '• Bridges technical implementation with user needs to deliver impactful products\n• Skilled in translating requirements into scalable, maintainable solutions',
-    },
-    {
-        text: 'Systems Engineer',
-        icon: <HiOutlineArrowsExpand size={40} />,
-        desc: '• Skilled in networking, operating systems, and concurrency concepts\n• Ensures performance and reliability through low-level programming languages like Rust, C, and C++',
-    },
-    {
-        text: 'IT Support Specialist',
-        icon: <IoIosInformationCircle size={40} />,
-        desc: '• Provides clear, reliable support with strong problem-solving skills\n• Improves workflows and user productivity through diagnostics and troubleshooting',
-    },
 ];
 
 export const projects: Project[] = [
-    {
-        name: 'AskJet',
-        scale: 0,
-        date: 'Jan. 2026',
-        span: 'Ongoing',
-        desc: '• Founded and building AskJet end-to-end, owning product vision, architecture, and UX for an AI-powered productivity platform that turns natural language it into clear, reviewable task and calendar actions, always with human approval, full transparency, and a privacy-first design\n• Designing core product systems including human-in-the-loop AI approvals, global undo/redo semantics, offline persistence, and constraint-aware daily planning using React, TypeScript, tRPC, PostgreSQL, and Cloudflare Workers\n• Leading full-stack implementation and prioritized low-friction automation with safety guardrails, designing for sustainable daily planning that reduces decision fatigue while maintaining user trust and control over their schedule',
-        skills: {
-            React: 0,
-            TypeScript: 0,
-            tRPC: 0,
-            PostgreSQL: 0,
-            'Cloudflare Workers': 0,
-        },
-        github: 'https://askjet.io',
-    },
     {
         name: 'GoalGetter',
         scale: 0,

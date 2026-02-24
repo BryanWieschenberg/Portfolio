@@ -1,317 +1,208 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { projects } from '../constants';
 import { FaEarthAmericas } from 'react-icons/fa6';
+import { motion } from 'framer-motion';
 
 const Projects: React.FC = () => {
     const topRef = useRef<HTMLParagraphElement | null>(null);
-    const ref = useRef<HTMLDivElement>(null);
-    const [visible, setVisible] = useState(false);
 
-    const [projectItems, setProjectItems] = useState(
-        projects.map((item) => ({ ...item, visible: false })),
+    const largeProjects = projects.filter((item) => item.scale === 0);
+    const mediumProjects = projects.filter((item) => item.scale === 1);
+    const smallProjects = projects.filter((item) => item.scale === 2);
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+            },
+        },
+    };
+
+    const cardVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.5, ease: 'easeOut' },
+        },
+    };
+
+    const headerVariants = {
+        hidden: { opacity: 0, y: -20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.6, ease: 'easeOut' },
+        },
+    };
+
+    const renderProjectCard = (project: any, index: number, gradient: string, bgColor: string) => (
+        <motion.div
+            key={index}
+            variants={cardVariants}
+            whileHover={{ scale: 1.05 }}
+            className={`group relative p-[6px] rounded-2xl shadow-lg transition-all duration-300 ease-out transform ${gradient}`}
+        >
+            <div className={`rounded-xl ${bgColor} p-3 h-full flex flex-col`}>
+                <div className="flex justify-between items-center mb-1">
+                    <h3 className="text-xl font-bold text-gray-800 truncate">{project.name}</h3>
+                    {project.github ? (
+                        <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 flex-shrink-0 ml-2"
+                        >
+                            <FaEarthAmericas size={32} />
+                        </a>
+                    ) : (
+                        <span title="This Project is Private" className="flex-shrink-0 ml-2">
+                            <FaEarthAmericas size={32} className="text-gray-400" />
+                        </span>
+                    )}
+                </div>
+                <p className="text-sm text-gray-600 mb-2">
+                    {project.date} • {project.span}
+                </p>
+                <p className="mt-1 text-gray-700 whitespace-pre-line flex-grow overflow-y-auto max-h-32">
+                    {project.desc}
+                </p>
+                {project.skills && Object.keys(project.skills).length > 0 && (
+                    <div className="mt-auto pt-3">
+                        <div className="flex flex-wrap gap-1">
+                            {Object.entries(project.skills).map(([skill, level], i) => {
+                                let badgeColor;
+                                switch (level) {
+                                    case 0:
+                                        badgeColor = 'bg-blue-600';
+                                        break;
+                                    case 1:
+                                        badgeColor = 'bg-green-600';
+                                        break;
+                                    case 2:
+                                        badgeColor = 'bg-yellow-600';
+                                        break;
+                                    case 3:
+                                        badgeColor = 'bg-red-600';
+                                        break;
+                                    case 4:
+                                        badgeColor = 'bg-fuchsia-600';
+                                        break;
+                                    default:
+                                        badgeColor = 'bg-gray-600';
+                                }
+                                return (
+                                    <span
+                                        key={i}
+                                        className={`${badgeColor} px-2 py-1 rounded-lg border text-white border-white text-xs inline-block min-w-0 max-w-full truncate`}
+                                    >
+                                        {skill}
+                                    </span>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
+            </div>
+        </motion.div>
     );
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(([entry]) => {
-            if (entry.isIntersecting) {
-                setTimeout(() => setVisible(true), 0);
-            }
-        });
-
-        if (ref.current) {
-            observer.observe(ref.current);
-        }
-        return () => observer.disconnect();
-    }, []);
-
-    useEffect(() => {
-        if (visible) {
-            projectItems.forEach((_, index) => {
-                setTimeout(() => {
-                    setProjectItems((prev) =>
-                        prev.map((item, i) => (i === index ? { ...item, visible: true } : item)),
-                    );
-                }, index * 50);
-            });
-        }
-    }, [visible]);
-
-    const largeProjects = projectItems.filter((item) => item.scale === 0);
-    const mediumProjects = projectItems.filter((item) => item.scale === 1);
-    const smallProjects = projectItems.filter((item) => item.scale === 2);
 
     return (
         <>
             <p id="ToTop" ref={topRef} className="invisible text-white">
                 ToTop
             </p>
-            <h1
-                ref={ref}
-                className={`text-6xl lg:text-8xl font-bold lg:mt-2 pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative bg-gradient-to-r from-[#0030ff] to-[#c4f9ff] bg-clip-text text-transparent ${visible ? 'opacity-100 translate-y-0 transition-all duration-300 ease-out' : 'opacity-0 -translate-y-20'}`}
+            <motion.h1
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-6xl lg:text-8xl font-bold lg:mt-2 pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative bg-gradient-to-r from-[#0030ff] to-[#c4f9ff] bg-clip-text text-transparent"
             >
                 Projects
-            </h1>
+            </motion.h1>
 
             <div className="container mx-auto px-4 lg:px-20 py-10">
                 {largeProjects.length > 0 && (
-                    <section className="mb-12">
-                        <h2 className="text-3xl lg:text-5xl text-center font-extrabold mb-6 text-[#4fbdf1] relative bg-gradient-to-r drop-shadow-[7px_7px_1.5px_rgba(60,60,150,1)]">
+                    <motion.section
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={containerVariants}
+                        className="mb-12"
+                    >
+                        <motion.h2
+                            variants={headerVariants}
+                            className="text-3xl lg:text-5xl text-center font-extrabold mb-6 text-[#4fbdf1] relative bg-gradient-to-r drop-shadow-[7px_7px_1.5px_rgba(60,60,150,1)]"
+                        >
                             Flagships
-                        </h2>
+                        </motion.h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {largeProjects.map((project, index) => (
-                                <div
-                                    key={index}
-                                    className={`group relative p-[6px] rounded-2xl shadow-lg transition-all duration-300 ease-out transform hover:scale-105 ${project.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} bg-gradient-to-t from-[#473eb4] to-[#00e5ff]`}
-                                >
-                                    <div className="rounded-xl bg-[#4fbdf1] p-3 h-full flex flex-col">
-                                        <div className="flex justify-between items-center mb-1">
-                                            <h3 className="text-xl font-bold text-gray-800 truncate">
-                                                {project.name}
-                                            </h3>
-                                            {project.github ? (
-                                                <a
-                                                    href={project.github}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-blue-600 hover:text-blue-800 flex-shrink-0 ml-2"
-                                                >
-                                                    <FaEarthAmericas size={32} />
-                                                </a>
-                                            ) : (
-                                                <span
-                                                    title="This Project is Private"
-                                                    className="flex-shrink-0 ml-2"
-                                                >
-                                                    <FaEarthAmericas
-                                                        size={32}
-                                                        className="text-gray-400"
-                                                    />
-                                                </span>
-                                            )}
-                                        </div>
-                                        <p className="text-sm text-gray-600 mb-2">
-                                            {project.date} • {project.span}
-                                        </p>
-                                        <p className="mt-1 text-gray-700 whitespace-pre-line flex-grow overflow-y-auto max-h-32">
-                                            {project.desc}
-                                        </p>
-                                        {project.skills &&
-                                            Object.keys(project.skills).length > 0 && (
-                                                <div className="mt-auto pt-3">
-                                                    <div className="flex flex-wrap gap-1">
-                                                        {Object.entries(project.skills).map(
-                                                            ([skill, level], i) => {
-                                                                let bgColor;
-                                                                switch (level) {
-                                                                    case 0:
-                                                                        bgColor = 'bg-blue-600';
-                                                                        break;
-                                                                    case 1:
-                                                                        bgColor = 'bg-green-600';
-                                                                        break;
-                                                                    case 2:
-                                                                        bgColor = 'bg-yellow-600';
-                                                                        break;
-                                                                    case 3:
-                                                                        bgColor = 'bg-red-600';
-                                                                        break;
-                                                                    case 4:
-                                                                        bgColor = 'bg-fuchsia-600';
-                                                                        break;
-                                                                }
-                                                                return (
-                                                                    <span
-                                                                        key={i}
-                                                                        className={`${bgColor} px-2 py-1 rounded-lg border text-white border-white text-xs inline-block min-w-0 max-w-full truncate`}
-                                                                    >
-                                                                        {skill}
-                                                                    </span>
-                                                                );
-                                                            },
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            )}
-                                    </div>
-                                </div>
-                            ))}
+                            {largeProjects.map((project, index) =>
+                                renderProjectCard(
+                                    project,
+                                    index,
+                                    'bg-gradient-to-t from-[#473eb4] to-[#00e5ff]',
+                                    'bg-[#4fbdf1]',
+                                ),
+                            )}
                         </div>
-                    </section>
+                    </motion.section>
                 )}
 
                 {mediumProjects.length > 0 && (
-                    <section className="mb-12">
-                        <h2 className="text-3xl lg:text-5xl text-center font-extrabold mb-6 text-[#4ff192] relative bg-gradient-to-r drop-shadow-[7px_7px_1.5px_rgba(20,120,20,1)]">
+                    <motion.section
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={containerVariants}
+                        className="mb-12"
+                    >
+                        <motion.h2
+                            variants={headerVariants}
+                            className="text-3xl lg:text-5xl text-center font-extrabold mb-6 text-[#4ff192] relative bg-gradient-to-r drop-shadow-[7px_7px_1.5px_rgba(20,120,20,1)]"
+                        >
                             Medium-Sized
-                        </h2>
+                        </motion.h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {mediumProjects.map((project, index) => (
-                                <div
-                                    key={index}
-                                    className={`group relative p-[6px] rounded-2xl shadow-lg transition-all duration-300 ease-out transform hover:scale-105 ${project.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} bg-gradient-to-t from-[#3eb47c] to-[#30ff00]`}
-                                >
-                                    <div className="rounded-xl bg-[#4ff192] p-3 h-full flex flex-col">
-                                        <div className="flex justify-between items-center mb-1">
-                                            <h3 className="text-xl font-bold text-gray-800 truncate">
-                                                {project.name}
-                                            </h3>
-                                            {project.github ? (
-                                                <a
-                                                    href={project.github}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-blue-500 hover:text-blue-700 flex-shrink-0 ml-2"
-                                                >
-                                                    <FaEarthAmericas size={32} />
-                                                </a>
-                                            ) : (
-                                                <span
-                                                    title="This Project is Private"
-                                                    className="flex-shrink-0 ml-2"
-                                                >
-                                                    <FaEarthAmericas
-                                                        size={32}
-                                                        className="text-[#b7bcc5]"
-                                                    />
-                                                </span>
-                                            )}
-                                        </div>
-                                        <p className="text-sm text-gray-600 mb-2">
-                                            {project.date} • {project.span}
-                                        </p>
-                                        <p className="mt-1 text-gray-700 whitespace-pre-line flex-grow overflow-y-auto max-h-32">
-                                            {project.desc}
-                                        </p>
-                                        {project.skills &&
-                                            Object.keys(project.skills).length > 0 && (
-                                                <div className="mt-auto pt-3">
-                                                    <div className="flex flex-wrap gap-1">
-                                                        {Object.entries(project.skills).map(
-                                                            ([skill, level], i) => {
-                                                                let bgColor;
-                                                                switch (level) {
-                                                                    case 0:
-                                                                        bgColor = 'bg-blue-600';
-                                                                        break;
-                                                                    case 1:
-                                                                        bgColor = 'bg-green-600';
-                                                                        break;
-                                                                    case 2:
-                                                                        bgColor = 'bg-yellow-600';
-                                                                        break;
-                                                                    case 3:
-                                                                        bgColor = 'bg-red-600';
-                                                                        break;
-                                                                    case 4:
-                                                                        bgColor = 'bg-fuchsia-600';
-                                                                        break;
-                                                                }
-                                                                return (
-                                                                    <span
-                                                                        key={i}
-                                                                        className={`${bgColor} px-2 py-1 rounded-lg border border-white text-white text-xs inline-block min-w-0 max-w-full truncate`}
-                                                                    >
-                                                                        {skill}
-                                                                    </span>
-                                                                );
-                                                            },
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            )}
-                                    </div>
-                                </div>
-                            ))}
+                            {mediumProjects.map((project, index) =>
+                                renderProjectCard(
+                                    project,
+                                    index,
+                                    'bg-gradient-to-t from-[#3eb47c] to-[#30ff00]',
+                                    'bg-[#4ff192]',
+                                ),
+                            )}
                         </div>
-                    </section>
+                    </motion.section>
                 )}
 
                 {smallProjects.length > 0 && (
-                    <section className="mb-12">
-                        <h2 className="text-3xl lg:text-5xl text-center font-extrabold mb-6 text-[#f1e24f] relative bg-gradient-to-r drop-shadow-[7px_7px_1.5px_rgba(120,120,30,1)]">
+                    <motion.section
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={containerVariants}
+                        className="mb-12"
+                    >
+                        <motion.h2
+                            variants={headerVariants}
+                            className="text-3xl lg:text-5xl text-center font-extrabold mb-6 text-[#f1e24f] relative bg-gradient-to-r drop-shadow-[7px_7px_1.5px_rgba(120,120,30,1)]"
+                        >
                             Small-Scale
-                        </h2>
+                        </motion.h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {smallProjects.map((project, index) => (
-                                <div
-                                    key={index}
-                                    className={`group relative p-[6px] rounded-2xl shadow-lg transition-all duration-300 ease-out transform hover:scale-105 ${project.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'} bg-gradient-to-t from-[#b4a03e] to-[#ffe700]`}
-                                >
-                                    <div className="rounded-xl bg-[#f1e24f] p-3 h-full flex flex-col">
-                                        <div className="flex justify-between items-center mb-1">
-                                            <h3 className="text-xl font-bold text-gray-800 truncate">
-                                                {project.name}
-                                            </h3>
-                                            {project.github ? (
-                                                <a
-                                                    href={project.github}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-blue-500 hover:text-blue-700 flex-shrink-0 ml-2"
-                                                >
-                                                    <FaEarthAmericas size={32} />
-                                                </a>
-                                            ) : (
-                                                <span
-                                                    title="This Project is Private"
-                                                    className="flex-shrink-0 ml-2"
-                                                >
-                                                    <FaEarthAmericas
-                                                        size={32}
-                                                        className="text-[#b7bcc5]"
-                                                    />
-                                                </span>
-                                            )}
-                                        </div>
-                                        <p className="text-sm text-gray-600 mb-2">
-                                            {project.date} • {project.span}
-                                        </p>
-                                        <p className="mt-1 text-gray-700 whitespace-pre-line flex-grow overflow-y-auto max-h-32">
-                                            {project.desc}
-                                        </p>
-                                        {project.skills &&
-                                            Object.keys(project.skills).length > 0 && (
-                                                <div className="mt-auto pt-3">
-                                                    <div className="flex flex-wrap gap-1">
-                                                        {Object.entries(project.skills).map(
-                                                            ([skill, level], i) => {
-                                                                let bgColor;
-                                                                switch (level) {
-                                                                    case 0:
-                                                                        bgColor = 'bg-blue-600';
-                                                                        break;
-                                                                    case 1:
-                                                                        bgColor = 'bg-green-600';
-                                                                        break;
-                                                                    case 2:
-                                                                        bgColor = 'bg-yellow-600';
-                                                                        break;
-                                                                    case 3:
-                                                                        bgColor = 'bg-red-600';
-                                                                        break;
-                                                                    case 4:
-                                                                        bgColor = 'bg-fuchsia-600';
-                                                                        break;
-                                                                }
-                                                                return (
-                                                                    <span
-                                                                        key={i}
-                                                                        className={`${bgColor} px-2 py-1 rounded-lg border text-white border-white text-xs inline-block min-w-0 max-w-full truncate`}
-                                                                    >
-                                                                        {skill}
-                                                                    </span>
-                                                                );
-                                                            },
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            )}
-                                    </div>
-                                </div>
-                            ))}
+                            {smallProjects.map((project, index) =>
+                                renderProjectCard(
+                                    project,
+                                    index,
+                                    'bg-gradient-to-t from-[#b4a03e] to-[#ffe700]',
+                                    'bg-[#f1e24f]',
+                                ),
+                            )}
                         </div>
-                    </section>
+                    </motion.section>
                 )}
             </div>
         </>

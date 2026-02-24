@@ -7,6 +7,7 @@ import About from './pages/About';
 import Experience from './pages/Experience';
 import Projects from './pages/Projects';
 import Contact from './pages/Contact';
+import ScrollToTop from './components/ScrollToTop';
 
 const App: React.FC = () => (
     <Router basename="/">
@@ -59,6 +60,7 @@ const App: React.FC = () => (
           bottom: 0;
           overflow-y: auto;
           width: 100%;
+          scrollbar-gutter: stable;
         }
         
         @media (min-width: 1024px) {
@@ -79,6 +81,7 @@ const App: React.FC = () => (
             <Navbar />
 
             <div className={`content-container`}>
+                <ScrollToTop />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/about" element={<About />} />
