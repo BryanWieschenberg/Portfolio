@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { work } from '../../constants';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../../context/ThemeContext';
+import SwipeReveal from '../../components/SwipeReveal';
 
 const Timeline: React.FC = () => {
+    const { theme } = useTheme();
     const items = work.map((item) => ({
         ...item,
         imagePath: `/assets/images/${item.company.toLowerCase().replace(/\s+/g, '')}.png`,
@@ -35,14 +38,20 @@ const Timeline: React.FC = () => {
 
     return (
         <div className="container mx-auto px-4 lg:px-20 mb-6 overflow-x-hidden">
-            <motion.h1
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="roles-text lg:mb-2 pt-4 lg:pt-10 text-2xl lg:text-6xl font-bold pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative text-[#8580e7] bg-clip-text"
-            >
-                My Timeline:
-            </motion.h1>
+            <div className="pt-4 lg:pt-10 text-center">
+                <SwipeReveal
+                    circleColor="bg-gradient-to-r from-[#8580e7] to-[#3c86ff]"
+                    shadowColor="shadow-[0_0_50px_rgba(133,128,231,0.6)]"
+                    duration={0.6}
+                >
+                    <h1
+                        className={`roles-text lg:mb-2 text-2xl lg:text-6xl font-bold pb-4 text-center relative text-[#8580e7] bg-clip-text
+                        ${theme === 'light' ? 'drop-shadow-[3px_3px_1px_rgba(30,30,160,0.2)]' : 'drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                    >
+                        My Timeline:
+                    </h1>
+                </SwipeReveal>
+            </div>
 
             <div className="relative lg:mt-4">
                 <motion.div
@@ -50,7 +59,8 @@ const Timeline: React.FC = () => {
                     whileInView={{ opacity: 1, height: '98%' }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, ease: 'easeInOut' }}
-                    className="absolute left-1/2 transform -translate-x-1/2 top-0 w-3 bg-[#1e65ff]"
+                    className={`absolute left-1/2 transform -translate-x-1/2 top-0 w-3 
+                        ${theme === 'light' ? 'bg-blue-300' : 'bg-[#1e65ff]'}`}
                 ></motion.div>
 
                 <motion.div
@@ -68,7 +78,12 @@ const Timeline: React.FC = () => {
                         >
                             <motion.div
                                 whileHover={{ scale: 1.01 }}
-                                className="bg-[#182a51] text-white p-5 rounded-xl shadow-lg cursor-pointer flex items-center space-x-4 mx-auto"
+                                className={`p-5 rounded-xl shadow-lg cursor-pointer flex items-center space-x-4 mx-auto border
+                                    ${
+                                        theme === 'light'
+                                            ? 'bg-white border-blue-100'
+                                            : 'bg-[#182a51] border-blue-900/50'
+                                    }`}
                                 onClick={() => handleClick(index)}
                             >
                                 <img
@@ -82,13 +97,26 @@ const Timeline: React.FC = () => {
                                 />
 
                                 <div className="flex-1">
-                                    <h3 className="text-lg lg:text-xl font-bold bg-gradient-to-r from-[#a9c7ff] to-[#00e7ff] text-transparent bg-clip-text inline-block">
+                                    <h3
+                                        className={`text-lg lg:text-xl font-bold inline-block
+                                        ${
+                                            theme === 'light'
+                                                ? 'text-blue-700'
+                                                : 'bg-gradient-to-r from-[#a9c7ff] to-[#00e7ff] text-transparent bg-clip-text'
+                                        }`}
+                                    >
                                         {exp.role}
                                     </h3>
-                                    <h4 className="text-md lg:text-lg font-semibold text-blue-300">
+                                    <h4
+                                        className={`text-md lg:text-lg font-semibold ${theme === 'light' ? 'text-blue-600' : 'text-blue-300'}`}
+                                    >
                                         {exp.company}
                                     </h4>
-                                    <p className="text-sm text-gray-300">{exp.date}</p>
+                                    <p
+                                        className={`text-sm ${theme === 'light' ? 'text-slate-500' : 'text-gray-300'}`}
+                                    >
+                                        {exp.date}
+                                    </p>
                                 </div>
                             </motion.div>
 
@@ -99,10 +127,18 @@ const Timeline: React.FC = () => {
                                         animate={{ height: 'auto', opacity: 1 }}
                                         exit={{ height: 0, opacity: 0 }}
                                         transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                        className="overflow-hidden bg-[#2f4677] text-white rounded-xl shadow-lg mt-2"
+                                        className={`overflow-hidden rounded-xl shadow-lg mt-2 border
+                                            ${
+                                                theme === 'light'
+                                                    ? 'bg-blue-50/50 border-blue-100'
+                                                    : 'bg-[#2f4677] border-blue-800'
+                                            }`}
                                     >
                                         <div className="p-3">
-                                            <p className="text-sm lg:text-base text-gray-200 whitespace-pre-line">
+                                            <p
+                                                className={`text-sm lg:text-base whitespace-pre-line
+                                                ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
+                                            >
                                                 {exp.desc}
                                             </p>
                                             {exp.skills && Object.keys(exp.skills).length > 0 && (

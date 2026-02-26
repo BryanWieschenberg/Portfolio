@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import Timeline from './subpages/Timeline';
-import Availability from './subpages/Availability';
-import { motion } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
+import SwipeReveal from '../components/SwipeReveal';
 
 const Experience: React.FC = () => {
+    const { theme } = useTheme();
     const topRef = useRef<HTMLParagraphElement | null>(null);
 
     return (
@@ -11,23 +12,21 @@ const Experience: React.FC = () => {
             <p id="ToTop" ref={topRef} className="invisible text-white">
                 ToTop
             </p>
-            <motion.h1
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-6xl lg:text-8xl font-bold lg:mt-2 pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative bg-gradient-to-r from-[#0030ff] to-[#c4f9ff] bg-clip-text text-transparent"
-            >
-                Experience
-            </motion.h1>
+            <div className="pt-16 lg:pt-20 text-center">
+                <SwipeReveal
+                    circleColor="bg-gradient-to-r from-[#0030ff] to-[#c4f9ff]"
+                    shadowColor="shadow-[0_0_50px_rgba(0,48,255,0.6)]"
+                    duration={0.6}
+                >
+                    <h1
+                        className={`text-6xl lg:text-8xl font-bold lg:mt-2 pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative bg-clip-text text-transparent
+                        ${theme === 'light' ? 'bg-gradient-to-r from-blue-700 to-blue-400' : 'bg-gradient-to-r from-[#0030ff] to-[#c4f9ff]'}`}
+                    >
+                        Experience
+                    </h1>
+                </SwipeReveal>
+            </div>
             <Timeline />
-            <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1, ease: 'easeOut' }}
-            >
-                <Availability />
-            </motion.div>
         </>
     );
 };

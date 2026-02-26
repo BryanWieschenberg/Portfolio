@@ -1,9 +1,12 @@
 import React, { useRef } from 'react';
 import { projects } from '../constants';
-import { FaEarthAmericas } from 'react-icons/fa6';
 import { motion } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
+import SwipeReveal from '../components/SwipeReveal';
+import { FaEarthAmericas } from 'react-icons/fa6';
 
 const Projects: React.FC = () => {
+    const { theme } = useTheme();
     const topRef = useRef<HTMLParagraphElement | null>(null);
 
     const largeProjects = projects.filter((item) => item.scale === 0);
@@ -45,9 +48,15 @@ const Projects: React.FC = () => {
             whileHover={{ scale: 1.05 }}
             className={`group relative p-[6px] rounded-2xl shadow-lg transition-all duration-300 ease-out transform ${gradient}`}
         >
-            <div className={`rounded-xl ${bgColor} p-3 h-full flex flex-col`}>
+            <div
+                className={`rounded-xl p-3 h-full flex flex-col ${theme === 'light' ? 'bg-white/90 backdrop-blur-sm' : bgColor}`}
+            >
                 <div className="flex justify-between items-center mb-1">
-                    <h3 className="text-xl font-bold text-gray-800 truncate">{project.name}</h3>
+                    <h3
+                        className={`text-xl font-bold truncate ${theme === 'light' ? 'text-slate-800' : 'text-gray-800'}`}
+                    >
+                        {project.name}
+                    </h3>
                     {project.github ? (
                         <a
                             href={project.github}
@@ -114,14 +123,20 @@ const Projects: React.FC = () => {
             <p id="ToTop" ref={topRef} className="invisible text-white">
                 ToTop
             </p>
-            <motion.h1
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-6xl lg:text-8xl font-bold lg:mt-2 pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative bg-gradient-to-r from-[#0030ff] to-[#c4f9ff] bg-clip-text text-transparent"
-            >
-                Projects
-            </motion.h1>
+            <div className="pt-16 lg:pt-20 text-center px-4">
+                <SwipeReveal
+                    circleColor="bg-gradient-to-r from-[#0030ff] to-[#c4f9ff]"
+                    shadowColor="shadow-[0_0_50px_rgba(0,48,255,0.6)]"
+                    duration={0.6}
+                >
+                    <h1
+                        className={`text-6xl lg:text-8xl font-bold lg:mt-2 pb-4 text-center relative bg-clip-text text-transparent
+                        ${theme === 'light' ? 'bg-gradient-to-r from-blue-700 to-blue-400 drop-shadow-[3px_3px_1px_rgba(30,30,160,0.2)]' : 'bg-gradient-to-r from-[#0030ff] to-[#c4f9ff] drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                    >
+                        Projects
+                    </h1>
+                </SwipeReveal>
+            </div>
 
             <div className="container mx-auto px-4 lg:px-20 py-10">
                 {largeProjects.length > 0 && (
@@ -134,7 +149,8 @@ const Projects: React.FC = () => {
                     >
                         <motion.h2
                             variants={headerVariants}
-                            className="text-3xl lg:text-5xl text-center font-extrabold mb-6 text-[#4fbdf1] relative bg-gradient-to-r drop-shadow-[7px_7px_1.5px_rgba(60,60,150,1)]"
+                            className={`text-3xl lg:text-5xl text-center font-extrabold mb-6 relative drop-shadow-[7px_7px_1.5px_rgba(60,60,150,0.5)]
+                                ${theme === 'light' ? 'text-blue-700' : 'text-[#4fbdf1]'}`}
                         >
                             Flagships
                         </motion.h2>
@@ -161,7 +177,8 @@ const Projects: React.FC = () => {
                     >
                         <motion.h2
                             variants={headerVariants}
-                            className="text-3xl lg:text-5xl text-center font-extrabold mb-6 text-[#4ff192] relative bg-gradient-to-r drop-shadow-[7px_7px_1.5px_rgba(20,120,20,1)]"
+                            className={`text-3xl lg:text-5xl text-center font-extrabold mb-6 relative drop-shadow-[7px_7px_1.5px_rgba(20,120,20,0.5)]
+                                ${theme === 'light' ? 'text-green-700' : 'text-[#4ff192]'}`}
                         >
                             Medium-Sized
                         </motion.h2>
@@ -188,7 +205,8 @@ const Projects: React.FC = () => {
                     >
                         <motion.h2
                             variants={headerVariants}
-                            className="text-3xl lg:text-5xl text-center font-extrabold mb-6 text-[#f1e24f] relative bg-gradient-to-r drop-shadow-[7px_7px_1.5px_rgba(120,120,30,1)]"
+                            className={`text-3xl lg:text-5xl text-center font-extrabold mb-6 relative drop-shadow-[7px_7px_1.5px_rgba(120,120,30,0.5)]
+                                ${theme === 'light' ? 'text-amber-700' : 'text-[#f1e24f]'}`}
                         >
                             Small-Scale
                         </motion.h2>

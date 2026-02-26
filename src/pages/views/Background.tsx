@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { useTheme } from '../../context/ThemeContext';
 
 const Background: React.FC = () => {
     const mountRef = useRef<HTMLDivElement>(null);
+    const { theme } = useTheme();
 
     useEffect(() => {
         if (!mountRef.current) {
@@ -44,7 +46,9 @@ const Background: React.FC = () => {
 
             positions.push(Math.cos(angle) * radius, Math.sin(angle) * radius, 0);
 
-            const c = new THREE.Color(`hsl(210, 80%, ${5 + Math.random() * 60}%)`);
+            const hue = theme === 'light' ? 200 : 210;
+            const lightness = theme === 'light' ? 60 + Math.random() * 30 : 5 + Math.random() * 60;
+            const c = new THREE.Color(`hsl(${hue}, 20%, ${lightness}%)`);
             colors.push(c.r, c.g, c.b);
         }
 
@@ -74,8 +78,8 @@ const Background: React.FC = () => {
             fragmentShader: `
         varying vec3 vColor;
         void main() {
-          vec2 uv = gl_PointCoord - 0.5;
-          if (length(uv) > 0.5) discard;
+          vec2 glCoord = gl_PointCoord - 0.5;
+          if (length(glCoord) > 0.5) discard;
           gl_FragColor = vec4(vColor, 1.0);
         }
       `,
@@ -109,11 +113,12 @@ const Background: React.FC = () => {
             window.removeEventListener('resize', onResize);
             mountRef.current?.removeChild(renderer.domElement);
         };
-    }, []);
+    }, [theme]);
 
     return (
         <div
             ref={mountRef}
+            className="transition-all duration-700"
             style={{
                 position: 'fixed',
                 top: 0,
@@ -122,7 +127,10 @@ const Background: React.FC = () => {
                 height: '100%',
                 pointerEvents: 'none',
                 zIndex: -1,
-                background: 'linear-gradient(to bottom, #09142a, #03060d 40%, #000000 100%)',
+                background:
+                    theme === 'light'
+                        ? 'linear-gradient(to bottom, #f1f5f9, #e2e8f0 40%, #cbd5e1 100%)'
+                        : 'linear-gradient(to bottom, #1e242b, #0f1214ff 40%, #0c0d0dff 100%)',
             }}
         />
     );

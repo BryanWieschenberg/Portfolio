@@ -1,6 +1,6 @@
 <div align="center">
 
-# Professional Engineering Portfolio
+# Personal Portfolio Website
 
 _A visual showcase of my engineering work._
 

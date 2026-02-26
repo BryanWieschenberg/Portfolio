@@ -1,18 +1,47 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { projects } from '../constants';
-import { FaEarthAmericas } from 'react-icons/fa6';
+import { FaLocationDot, FaFileLines, FaGithub, FaEarthAmericas } from 'react-icons/fa6';
 import { motion, AnimatePresence } from 'framer-motion';
 import SwipeReveal from '../components/SwipeReveal';
+import { useTheme } from '../context/ThemeContext';
+import { PiArrowFatLinesRightFill } from 'react-icons/pi';
+
+function useLgUp() {
+    const [isLgUp, setIsLgUp] = useState(false);
+
+    useEffect(() => {
+        const mq = window.matchMedia('(min-width: 1024px)');
+        const handler = () => setIsLgUp(mq.matches);
+        handler();
+        mq.addEventListener('change', handler);
+        return () => mq.removeEventListener('change', handler);
+    }, []);
+
+    return isLgUp;
+}
 
 const Home: React.FC = () => {
+    const { theme } = useTheme();
     const topRef = useRef<HTMLParagraphElement | null>(null);
     const featuredRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
     const [isIntroComplete, setIsIntroComplete] = useState(false);
 
-    // Select the top 3 projects (AskJet, GoalGetter, StreamLine)
-    const featuredProjects = projects.filter((item) => item.scale === 0);
+    const age = useMemo(() => {
+        const birthDate = new Date('2003-08-11');
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }, []);
+
+    const featuredProjects = projects.filter(
+        (item) => item.name === 'GoalGetter' || item.name === 'StreamLine',
+    );
 
     const scrollToFeatured = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -44,13 +73,14 @@ const Home: React.FC = () => {
         visible: { opacity: 1, y: 0 },
     };
 
+    const isLgUp = useLgUp();
+
     return (
         <>
             <p id="ToTop" ref={topRef} className="invisible text-white">
                 ToTop
             </p>
 
-            {/* Intro Overlay Background - Fades out once intro is complete */}
             <AnimatePresence>
                 {!isIntroComplete && (
                     <motion.div
@@ -60,71 +90,83 @@ const Home: React.FC = () => {
                         className="fixed inset-0 z-[90] pointer-events-none"
                         style={{
                             background:
-                                'linear-gradient(to bottom, #09142a, #03060d 40%, #000000 100%)',
+                                theme === 'light'
+                                    ? 'linear-gradient(to bottom, #f1f5f9, #e2e8f0 40%, #cbd5e1 100%)'
+                                    : 'linear-gradient(to bottom, #1e242b, #0f1214ff 40%, #0c0d0dff 100%)',
                         }}
                     />
                 )}
             </AnimatePresence>
 
-            {/* Hero Section */}
-            <div className="main-content relative z-[100] flex flex-col lg:flex-row items-center justify-center text-white mt-4 lg:mt-12 w-full">
+            <div
+                className={`main-content relative z-[95] flex flex-col lg:flex-row items-center justify-center pt-8 lg:pt-12 w-full transition-all duration-300 ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
+            >
                 <div className="flex flex-col lg:flex-row items-center justify-center container mx-auto px-4 lg:px-20 max-w-7xl">
                     <div className="text-center lg:text-left lg:w-3/5 flex flex-col items-center lg:items-start">
-                        {/* Title with IntroReveal wrapper for stable positioning */}
                         <div className="mt-4">
                             <SwipeReveal onComplete={() => setIsIntroComplete(true)}>
-                                <h1 className="text-5xl lg:text-7xl font-bold leading-tight drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center lg:text-left whitespace-nowrap">
+                                <h1
+                                    className={`text-5xl lg:text-8xl font-bold leading-tight text-center lg:text-left whitespace-nowrap 
+                                    ${theme === 'light' ? 'drop-shadow-[3px_3px_1px_rgba(30,30,160,0.2)]' : 'drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                                >
                                     Hi, I'm{' '}
                                     <span className="relative bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] bg-clip-text text-transparent">
-                                        Bryan
+                                        Bryan 👋
                                     </span>
-                                    .
                                 </h1>
                             </SwipeReveal>
                         </div>
 
-                        {/* Other hero content - only fades in after intro is done */}
                         <AnimatePresence>
                             {isIntroComplete && (
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    transition={{ duration: 0.8 }}
+                                    transition={{ duration: 0.4 }}
                                     className="w-full flex flex-col items-center lg:items-start"
                                 >
                                     <motion.p
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.8, delay: 0.1 }}
-                                        className="mt-6 text-2xl lg:text-4xl font-semibold leading-relaxed drop-shadow-lg text-[#f0f4f8]"
+                                        transition={{ duration: 0.4 }}
+                                        className={`mt-1 flex text-xl lg:text-3xl font-semibold leading-relaxed drop-shadow-lg ${theme === 'light' ? 'text-slate-800' : 'text-[#f0f4f8]'}`}
                                     >
-                                        I engineer scalable, secure software solutions that help
-                                        businesses and users achieve high-performance outcomes.
-                                    </motion.p>
-
-                                    <motion.p
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.8, delay: 0.3 }}
-                                        className="mt-6 text-base lg:text-xl text-gray-300 max-w-2xl text-center lg:text-left leading-relaxed"
-                                    >
-                                        Combining{' '}
-                                        <span className="text-[#69f1ff] font-medium">
-                                            system-level performance
-                                        </span>{' '}
-                                        with{' '}
-                                        <span className="text-[#3c86ff] font-medium">
-                                            intuitive full-stack product design
+                                        {isLgUp && (
+                                            <PiArrowFatLinesRightFill className="shrink-0 text-xl lg:text-3xl" />
+                                        )}
+                                        <span className="lg:pl-2">
+                                            Full-Stack Engineer{' '}
+                                            <span className="pl-1 lg:pl-2 text-sm lg:text-xl">
+                                                (Backend-Focused)
+                                            </span>
                                         </span>
-                                        . From low-level threading in Rust to responsive React
-                                        interfaces and end-to-end cloud deployments, I build
-                                        reliable experiences from the ground up.
                                     </motion.p>
 
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.5, delay: 0.5 }}
+                                        transition={{ duration: 0.4 }}
+                                        className={`mt-2 flex items-center font-medium ${theme === 'light' ? 'text-blue-600' : 'text-[#69f1ff]'}`}
+                                    >
+                                        <FaLocationDot className="mr-2" />
+                                        <span>{age} y/o from Montville, New Jersey</span>
+                                    </motion.div>
+
+                                    <motion.p
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.4 }}
+                                        className={`mt-6 text-base lg:text-xl max-w-2xl text-center lg:text-left leading-relaxed italic ${theme === 'light' ? 'text-slate-600' : 'text-gray-300'}`}
+                                    >
+                                        I build full-stack solutions and backend systems that scale,
+                                        are secure, and can perform under even the harshest
+                                        conditions.
+                                    </motion.p>
+
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.4 }}
                                         className="mt-8 flex flex-row justify-center lg:justify-start space-x-4 w-full"
                                     >
                                         <button
@@ -137,8 +179,32 @@ const Home: React.FC = () => {
                                             onClick={ContactMe}
                                             className="px-6 py-3 border-2 border-[#69f1ff] text-[#69f1ff] font-bold rounded-xl shadow-[0_0_10px_rgba(105,241,255,0.1)] hover:bg-[#69f1ff] hover:text-[#0b1021] hover:shadow-[0_0_20px_rgba(105,241,255,0.4)] transition-all duration-300 transform hover:-translate-y-1 text-lg lg:text-xl"
                                         >
-                                            Contact Me
+                                            Get in Touch
                                         </button>
+                                    </motion.div>
+
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.4 }}
+                                        className={`mt-6 flex flex-wrap justify-center lg:justify-start gap-6 font-medium ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
+                                    >
+                                        <a
+                                            href="/assets/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
+                                            target="_blank"
+                                            className={`transition-colors flex items-center gap-2 ${theme === 'light' ? 'hover:text-blue-600' : 'hover:text-white'}`}
+                                        >
+                                            <FaFileLines />
+                                            <span>Resume</span>
+                                        </a>
+                                        <a
+                                            href="https://github.com/BryanWieschenberg/"
+                                            target="_blank"
+                                            className={`transition-colors flex items-center gap-2 ${theme === 'light' ? 'hover:text-blue-600' : 'hover:text-white'}`}
+                                        >
+                                            <FaGithub />
+                                            <span>GitHub</span>
+                                        </a>
                                     </motion.div>
                                 </motion.div>
                             )}
@@ -151,7 +217,7 @@ const Home: React.FC = () => {
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.7, delay: 0.4 }}
+                                    transition={{ duration: 0.5 }}
                                     className="relative group perspective"
                                 >
                                     <motion.div
@@ -178,7 +244,6 @@ const Home: React.FC = () => {
                 </div>
             </div>
 
-            {/* Featured Work Section */}
             {isIntroComplete && (
                 <div ref={featuredRef} className="container mx-auto px-4 lg:px-20 pt-24 pb-16">
                     <motion.div
@@ -189,23 +254,30 @@ const Home: React.FC = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className="text-4xl lg:text-6xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-[#69f1ff] to-[#3c86ff] drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]"
+                            className={`text-4xl lg:text-6xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-[#69f1ff] to-[#3c86ff] 
+                                ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.2)]' : 'drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]'}`}
                         >
                             Featured Work
                         </motion.h2>
                         <motion.p
                             variants={itemVariants}
-                            className="text-center text-gray-400 mb-12 text-lg lg:text-xl"
+                            className={`text-center mb-12 text-lg lg:text-xl ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
                         >
                             A selection of my strongest engineering projects.
                         </motion.p>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                             {featuredProjects.map((project, index) => (
                                 <motion.div
                                     key={index}
                                     variants={itemVariants}
-                                    className="group relative p-[2px] rounded-2xl shadow-2xl transition-all duration-500 ease-out transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(60,134,255,0.4)] bg-gradient-to-br from-[#1a2035] via-[#2a3045] to-[#1a2035] overflow-hidden"
+                                    className={`group relative p-[2px] rounded-2xl shadow-2xl transition-all duration-500 ease-out transform hover:-translate-y-2 
+                                        ${
+                                            theme === 'light'
+                                                ? 'bg-gradient-to-br from-white via-blue-50 to-white hover:shadow-[0_10px_30px_rgba(59,130,246,0.2)]'
+                                                : 'bg-gradient-to-br from-[#1a2035] via-[#2a3045] to-[#1a2035] hover:shadow-[0_10px_30px_rgba(60,134,255,0.4)]'
+                                        } 
+                                        overflow-hidden`}
                                 >
                                     <motion.div
                                         initial={{ opacity: 0 }}
@@ -216,12 +288,19 @@ const Home: React.FC = () => {
                                             repeat: Infinity,
                                             ease: 'easeInOut',
                                         }}
-                                        className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(105,241,255,0.2)] to-transparent z-0 pointer-events-none"
+                                        className={`absolute inset-0 bg-gradient-to-r from-transparent z-0 pointer-events-none
+                                            ${theme === 'light' ? 'via-blue-200/30' : 'via-[rgba(105,241,255,0.2)]'}`}
                                     ></motion.div>
 
-                                    <div className="relative z-10 rounded-xl bg-[#0b1021]/90 backdrop-blur-sm p-6 h-full flex flex-col border border-gray-700/50">
+                                    <div
+                                        className={`relative z-10 rounded-xl backdrop-blur-sm p-6 h-full flex flex-col border 
+                                        ${theme === 'light' ? 'bg-white/90 border-slate-200' : 'bg-[#0b1021]/90 border-gray-700/50'}`}
+                                    >
                                         <div className="flex justify-between items-start mb-4">
-                                            <h3 className="text-2xl font-bold text-white group-hover:text-[#69f1ff] transition-colors duration-300">
+                                            <h3
+                                                className={`text-2xl font-bold transition-colors duration-300 
+                                                ${theme === 'light' ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-[#69f1ff]'}`}
+                                            >
                                                 {project.name}
                                             </h3>
                                             {project.github ? (
@@ -232,16 +311,7 @@ const Home: React.FC = () => {
                                                     className="text-gray-400 hover:text-white transition-colors duration-300"
                                                     title="View Project"
                                                 >
-                                                    <motion.div
-                                                        whileHover={{ rotate: 360 }}
-                                                        transition={{
-                                                            duration: 3,
-                                                            repeat: Infinity,
-                                                            ease: 'linear',
-                                                        }}
-                                                    >
-                                                        <FaEarthAmericas size={24} />
-                                                    </motion.div>
+                                                    <FaEarthAmericas size={24} />
                                                 </a>
                                             ) : (
                                                 <span title="Private Project">
@@ -257,7 +327,9 @@ const Home: React.FC = () => {
                                             {project.date} • {project.span}
                                         </p>
 
-                                        <p className="text-gray-300 text-sm leading-relaxed mb-6 flex-grow">
+                                        <p
+                                            className={`text-sm leading-relaxed mb-6 flex-grow ${theme === 'light' ? 'text-slate-600' : 'text-gray-300'}`}
+                                        >
                                             {project.desc.split('\n')[0].replace('• ', '')}
                                         </p>
 
@@ -294,7 +366,7 @@ const Home: React.FC = () => {
                         >
                             <button
                                 onClick={() => navigate('/projects')}
-                                className="text-gray-400 hover:text-white text-lg font-medium inline-flex items-center space-x-2 group"
+                                className={`text-lg font-medium inline-flex items-center space-x-2 group ${theme === 'light' ? 'text-slate-500 hover:text-blue-600' : 'text-gray-400 hover:text-white'}`}
                             >
                                 <span>View all projects</span>
                                 <span className="transform transition-transform duration-300 group-hover:translate-x-1">

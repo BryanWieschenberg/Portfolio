@@ -10,9 +10,12 @@ import { MdWork, MdWorkOutline } from 'react-icons/md';
 import { HiChatBubbleBottomCenterText, HiOutlineChatBubbleBottomCenterText } from 'react-icons/hi2';
 import { GoHome, GoHomeFill } from 'react-icons/go';
 import { FiPlus, FiX } from 'react-icons/fi';
-import { FaLinkedin, FaGithub, FaFileAlt, FaUniversity } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaFileAlt } from 'react-icons/fa';
+import { IoSunny, IoMoon } from 'react-icons/io5';
+import { useTheme } from '../../context/ThemeContext';
 
 const Navbar: React.FC = () => {
+    const { theme, toggleTheme } = useTheme();
     const location = useLocation();
     const navigate = useNavigate();
     const homeRef = useRef<HTMLDivElement>(null);
@@ -92,32 +95,24 @@ const Navbar: React.FC = () => {
     };
 
     return (
-        <div className="fixed top-0 left-0 w-full z-50">
+        <div
+            className={`sticky top-0 left-0 w-full z-[100] backdrop-blur-3xl transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.3),0_1px_20px_rgba(255,255,255,0.15)]
+                ${theme === 'light' ? 'bg-white/20 border-white/30' : 'bg-slate-900/40 border-white/10'}`}
+        >
             <div
-                className={`w-full overflow-hidden transition-all duration-300 ease-in-out
+                className={`w-full overflow-hidden transition-all duration-300 ease-in-out border-b
                     ${isExpanded ? 'h-10 opacity-100' : 'h-0 opacity-0'}`}
-                style={{ background: 'linear-gradient(to bottom, #6b87aa, #4b576a)' }}
             >
                 <div className="container mx-auto px-2 h-full flex items-center justify-center">
-                    <ul className="flex space-x-1.5 text-lg text-blue-200">
+                    <ul className="flex items-center space-x-1.5 text-lg">
                         <li>
                             <a
                                 href="/assets/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hover:text-blue-300 flex items-center"
+                                className={`hover:text-blue-400 flex items-center text-blue-200`}
                             >
                                 <FaFileAlt className="w-7 h-7" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://tcnj.edu"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:text-blue-300 flex items-center"
-                            >
-                                <FaUniversity className="w-7 h-7" />
                             </a>
                         </li>
                         <li>
@@ -125,7 +120,7 @@ const Navbar: React.FC = () => {
                                 href="https://github.com/BryanWieschenberg/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hover:text-blue-300 flex items-center"
+                                className={`hover:text-blue-400 flex items-center text-blue-200`}
                             >
                                 <FaGithub className="w-7 h-7" />
                             </a>
@@ -135,18 +130,31 @@ const Navbar: React.FC = () => {
                                 href="https://linkedin.com/in/BryanWieschenberg/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hover:text-blue-300 flex items-center"
+                                className={`hover:text-blue-400 flex items-center text-blue-200`}
                             >
                                 <FaLinkedin className="w-7 h-7" />
                             </a>
+                        </li>
+                        <li>
+                            <button
+                                onClick={toggleTheme}
+                                className={`flex items-center p-1 rounded-full transition-colors ${theme === 'light' ? 'bg-slate-200/50 text-slate-800 hover:bg-slate-300' : 'bg-slate-800/50 text-yellow-400 hover:bg-slate-700'}`}
+                            >
+                                {theme === 'light' ? (
+                                    <IoMoon className="w-5 h-5" />
+                                ) : (
+                                    <IoSunny className="w-5 h-5" />
+                                )}
+                            </button>
                         </li>
                     </ul>
                 </div>
             </div>
 
             <header
-                className={`relative flex items-center w-full text-white shadow-lg py-2 ${isExpanded ? 'mt-0' : ''}`}
-                style={{ background: 'linear-gradient(to bottom, #4b576a, #0e1528)' }}
+                className={`relative flex items-center w-full py-2 transition-all duration-300 
+                    ${isExpanded ? 'mt-0 border-t border-white/10' : ''}
+                    ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
             >
                 <div className="container mx-auto px-4 flex justify-between items-center">
                     <div
@@ -158,22 +166,26 @@ const Navbar: React.FC = () => {
                             alt="Logo"
                             className="w-6 h-6 lg:w-10 lg:h-10"
                         />
-                        <div className="ml-2 hidden lg:block">
-                            <span className="text-blue-300">Bryan</span>
-                            <span className="block text-blue-300">Wieschenberg</span>
-                        </div>
                     </div>
 
-                    <nav className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex space-x-3 lg:space-x-10 text-lg text-blue-300">
-                        <ul className="flex flex-wrap space-x-1.5 lg:space-x-8 text-lg text-blue-300">
+                    <nav
+                        className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex space-x-3 lg:space-x-10 text-lg ${theme === 'light' ? 'text-blue-600' : 'text-blue-300'}`}
+                    >
+                        <ul
+                            className={`flex flex-wrap space-x-1.5 lg:space-x-8 text-lg ${theme === 'light' ? 'text-blue-600' : 'text-blue-300'}`}
+                        >
                             <li>
                                 <div
                                     ref={homeRef}
                                     onClick={(e) => handleNavigation(e, '/')}
-                                    className={`flex flex-col items-center cursor-pointer ${
+                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
                                         location.pathname === '/'
-                                            ? 'text-blue-300'
-                                            : 'text-gray-400 hover:text-gray-300'
+                                            ? theme === 'light'
+                                                ? 'text-blue-700'
+                                                : 'text-blue-300'
+                                            : theme === 'light'
+                                              ? 'text-slate-600 hover:text-blue-600'
+                                              : 'text-gray-400 hover:text-gray-300'
                                     }`}
                                 >
                                     {location.pathname === '/' ? (
@@ -190,10 +202,14 @@ const Navbar: React.FC = () => {
                                 <div
                                     ref={aboutRef}
                                     onClick={(e) => handleNavigation(e, '/about')}
-                                    className={`flex flex-col items-center cursor-pointer ${
+                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
                                         location.pathname === '/about'
-                                            ? 'text-blue-300'
-                                            : 'text-gray-400 hover:text-gray-300'
+                                            ? theme === 'light'
+                                                ? 'text-blue-700'
+                                                : 'text-blue-300'
+                                            : theme === 'light'
+                                              ? 'text-slate-600 hover:text-blue-600'
+                                              : 'text-gray-400 hover:text-gray-300'
                                     }`}
                                 >
                                     {location.pathname === '/about' ? (
@@ -210,10 +226,14 @@ const Navbar: React.FC = () => {
                                 <div
                                     ref={experienceRef}
                                     onClick={(e) => handleNavigation(e, '/experience')}
-                                    className={`flex flex-col items-center cursor-pointer ${
+                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
                                         location.pathname === '/experience'
-                                            ? 'text-blue-300'
-                                            : 'text-gray-400 hover:text-gray-300'
+                                            ? theme === 'light'
+                                                ? 'text-blue-700'
+                                                : 'text-blue-300'
+                                            : theme === 'light'
+                                              ? 'text-slate-600 hover:text-blue-600'
+                                              : 'text-gray-400 hover:text-gray-300'
                                     }`}
                                 >
                                     {location.pathname === '/experience' ? (
@@ -230,10 +250,14 @@ const Navbar: React.FC = () => {
                                 <div
                                     ref={projectsRef}
                                     onClick={(e) => handleNavigation(e, '/projects')}
-                                    className={`flex flex-col items-center cursor-pointer ${
+                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
                                         location.pathname === '/projects'
-                                            ? 'text-blue-300'
-                                            : 'text-gray-400 hover:text-gray-300'
+                                            ? theme === 'light'
+                                                ? 'text-blue-700'
+                                                : 'text-blue-300'
+                                            : theme === 'light'
+                                              ? 'text-slate-600 hover:text-blue-600'
+                                              : 'text-gray-400 hover:text-gray-300'
                                     }`}
                                 >
                                     {location.pathname === '/projects' ? (
@@ -250,10 +274,14 @@ const Navbar: React.FC = () => {
                                 <div
                                     ref={contactRef}
                                     onClick={(e) => handleNavigation(e, '/contact')}
-                                    className={`flex flex-col items-center cursor-pointer ${
+                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
                                         location.pathname === '/contact'
-                                            ? 'text-blue-300'
-                                            : 'text-gray-400 hover:text-gray-300'
+                                            ? theme === 'light'
+                                                ? 'text-blue-700'
+                                                : 'text-blue-300'
+                                            : theme === 'light'
+                                              ? 'text-slate-600 hover:text-blue-600'
+                                              : 'text-gray-400 hover:text-gray-300'
                                     }`}
                                 >
                                     {location.pathname === '/contact' ? (
@@ -271,25 +299,15 @@ const Navbar: React.FC = () => {
 
                     <div className="flex items-center">
                         <div className="hidden lg:flex items-center">
-                            <ul className="flex space-x-6 text-lg text-blue-200">
+                            <ul className="flex items-center space-x-6 text-lg">
                                 <li>
                                     <a
                                         href="./assets/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="hover:text-blue-300 flex flex-col items-center"
+                                        className={`hover:text-blue-400 flex flex-col items-center ${theme === 'light' ? 'text-blue-600' : 'text-blue-200'}`}
                                     >
                                         <FaFileAlt className="w-8 h-8" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="https://tcnj.edu"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:text-blue-300 flex flex-col items-center"
-                                    >
-                                        <FaUniversity className="w-8 h-8" />
                                     </a>
                                 </li>
                                 <li>
@@ -297,7 +315,7 @@ const Navbar: React.FC = () => {
                                         href="https://github.com/BryanWieschenberg/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="hover:text-blue-300 flex flex-col items-center"
+                                        className={`hover:text-blue-400 flex flex-col items-center ${theme === 'light' ? 'text-blue-600' : 'text-blue-200'}`}
                                     >
                                         <FaGithub className="w-8 h-8" />
                                     </a>
@@ -307,10 +325,26 @@ const Navbar: React.FC = () => {
                                         href="https://linkedin.com/in/BryanWieschenberg/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="hover:text-blue-300 flex flex-col items-center"
+                                        className={`hover:text-blue-400 flex flex-col items-center text-blue-200`}
                                     >
                                         <FaLinkedin className="w-8 h-8" />
                                     </a>
+                                </li>
+                                <li>
+                                    <button
+                                        onClick={toggleTheme}
+                                        className={`ml-2 flex items-center p-2 rounded-full transition-all duration-300 ${
+                                            theme === 'light'
+                                                ? 'bg-blue-100/50 text-blue-600 hover:bg-blue-200'
+                                                : 'bg-slate-800/50 text-yellow-400 hover:bg-slate-700 shadow-[0_0_15px_rgba(250,204,21,0.2)]'
+                                        }`}
+                                    >
+                                        {theme === 'light' ? (
+                                            <IoMoon className="w-6 h-6" />
+                                        ) : (
+                                            <IoSunny className="w-6 h-6" />
+                                        )}
+                                    </button>
                                 </li>
                             </ul>
                         </div>

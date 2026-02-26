@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { skills } from '../../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import SwipeReveal from '../../components/SwipeReveal';
+import { useTheme } from '../../context/ThemeContext';
 
 interface Skill {
     name: string;
@@ -10,6 +11,7 @@ interface Skill {
 }
 
 const Skills = () => {
+    const { theme } = useTheme();
     const [activeSkill, setActiveSkill] = useState<Skill | null>(null);
 
     const categoryColors: { [key: number]: string } = {
@@ -63,7 +65,10 @@ const Skills = () => {
                     shadowColor="shadow-[0_0_50px_rgba(133,128,231,0.8)]"
                     duration={0.6}
                 >
-                    <h1 className="roles-text lg:mb-2 lg:pt-5 text-2xl lg:text-6xl font-bold pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative text-[#8580e7] bg-clip-text">
+                    <h1
+                        className={`roles-text lg:mb-2 lg:pt-5 text-2xl lg:text-6xl font-bold pb-4 text-center relative text-[#8580e7] bg-clip-text
+                        ${theme === 'light' ? 'drop-shadow-[3px_3px_1px_rgba(30,30,160,0.2)]' : 'drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                    >
                         My Skills:
                     </h1>
                 </SwipeReveal>
@@ -80,7 +85,11 @@ const Skills = () => {
                         <div
                             className={`mr-2 min-w-[1rem] min-h-[1rem] ${cat.color} rounded-full`}
                         ></div>
-                        <span className="text-xs lg:text-sm text-white">{cat.label}</span>
+                        <span
+                            className={`text-xs lg:text-sm ${theme === 'light' ? 'text-slate-700 font-medium' : 'text-white'}`}
+                        >
+                            {cat.label}
+                        </span>
                     </div>
                 ))}
             </div>
@@ -101,8 +110,9 @@ const Skills = () => {
                             zIndex: 50,
                             backgroundColor: 'rgba(255,255,255,0.1)',
                         }}
-                        className={`relative flex flex-col items-center justify-center mb-[0.25px] bg-opacity-50 border-2 
-                            ${categoryColors[item.type]} ${categoryBgColors[item.type]}`}
+                        className={`relative flex flex-col items-center justify-center mb-[0.25px] border-2 transition-colors duration-300
+                            ${categoryColors[item.type]} 
+                            ${theme === 'light' ? 'bg-white/40 hover:bg-white/60' : categoryBgColors[item.type] + ' bg-opacity-50'}`}
                         onMouseEnter={() => setActiveSkill(item as Skill)}
                         onMouseLeave={() => setActiveSkill(null)}
                     >
@@ -132,7 +142,11 @@ const Skills = () => {
                             initial={{ opacity: 0, scale: 0.8, y: 10 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                            className="bg-blue-900/50 px-4 py-2 rounded-lg shadow-lg z-10 self-center"
+                            className={`px-4 py-2 rounded-lg shadow-lg z-10 self-center border ${
+                                theme === 'light'
+                                    ? 'bg-white border-blue-200 shadow-blue-100/50'
+                                    : 'bg-blue-900/50 border-blue-800/50 shadow-black/50'
+                            }`}
                         >
                             <h3
                                 className={`font-bold text-lg lg:text-2xl text-center
@@ -141,7 +155,15 @@ const Skills = () => {
                                     ${activeSkill.type === 2 ? 'text-yellow-500' : ''}
                                     ${activeSkill.type === 3 ? 'text-fuchsia-500' : ''}`}
                             >
-                                <span className="text-[rgb(157,230,255)]">Skill: </span>
+                                <span
+                                    className={
+                                        theme === 'light'
+                                            ? 'text-slate-500'
+                                            : 'text-[rgb(157,230,255)]'
+                                    }
+                                >
+                                    Skill:{' '}
+                                </span>
                                 {activeSkill.name}
                             </h3>
                         </motion.div>

@@ -5,10 +5,17 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                varela: ['Varela Round', 'sans-serif'],
-            },
-            backgroundImage: {
-                '345gradient': 'linear-gradient(345deg, #24bdd4, #c4f9ff)',
+                varela: [
+                    '"Fira Sans"',
+                    'system-ui',
+                    '-apple-system',
+                    'BlinkMacSystemFont',
+                    '"Segoe UI"',
+                    'Roboto',
+                    'Helvetica',
+                    'Arial',
+                    'sans-serif',
+                ],
             },
         },
     },

@@ -1,8 +1,11 @@
 import React, { useRef } from 'react';
 import Skills from './subpages/Skills';
 import { motion } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
+import SwipeReveal from '../components/SwipeReveal';
 
 const About: React.FC = () => {
+    const { theme } = useTheme();
     const topRef = useRef<HTMLParagraphElement | null>(null);
 
     return (
@@ -10,14 +13,20 @@ const About: React.FC = () => {
             <p id="ToTop" ref={topRef} className="invisible text-white">
                 ToTop
             </p>
-            <motion.h1
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-6xl lg:text-8xl font-bold lg:mt-2 pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative bg-gradient-to-r from-[#0030ff] to-[#c4f9ff] bg-clip-text text-transparent"
-            >
-                About Me
-            </motion.h1>
+            <div className="pt-16 lg:pt-20 text-center">
+                <SwipeReveal
+                    circleColor="bg-gradient-to-r from-[#0030ff] to-[#c4f9ff]"
+                    shadowColor="shadow-[0_0_50px_rgba(0,48,255,0.6)]"
+                    duration={0.6}
+                >
+                    <h1
+                        className={`text-6xl lg:text-8xl font-bold lg:mt-2 pb-4 text-center relative bg-clip-text text-transparent
+                        ${theme === 'light' ? 'bg-gradient-to-r from-blue-700 to-blue-400 drop-shadow-[3px_3px_1px_rgba(30,30,160,0.2)]' : 'bg-gradient-to-r from-[#0030ff] to-[#c4f9ff] drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                    >
+                        About Me
+                    </h1>
+                </SwipeReveal>
+            </div>
 
             <div className="flex flex-col lg:flex-row items-center justify-center mt-4 lg:mt-8 container mx-auto px-4 lg:px-40">
                 <motion.div
@@ -27,7 +36,9 @@ const About: React.FC = () => {
                     transition={{ duration: 0.6, ease: 'easeOut' }}
                     className="lg:w-1/2 mb-8 lg:mb-0"
                 >
-                    <p className="text-xs lg:text-lg text-[#d7e0e0]">
+                    <p
+                        className={`text-xs lg:text-lg font-medium leading-relaxed ${theme === 'light' ? 'text-slate-600' : 'text-[#d7e0e0]'}`}
+                    >
                         Hi, I'm Bryan Wieschenberg, a passionate Computer Science student at The
                         College of New Jersey, currently in my 7th semester as a Senior! I'm a
                         software engineer with a strong focus on building secure, scalable

@@ -1,7 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
+import SwipeReveal from '../components/SwipeReveal';
 
 const Contact: React.FC = () => {
+    const { theme } = useTheme();
     const [status, setStatus] = useState('');
     const topRef = useRef<HTMLParagraphElement | null>(null);
 
@@ -32,14 +35,20 @@ const Contact: React.FC = () => {
             <p id="ToTop" ref={topRef} className="invisible text-white">
                 ToTop
             </p>
-            <motion.h1
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-6xl lg:text-8xl font-bold lg:mt-2 pb-4 drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)] text-center relative bg-gradient-to-r from-[#0030ff] to-[#c4f9ff] bg-clip-text text-transparent"
-            >
-                Contact
-            </motion.h1>
+            <div className="pt-16 lg:pt-20 text-center">
+                <SwipeReveal
+                    circleColor="bg-gradient-to-r from-[#0030ff] to-[#c4f9ff]"
+                    shadowColor="shadow-[0_0_50px_rgba(0,48,255,0.6)]"
+                    duration={0.6}
+                >
+                    <h1
+                        className={`text-6xl lg:text-8xl font-bold lg:mt-2 pb-4 text-center relative bg-clip-text text-transparent
+                        ${theme === 'light' ? 'bg-gradient-to-r from-blue-700 to-blue-400 drop-shadow-[3px_3px_1px_rgba(30,30,160,0.2)]' : 'bg-gradient-to-r from-[#0030ff] to-[#c4f9ff] drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                    >
+                        Contact
+                    </h1>
+                </SwipeReveal>
+            </div>
 
             <motion.div
                 initial={{ opacity: 0, x: -50 }}
@@ -47,7 +56,10 @@ const Contact: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
             >
-                <p className="text-center text-sm lg:text-xl text-white max-w-2xl lg:max-w-6xl mx-auto mt-4 mb-8">
+                <p
+                    className={`text-center text-sm lg:text-xl max-w-2xl lg:max-w-6xl mx-auto mt-4 mb-8 font-medium
+                    ${theme === 'light' ? 'text-slate-600' : 'text-white'}`}
+                >
                     Feel free to reach out to me for any inquiries, collaborations, or just to say
                     hello!
                     <br />
@@ -56,7 +68,10 @@ const Contact: React.FC = () => {
 
                 <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-6">
                     <div>
-                        <label htmlFor="name" className="block text-lg font-medium text-white">
+                        <label
+                            htmlFor="name"
+                            className={`block text-lg font-bold ${theme === 'light' ? 'text-slate-700' : 'text-white'}`}
+                        >
                             Name
                         </label>
                         <input
@@ -64,12 +79,20 @@ const Contact: React.FC = () => {
                             name="name"
                             type="text"
                             required
-                            className="mt-1 block w-full p-3 rounded-md bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`mt-1 block w-full p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors
+                                ${
+                                    theme === 'light'
+                                        ? 'bg-white text-slate-900 border-slate-300'
+                                        : 'bg-gray-800 text-white border-gray-700'
+                                }`}
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="email" className="block text-lg font-medium text-white">
+                        <label
+                            htmlFor="email"
+                            className={`block text-lg font-bold ${theme === 'light' ? 'text-slate-700' : 'text-white'}`}
+                        >
                             Email
                         </label>
                         <input
@@ -77,12 +100,20 @@ const Contact: React.FC = () => {
                             name="email"
                             type="email"
                             required
-                            className="mt-1 block w-full p-3 rounded-md bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`mt-1 block w-full p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors
+                                ${
+                                    theme === 'light'
+                                        ? 'bg-white text-slate-900 border-slate-300'
+                                        : 'bg-gray-800 text-white border-gray-700'
+                                }`}
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="message" className="block text-lg font-medium text-white">
+                        <label
+                            htmlFor="message"
+                            className={`block text-lg font-bold ${theme === 'light' ? 'text-slate-700' : 'text-white'}`}
+                        >
                             Message
                         </label>
                         <textarea
@@ -90,7 +121,12 @@ const Contact: React.FC = () => {
                             name="message"
                             rows={4}
                             required
-                            className="mt-1 block w-full p-3 rounded-md bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`mt-1 block w-full p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors
+                                ${
+                                    theme === 'light'
+                                        ? 'bg-white text-slate-900 border-slate-300'
+                                        : 'bg-gray-800 text-white border-gray-700'
+                                }`}
                         ></textarea>
                     </div>
 
