@@ -82,7 +82,7 @@ const ExperienceDetail: React.FC = () => {
         }
     };
 
-    const imagePath = `/assets/images/${experience.company.toLowerCase().replace(/\s+/g, '')}.png`;
+    const imagePath = `/images/${experience.company.toLowerCase().replace(/\s+/g, '')}.png`;
     const bullets = experience.desc
         .split('\n')
         .map((b) => b.replace(/^•\s*/, '').trim())
@@ -112,7 +112,6 @@ const ExperienceDetail: React.FC = () => {
             </p>
 
             <div className="container mx-auto px-4 lg:px-20 pt-20 pb-16 max-w-5xl">
-                {/* Back Button */}
                 <motion.button
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -126,10 +125,8 @@ const ExperienceDetail: React.FC = () => {
                 </motion.button>
 
                 <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-                    {/* Hero Section */}
                     <motion.div variants={itemVariants} className="mb-10">
                         <div className="flex items-start gap-6 mb-4">
-                            {/* Company Logo */}
                             <div
                                 className={`flex-shrink-0 w-20 h-20 lg:w-24 lg:h-24 rounded-2xl overflow-hidden flex items-center justify-center shadow-xl
                                 ${theme === 'light' ? 'bg-white border-2 border-slate-200' : 'bg-white/10 border-2 border-gray-600/50'}`}
@@ -139,8 +136,7 @@ const ExperienceDetail: React.FC = () => {
                                     alt={`${experience.company} logo`}
                                     className="w-14 h-14 lg:w-16 lg:h-16 object-contain"
                                     onError={(e) => {
-                                        (e.target as HTMLImageElement).src =
-                                            '/assets/images/default.png';
+                                        (e.target as HTMLImageElement).src = '/images/default.png';
                                     }}
                                 />
                             </div>
@@ -171,7 +167,6 @@ const ExperienceDetail: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Action Links */}
                         <div className="flex flex-wrap gap-3">
                             {experience.artifacts.liveUrl && (
                                 <a
@@ -201,7 +196,6 @@ const ExperienceDetail: React.FC = () => {
                         </div>
                     </motion.div>
 
-                    {/* Overview Section */}
                     <motion.div
                         variants={itemVariants}
                         className={`rounded-2xl p-6 mb-6 border
@@ -239,7 +233,6 @@ const ExperienceDetail: React.FC = () => {
                         </ul>
                     </motion.div>
 
-                    {/* My Contribution */}
                     {experience.contribution && (
                         <motion.div
                             variants={itemVariants}
@@ -250,7 +243,6 @@ const ExperienceDetail: React.FC = () => {
                                     : 'bg-gradient-to-br from-[#0b1021] to-[#1a1133] border-purple-800/30 shadow-2xl'
                             }`}
                         >
-                            {/* Accent border */}
                             <div
                                 className={`absolute top-0 left-0 bottom-0 w-[3px]
                                 ${theme === 'light' ? 'bg-gradient-to-b from-purple-400 to-blue-400' : 'bg-gradient-to-b from-[#8580e7] to-[#3c86ff]'}`}
@@ -275,7 +267,6 @@ const ExperienceDetail: React.FC = () => {
                         </motion.div>
                     )}
 
-                    {/* Tech Stack */}
                     {experience.skills && Object.keys(experience.skills).length > 0 && (
                         <motion.div
                             variants={itemVariants}
@@ -312,7 +303,6 @@ const ExperienceDetail: React.FC = () => {
                         </motion.div>
                     )}
 
-                    {/* Artifacts */}
                     {(experience.artifacts.screenshots?.length || experience.artifacts.writeup) && (
                         <motion.div
                             variants={itemVariants}

@@ -191,7 +191,7 @@ const About: React.FC = () => {
                                     className="absolute -inset-2 bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] rounded-2xl blur-lg"
                                 />
                                 <img
-                                    src="./assets/images/photo.png"
+                                    src="/images/photo.png"
                                     alt="Bryan"
                                     className="relative rounded-2xl border-2 border-[#3c86ff]/40 object-cover w-48 h-48 lg:w-64 lg:h-64 shadow-2xl z-10"
                                 />
@@ -337,7 +337,7 @@ const About: React.FC = () => {
                                 ${theme === 'light' ? 'bg-white border border-slate-200' : 'bg-white/10 border border-gray-600/50'}`}
                             >
                                 <img
-                                    src="./assets/images/tcnj.png"
+                                    src="/images/tcnj.png"
                                     alt="TCNJ"
                                     className="w-12 h-12 lg:w-14 lg:h-14 object-contain"
                                 />
@@ -448,7 +448,7 @@ const About: React.FC = () => {
                                                     className="max-w-full max-h-full object-contain"
                                                     onError={(e) => {
                                                         (e.target as HTMLImageElement).src =
-                                                            '/assets/skills/default.png';
+                                                            '/skills/default.png';
                                                     }}
                                                 />
                                             ) : (

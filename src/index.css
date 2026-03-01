@@ -19,7 +19,6 @@ body {
     @apply font-bold container mx-auto text-center text-white leading-[.9] drop-shadow-[0_0px_10px_rgba(0,0,139,.8)];
 }
 
-/* fadeIn.css */
 .fade-in {
     opacity: 0;
     transform: translateY(5px);
@@ -36,12 +35,12 @@ body {
     width: 10px;
 }
 .scrollbar-dark::-webkit-scrollbar-track {
-    background: #0a0a0a; /* Dark background */
+    background: #0a0a0a;
 }
 .scrollbar-dark::-webkit-scrollbar-thumb {
-    background: #555; /* Dark grey thumb */
+    background: #555;
     border-radius: 5px;
 }
 .scrollbar-dark::-webkit-scrollbar-thumb:hover {
-    background: #777; /* Slightly lighter on hover */
+    background: #777;
 }

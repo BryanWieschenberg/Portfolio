@@ -190,7 +190,7 @@ const Home: React.FC = () => {
                                         className={`mt-6 flex flex-wrap justify-center lg:justify-start gap-6 font-medium ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
                                     >
                                         <a
-                                            href="/assets/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
+                                            href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
                                             target="_blank"
                                             className={`transition-colors flex items-center gap-2 ${theme === 'light' ? 'hover:text-blue-600' : 'hover:text-white'}`}
                                         >
@@ -233,7 +233,7 @@ const Home: React.FC = () => {
                                         className="absolute -inset-1 bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] rounded-full blur"
                                     ></motion.div>
                                     <img
-                                        src="./assets/images/photo.png"
+                                        src="/images/photo.png"
                                         alt="Bryan"
                                         className="relative rounded-full border-4 border-[#3c86ff] object-cover w-64 h-64 lg:w-96 lg:h-96 transform transition duration-500 hover:scale-105 shadow-2xl z-10"
                                     />

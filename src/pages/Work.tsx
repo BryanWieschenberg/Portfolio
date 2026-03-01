@@ -227,7 +227,7 @@ const Work: React.FC = () => {
     };
 
     const renderExperienceCard = (exp: WorkType) => {
-        const imagePath = `/assets/images/${exp.company.toLowerCase().replace(/\s+/g, '')}.png`;
+        const imagePath = `/images/${exp.company.toLowerCase().replace(/\s+/g, '')}.png`;
         const firstLine = exp.desc.split('\n')[0].replace('• ', '');
 
         return (
@@ -273,7 +273,7 @@ const Work: React.FC = () => {
                             alt={`${exp.company} logo`}
                             className="w-10 h-10 lg:w-12 lg:h-12 object-contain"
                             onError={(e) => {
-                                (e.target as HTMLImageElement).src = '/assets/images/default.png';
+                                (e.target as HTMLImageElement).src = '/images/default.png';
                             }}
                         />
                     </div>
@@ -350,7 +350,9 @@ const Work: React.FC = () => {
         gradient: string,
         icon: React.ReactNode,
     ) => {
-        if (items.length === 0) {return null;}
+        if (items.length === 0) {
+            return null;
+        }
 
         return (
             <motion.section
@@ -452,41 +454,6 @@ const Work: React.FC = () => {
                 </motion.div>
             </div>
 
-            {/* Professional Experience Section */}
-            <div ref={experienceRef} className="container mx-auto px-4 lg:px-20 pt-20 pb-8">
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-50px' }}
-                    variants={containerVariants}
-                >
-                    <motion.div variants={headerVariants} className="text-center mb-10">
-                        <h2
-                            className={`text-3xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#8580e7] to-[#3c86ff]
-                            ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)]' : 'drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]'}`}
-                        >
-                            Professional Experience
-                        </h2>
-                        <p
-                            className={`mt-2 text-base lg:text-lg ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
-                        >
-                            Roles where I've delivered real impact.
-                        </p>
-                    </motion.div>
-
-                    <div className="max-w-4xl mx-auto space-y-5">
-                        {work.map((exp) => renderExperienceCard(exp))}
-                    </div>
-                </motion.div>
-            </div>
-
-            {/* Divider */}
-            <div className="container mx-auto px-20 pt-8">
-                <div
-                    className={`h-[1px] w-full ${theme === 'light' ? 'bg-gradient-to-r from-transparent via-slate-300 to-transparent' : 'bg-gradient-to-r from-transparent via-gray-700 to-transparent'}`}
-                />
-            </div>
-
             {/* Projects Section */}
             <div ref={projectsRef} className="container mx-auto px-4 lg:px-20 pt-16 pb-16">
                 <motion.div
@@ -528,6 +495,41 @@ const Work: React.FC = () => {
                     'from-[#fbbf24] to-[#fcd34d]',
                     <FaBolt />,
                 )}
+            </div>
+
+            {/* Divider */}
+            <div className="container mx-auto px-20 pt-8">
+                <div
+                    className={`h-[1px] w-full ${theme === 'light' ? 'bg-gradient-to-r from-transparent via-slate-300 to-transparent' : 'bg-gradient-to-r from-transparent via-gray-700 to-transparent'}`}
+                />
+            </div>
+
+            {/* Professional Experience Section */}
+            <div ref={experienceRef} className="container mx-auto px-4 lg:px-20 pt-20 pb-8">
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-50px' }}
+                    variants={containerVariants}
+                >
+                    <motion.div variants={headerVariants} className="text-center mb-10">
+                        <h2
+                            className={`text-3xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#8580e7] to-[#3c86ff]
+                            ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)]' : 'drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]'}`}
+                        >
+                            Professional Experience
+                        </h2>
+                        <p
+                            className={`mt-2 text-base lg:text-lg ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
+                        >
+                            Roles where I've delivered real impact.
+                        </p>
+                    </motion.div>
+
+                    <div className="max-w-4xl mx-auto space-y-5">
+                        {work.map((exp) => renderExperienceCard(exp))}
+                    </div>
+                </motion.div>
             </div>
 
             <br />

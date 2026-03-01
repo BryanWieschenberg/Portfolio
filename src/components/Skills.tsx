@@ -55,7 +55,7 @@ const Skills = () => {
                 whileInView={{ opacity: 1, scaleX: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, ease: 'easeOut' }}
-                src="./assets/images/arrowBig.png"
+                src="/images/arrowBig.png"
                 className="custom-image mx-auto"
                 style={{ width: '1600px', height: '20px' }}
             />
@@ -123,8 +123,7 @@ const Skills = () => {
                                     alt={item.name}
                                     className="max-w-full max-h-full object-contain"
                                     onError={(e) => {
-                                        (e.target as HTMLImageElement).src =
-                                            '/assets/skills/default.png';
+                                        (e.target as HTMLImageElement).src = '/skills/default.png';
                                     }}
                                 />
                             ) : (

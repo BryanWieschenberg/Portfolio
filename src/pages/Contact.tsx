@@ -104,7 +104,7 @@ const Contact: React.FC = () => {
             icon: <FaFileAlt />,
             label: 'Resume',
             handle: 'Download PDF',
-            url: '/assets/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf',
+            url: '/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf',
         },
     ];
 

@@ -8,7 +8,7 @@ const Timeline: React.FC = () => {
     const { theme } = useTheme();
     const items = work.map((item) => ({
         ...item,
-        imagePath: `/assets/images/${item.company.toLowerCase().replace(/\s+/g, '')}.png`,
+        imagePath: `/images/${item.company.toLowerCase().replace(/\s+/g, '')}.png`,
     }));
 
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -91,8 +91,7 @@ const Timeline: React.FC = () => {
                                     alt={`${exp.company} logo`}
                                     className="w-12 h-12 lg:w-16 lg:h-16 object-contain rounded-lg bg-white p-2 shadow-md"
                                     onError={(e) => {
-                                        (e.target as HTMLImageElement).src =
-                                            '/assets/images/default.png';
+                                        (e.target as HTMLImageElement).src = '/images/default.png';
                                     }}
                                 />
 

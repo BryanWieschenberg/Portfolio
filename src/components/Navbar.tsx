@@ -30,11 +30,11 @@ const Navbar: React.FC = () => {
     const updateLinePosition = () => {
         let ref: React.RefObject<HTMLDivElement | null> | null = null;
 
-        if (location.pathname === '/') {ref = homeRef;}
-        else if (location.pathname === '/about') {ref = aboutRef;}
-        else if (isWorkActive) {ref = workRef;}
-        else if (isBlogActive) {ref = blogRef;}
-        else if (location.pathname === '/contact') {ref = contactRef;}
+        if (location.pathname === '/') ref = homeRef;
+        else if (location.pathname === '/about') ref = aboutRef;
+        else if (isWorkActive) ref = workRef;
+        else if (isBlogActive) ref = blogRef;
+        else if (location.pathname === '/contact') ref = contactRef;
 
         if (ref?.current) {
             const rect = ref.current.getBoundingClientRect();
@@ -81,7 +81,7 @@ const Navbar: React.FC = () => {
                     <ul className="flex items-center space-x-1.5 text-lg">
                         <li>
                             <a
-                                href="/assets/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
+                                href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={`hover:text-blue-400 flex items-center text-blue-200`}
@@ -136,7 +136,7 @@ const Navbar: React.FC = () => {
                         onClick={(e) => handleNavigation(e, '/')}
                     >
                         <img
-                            src="./assets/images/favicon.ico"
+                            src="/images/favicon.ico"
                             alt="Logo"
                             className="w-6 h-6 lg:w-10 lg:h-10"
                         />
@@ -276,7 +276,7 @@ const Navbar: React.FC = () => {
                             <ul className="flex items-center space-x-6 text-lg">
                                 <li>
                                     <a
-                                        href="./assets/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
+                                        href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={`hover:text-blue-400 flex flex-col items-center ${theme === 'light' ? 'text-blue-600' : 'text-blue-200'}`}

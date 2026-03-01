@@ -4,59 +4,7 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from '../components/SwipeReveal';
 import { FaArrowRight, FaClock, FaTag } from 'react-icons/fa';
-
-export interface BlogPost {
-    slug: string;
-    title: string;
-    subtitle: string;
-    date: string;
-    readTime: string;
-    tags: string[];
-    preview: string;
-}
-
-export const blogPosts: BlogPost[] = [
-    {
-        slug: 'ml_research',
-        title: 'Teaching Robots to See',
-        subtitle: 'My Summer in ML Research at TCNJ',
-        date: 'Jun 2025',
-        readTime: '8 min read',
-        tags: ['Machine Learning', 'Computer Vision', 'Robotics'],
-        preview:
-            "What happens when a software engineer who's never touched a neural network gets thrown into a robotics lab with a deadline and a camera.",
-    },
-    {
-        slug: 'streamline',
-        title: 'Building StreamLine',
-        subtitle: 'An Encrypted, Multithreaded Chat Server in Rust',
-        date: 'Jul 2025',
-        readTime: '12 min read',
-        tags: ['Rust', 'Systems', 'Cryptography'],
-        preview:
-            'Why I chose the hardest possible way to build a chat app — and what it taught me about ownership, encryption, and protocol design.',
-    },
-    {
-        slug: 'goalgetter',
-        title: 'Building GoalGetter',
-        subtitle: 'A Productivity App with 30+ Users and Zero Excuses',
-        date: 'Aug 2025',
-        readTime: '11 min read',
-        tags: ['Full-Stack', 'Auth', 'Product'],
-        preview:
-            'What I learned shipping a real product — from auth nightmares to scheduling math to the moment someone said "I use this every day."',
-    },
-    {
-        slug: 'dsa_journey',
-        title: 'My DSA Journey',
-        subtitle: 'Blind 75 → NeetCode 150 → NeetCode 250',
-        date: 'Feb 2026',
-        readTime: '10 min read',
-        tags: ['DSA', 'Learning', 'Problem Solving'],
-        preview:
-            'What I actually learned grinding through 250+ data structures & algorithms problems — and why the grind itself is only half the point.',
-    },
-];
+import { blogPosts } from '../constants';
 
 const Blog: React.FC = () => {
     const { theme } = useTheme();
