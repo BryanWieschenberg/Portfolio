@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { skills } from '../../constants';
+import { skills } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
-import SwipeReveal from '../../components/SwipeReveal';
-import { useTheme } from '../../context/ThemeContext';
+import SwipeReveal from './SwipeReveal';
+import { useTheme } from '../context/ThemeContext';
 
 interface Skill {
     name: string;

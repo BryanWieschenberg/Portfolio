@@ -15,12 +15,23 @@ export interface Skill {
     icon: string | React.ReactElement;
 }
 
+export interface Artifacts {
+    screenshots?: string[];
+    demoUrl?: string;
+    liveUrl?: string;
+    repoUrl?: string;
+    writeup?: string;
+}
+
 export interface Work {
     role: string;
     company: string;
+    slug: string;
     date: string;
     desc: string;
     skills: Record<string, number>;
+    artifacts: Artifacts;
+    contribution: string;
 }
 
 export interface Role {
@@ -31,12 +42,15 @@ export interface Role {
 
 export interface Project {
     name: string;
+    slug: string;
     scale: number; // 0: Large (>4 weeks), 1: Medium (1-4 weeks), 2: Small (<1 week)
     date: string;
     span: string;
     desc: string;
     skills: Record<string, number>;
     github: string;
+    artifacts: Artifacts;
+    contribution: string;
 }
 
 export const skills: Skill[] = [
@@ -382,13 +396,18 @@ export const work: Work[] = [
     {
         role: 'Operations Manager',
         company: 'The College of New Jersey',
+        slug: 'operations-manager',
         date: 'Aug. 2025 – Present',
         desc: '• Leading a team of 15 staff in key inventory tracking, streamlining office workflows to support 3,000+ campus residents, resulting in a 40% reduction in key distribution errors and improved operational efficiency\n• Standardizing dormitory procedures through transaction logs, weekly audits, monthly team meetings, and emergency coordination protocols, reducing process overhead for staff and ensuring safe conditions across all properties',
         skills: {},
+        artifacts: {},
+        contribution:
+            'Sole manager responsible for all key inventory operations and staff coordination across the entire residential campus.',
     },
     {
         role: 'Machine Learning Engineer',
         company: 'The College of New Jersey',
+        slug: 'machine-learning-engineer',
         date: 'May 2025 – Jul. 2025',
         desc: '• Engineered a proprietary computer vision application with OpenCV to extract spatial data using trained model at a stable 30 FPS, ensuring low-latency perception and supporting reliable robotic decision-making\n• Trained and optimized a Convolutional Neural Network (CNN) in PyTorch on 40,000+ real-world images (captured and augmented), using NumPy and Matplotlib for analysis, improving accuracy by 50%+ and ensuring resilience to lighting/color variations\n• Implemented a closed-loop pipeline in ROS that transformed vision outputs into precise autonomous actuation, coordinating multiple robots and reducing manual operator intervention by 25% compared to baseline teleoperation',
         skills: {
@@ -401,12 +420,16 @@ export const work: Work[] = [
             'Computer Vision': 3,
             'Neural Networks': 3,
         },
+        artifacts: {},
+        contribution:
+            'Designed and implemented the full computer vision pipeline end-to-end: data capture & augmentation, CNN architecture & training, OpenCV spatial extraction, and ROS integration for autonomous actuation.',
     },
 ];
 
 export const projects: Project[] = [
     {
         name: 'GoalGetter',
+        slug: 'goalgetter',
         scale: 0,
         date: 'Aug. 2025',
         span: '1 month',
@@ -426,9 +449,15 @@ export const projects: Project[] = [
             'CI/CD': 4,
         },
         github: 'https://github.com/BryanWieschenberg/GoalGetter',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/GoalGetter',
+        },
+        contribution:
+            'Solo-developed the entire application end-to-end: frontend UI, backend API, database schema, authentication system, scheduling engine, and AWS deployment infrastructure.',
     },
     {
         name: 'StreamLine',
+        slug: 'streamline',
         scale: 0,
         date: 'Jul. 2025',
         span: '1 month',
@@ -445,9 +474,15 @@ export const projects: Project[] = [
             'End-to-End Encryption': 4,
         },
         github: 'https://github.com/BryanWieschenberg/StreamLine',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/StreamLine',
+        },
+        contribution:
+            'Solo-architected and built the entire platform: network protocol, encryption layer, multithreaded server, command system, RBAC, and persistent storage.',
     },
     {
         name: 'Personal Website',
+        slug: 'personal-website',
         scale: 1,
         date: 'Jan. 2025 – Mar. 2025',
         span: '3 months',
@@ -463,9 +498,15 @@ export const projects: Project[] = [
             Frontend: 4,
         },
         github: 'https://github.com/BryanWieschenberg/Personal-Website',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/Personal-Website',
+        },
+        contribution:
+            'Designed and built the entire portfolio site from scratch, including all animations, theming, and deployment.',
     },
     {
         name: 'Dashboard and Applicant Manager',
+        slug: 'dashboard-applicant-manager',
         scale: 1,
         date: 'Sep. 2024 – Nov. 2024',
         span: '3 months',
@@ -481,9 +522,13 @@ export const projects: Project[] = [
             'Agile Development': 4,
         },
         github: '',
+        artifacts: {},
+        contribution:
+            'Led backend development including database schema design, Rails controllers, and complex SQL queries for analytics dashboards.',
     },
     {
         name: 'Video Sharing Service',
+        slug: 'video-sharing-service',
         scale: 1,
         date: 'Oct. 2025 – Nov. 2024',
         span: '1 month',
@@ -503,9 +548,15 @@ export const projects: Project[] = [
             Backend: 4,
         },
         github: 'https://github.com/BryanWieschenberg/Video-Sharing-Service',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/Video-Sharing-Service',
+        },
+        contribution:
+            'Built the complete backend (Node.js API, Docker containers, GCP integration) and contributed to the Next.js frontend.',
     },
     {
         name: 'Livestock Metrics Visualization App',
+        slug: 'livestock-metrics',
         scale: 1,
         date: 'Feb. 2024 – Apr. 2024',
         span: '3 months',
@@ -519,9 +570,15 @@ export const projects: Project[] = [
             'Full-Stack': 4,
         },
         github: 'https://github.com/BryanWieschenberg/Livestock-Metrics-Visualization-App',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/Livestock-Metrics-Visualization-App',
+        },
+        contribution:
+            'Owned the database layer (schema, views, complex analytical queries) and Flask backend; contributed to frontend visualizations.',
     },
     {
         name: 'Neural Networks',
+        slug: 'neural-networks',
         scale: 2,
         date: 'Jun. 2025',
         span: '3 days',
@@ -536,86 +593,142 @@ export const projects: Project[] = [
             NLP: 4,
         },
         github: 'https://github.com/BryanWieschenberg/Neural-Networks',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/Neural-Networks',
+        },
+        contribution:
+            'Independently designed, trained, and evaluated both neural network architectures from scratch.',
     },
     {
         name: 'Command Line Shell Interface',
+        slug: 'cli-shell',
         scale: 2,
         date: 'Feb. 2025',
         span: '2 weeks',
         desc: '• CLI built in C leveraging system calls (fork(), exec()) to emulate Linux shell commands\n• Supports I/O redirection, piping, and arrow key navigation for command history',
         skills: { C: 0, Bash: 0, Termios: 1, 'Parent/Child Processes': 4 },
         github: '',
+        artifacts: {},
+        contribution:
+            'Sole developer — implemented the full shell including process management, I/O redirection, piping, and terminal control.',
     },
     {
         name: 'Flashcards App',
+        slug: 'flashcards-app',
         scale: 2,
         date: 'Feb. 2025',
         span: '1.5 weeks',
         desc: '• Interactive study tool developed in Python for memorizing terms and definitions\n• Implements dynamic content switching with keyboard controls for adaptive learning',
         skills: { Python: 0, Tkinter: 1 },
         github: 'https://github.com/BryanWieschenberg/Flashcards-App',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/Flashcards-App',
+        },
+        contribution:
+            'Solo-developed the entire application including UI, session persistence, and adaptive learning logic.',
     },
     {
         name: 'Hackathon Event Scheduler',
+        slug: 'hackathon-scheduler',
         scale: 2,
         date: 'Sep. 2024',
         span: '3 weeks',
         desc: '• Developed a Hackathon scheduler in Ruby, utilizing room and event CSV data to generate optimized scheduling plans\n• Implemented automated room allocation and conflict detection, keeping track of capacity, equipment, and event type',
         skills: { Ruby: 0 },
         github: 'https://github.com/BryanWieschenberg/Hackathon-Scheduling-Tool',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/Hackathon-Scheduling-Tool',
+        },
+        contribution:
+            'Built the scheduling algorithm, conflict detection, and CSV parsing engine from scratch.',
     },
     {
         name: 'Amazon Web Scraper',
+        slug: 'amazon-web-scraper',
         scale: 2,
         date: 'Oct. 2023',
         span: '2 weeks',
         desc: '• Automated web scraper using Python and Selenium for Amazon data extraction\n• Analyzes reviewer bias and creates trusted final conclusions on products',
         skills: { Python: 0, Selenium: 1, 'Beautiful Soup': 1, 'Web Scraping': 4 },
         github: 'https://github.com/BryanWieschenberg/Amazon-Web-Scraper',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/Amazon-Web-Scraper',
+        },
+        contribution:
+            'Solo-developed the scraping pipeline, bias analysis algorithm, and result aggregation.',
     },
     {
         name: 'Turtle Stack',
+        slug: 'turtle-stack',
         scale: 2,
         date: 'Feb. 2025',
         span: '24 hours',
         desc: '• Hackathon game built in Python featuring real-time turtle stacking mechanics\n• Implemented dynamic difficulty and unique turtle properties to create a challenging yet addicting experience',
         skills: { Python: 0, Pygame: 1, 'Game Development': 4 },
         github: 'https://github.com/BryanWieschenberg/Turtle-Stack',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/Turtle-Stack',
+        },
+        contribution:
+            'Designed and coded all game mechanics, physics, difficulty scaling, and visual assets within 24 hours.',
     },
     {
         name: 'Computer Lab Finder',
+        slug: 'computer-lab-finder',
         scale: 2,
         date: 'Oct. 2024',
         span: '2 days',
         desc: '• Python-based tool for locating TCNJ computer labs by analyzing room occupancy and class/event schedules\n• Outputs availability and scheduling data with an easy-to-read format',
         skills: { Python: 0 },
         github: 'https://github.com/BryanWieschenberg/Computer-Lab-Finder',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/Computer-Lab-Finder',
+        },
+        contribution: 'Sole developer — built the scheduling parser and availability engine.',
     },
     {
         name: 'AVL Tree Data Analyzer',
+        slug: 'avl-tree-analyzer',
         scale: 2,
         date: 'Apr. 2023',
         span: '1 week',
         desc: '• Built an extremely optimized and fast AVL tree in C++ in a team of two other students, which analyzes large data sets of randomly-generated names and social security numbers\n• The user can choose which data set they want to be analyzed using the command line, spanning from 15 lines of data to 500,000 lines, with each line containing the operation needed to be performed on that line of data, along with the corresponding name and social security number\n• Implemented three operations for data in the set: insertion, delete, and retrieval, with each line telling the program which operation to perform',
         skills: { 'C++': 0, 'AVL Trees': 4 },
         github: 'https://github.com/BryanWieschenberg/AVL-Tree-Data-Analyzer',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/AVL-Tree-Data-Analyzer',
+        },
+        contribution:
+            'Led AVL tree implementation including rotation logic, balancing, and performance optimization for 500K+ records.',
     },
     {
         name: 'Matrix Word Scanner',
+        slug: 'matrix-word-scanner',
         scale: 2,
         date: 'Feb. 2023',
         span: '5 days',
         desc: '• Planned and executed a program built in C++ to scan a matrix of any size in a 2-dimensional array and use the command line to find any amount of words of any length listed and color the successfully found words red\n• Can search for any words listed in the command line after the name of the executable, followed by <, then the matrix file name',
         skills: { 'C++': 0 },
         github: 'https://github.com/BryanWieschenberg/Matrix-Word-Scanner',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/Matrix-Word-Scanner',
+        },
+        contribution:
+            'Sole developer — designed the matrix traversal algorithm and ANSI color output system.',
     },
     {
         name: 'Name Frequency Analyzer',
+        slug: 'name-frequency-analyzer',
         scale: 2,
         date: 'Nov. 2022',
         span: '5 days',
         desc: '• Designed and implemented a program built in Java that analyzes baby name popularities in public data given by the Social Security Administration\n• Sorted a dataset of 2,052,781 lines, with each consisting of names, genders, and number of occurrences through every male and female name with two to fifteen characters from the year 1880 to 2021, and ranked each name by popularity for each year through an optimized object-oriented algorithmn\n• Created six seamless search functions for the user',
         skills: { Java: 0, 'Object-Oriented Programming': 4 },
         github: 'https://github.com/BryanWieschenberg/Name-Frequency-Analyzer',
+        artifacts: {
+            repoUrl: 'https://github.com/BryanWieschenberg/Name-Frequency-Analyzer',
+        },
+        contribution:
+            'Sole developer — built the data parser, sorting algorithms, and all six search functions from scratch.',
     },
 ];

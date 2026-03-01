@@ -29,7 +29,7 @@ const SwipeReveal: React.FC<SwipeRevealProps> = ({
     const opacity = useMotionValue(0);
 
     const clipPath = useTransform(x, (currentX) => {
-        if (!isRevealPhase) return 'inset(-100px 100% -100px -100px)';
+        if (!isRevealPhase) {return 'inset(-100px 100% -100px -100px)';}
         const rightInsetPx = containerWidth - currentX;
         return `inset(-100px ${rightInsetPx}px -100px -100px)`;
     });
@@ -54,11 +54,11 @@ const SwipeReveal: React.FC<SwipeRevealProps> = ({
     const hasStarted = useRef(false);
 
     useEffect(() => {
-        if (containerWidth === 0 || hasStarted.current) return;
+        if (containerWidth === 0 || hasStarted.current) {return;}
         hasStarted.current = true;
 
         const runSequence = async () => {
-            if (delay > 0) await new Promise((resolve) => setTimeout(resolve, delay * 1000));
+            if (delay > 0) {await new Promise((resolve) => setTimeout(resolve, delay * 1000));}
 
             x.set(0);
             y.set(0);

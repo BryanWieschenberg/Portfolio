@@ -1,11 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './pages/views/Navbar';
-import Background from './pages/views/Background';
+import Navbar from './components/Navbar';
+import Background from './components/Background';
 import Home from './pages/Home';
 import About from './pages/About';
-import Experience from './pages/Experience';
-import Projects from './pages/Projects';
+import Work from './pages/Work';
+import ProjectDetail from './components/ProjectDetail';
+import ExperienceDetail from './components/ExperienceDetail';
+import Blog from './pages/Blog';
+import DSAJourney from './pages/blog/DSAJourney';
+import MLResearch from './pages/blog/MLResearch';
+import StreamLineBlog from './pages/blog/StreamLine';
+import GoalGetterBlog from './pages/blog/GoalGetter';
 import Contact from './pages/Contact';
 import ScrollToTop from './components/ScrollToTop';
 import { ThemeProvider } from './context/ThemeContext';
@@ -73,8 +79,14 @@ const App: React.FC = () => (
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<About />} />
-                        <Route path="/experience" element={<Experience />} />
-                        <Route path="/projects" element={<Projects />} />
+                        <Route path="/work" element={<Work />} />
+                        <Route path="/work/projects/:slug" element={<ProjectDetail />} />
+                        <Route path="/work/experience/:slug" element={<ExperienceDetail />} />
+                        <Route path="/blog" element={<Blog />} />
+                        <Route path="/blog/ml_research" element={<MLResearch />} />
+                        <Route path="/blog/streamline" element={<StreamLineBlog />} />
+                        <Route path="/blog/goalgetter" element={<GoalGetterBlog />} />
+                        <Route path="/blog/dsa_journey" element={<DSAJourney />} />
                         <Route path="/contact" element={<Contact />} />
                     </Routes>
                 </div>

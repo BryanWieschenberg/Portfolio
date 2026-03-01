@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { work } from '../../constants';
+import { work } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../../context/ThemeContext';
-import SwipeReveal from '../../components/SwipeReveal';
+import { useTheme } from '../context/ThemeContext';
+import SwipeReveal from './SwipeReveal';
 
 const Timeline: React.FC = () => {
     const { theme } = useTheme();

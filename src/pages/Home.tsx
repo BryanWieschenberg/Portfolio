@@ -365,7 +365,7 @@ const Home: React.FC = () => {
                             className="mt-12 text-center transition-all duration-700 delay-500 ease-out transform"
                         >
                             <button
-                                onClick={() => navigate('/projects')}
+                                onClick={() => navigate('/work')}
                                 className={`text-lg font-medium inline-flex items-center space-x-2 group ${theme === 'light' ? 'text-slate-500 hover:text-blue-600' : 'text-gray-400 hover:text-white'}`}
                             >
                                 <span>View all projects</span>

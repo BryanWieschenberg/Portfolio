@@ -1,10 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '../context/ThemeContext';
 
 const Background: React.FC = () => {
     const mountRef = useRef<HTMLDivElement>(null);
     const { theme } = useTheme();
+
+    const sceneRef = useRef<{
+        renderer: THREE.WebGLRenderer;
+        scene: THREE.Scene;
+        camera: THREE.PerspectiveCamera;
+        geometry: THREE.BufferGeometry;
+        angles: number[];
+        radii: number[];
+        speeds: number[];
+        count: number;
+        animId: number;
+    } | null>(null);
 
     useEffect(() => {
         if (!mountRef.current) {
@@ -42,14 +54,11 @@ const Background: React.FC = () => {
             const size = Math.random() < 0.99 ? 0.5 + Math.random() * 5 : 5 + Math.random() * 15;
             sizes.push(size);
 
-            speeds.push(size * 0.1 * (0.0001 + Math.random() * 0.0005));
+            speeds.push(size * 0.25 * (0.0001 + Math.random() * 0.0005));
 
             positions.push(Math.cos(angle) * radius, Math.sin(angle) * radius, 0);
 
-            const hue = theme === 'light' ? 200 : 210;
-            const lightness = theme === 'light' ? 60 + Math.random() * 30 : 5 + Math.random() * 60;
-            const c = new THREE.Color(`hsl(${hue}, 20%, ${lightness}%)`);
-            colors.push(c.r, c.g, c.b);
+            colors.push(0, 0, 0);
         }
 
         geometry.setAttribute(
@@ -66,30 +75,31 @@ const Background: React.FC = () => {
             vertexColors: true,
             transparent: true,
             vertexShader: `
-        attribute float size;
-        varying vec3 vColor;
-        void main() {
-          vColor = color;
-          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-          gl_PointSize = size * (300.0 / -mvPosition.z);
-          gl_Position = projectionMatrix * mvPosition;
-        }
-      `,
+                attribute float size;
+                varying vec3 vColor;
+                void main() {
+                    vColor = color;
+                    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                    gl_PointSize = size * (300.0 / -mvPosition.z);
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `,
             fragmentShader: `
-        varying vec3 vColor;
-        void main() {
-          vec2 glCoord = gl_PointCoord - 0.5;
-          if (length(glCoord) > 0.5) discard;
-          gl_FragColor = vec4(vColor, 1.0);
-        }
-      `,
+                varying vec3 vColor;
+                void main() {
+                    vec2 glCoord = gl_PointCoord - 0.5;
+                    if (length(glCoord) > 0.5) discard;
+                    gl_FragColor = vec4(vColor, 1.0);
+                }
+            `,
         });
 
         const points = new THREE.Points(geometry, material);
         scene.add(points);
 
+        let animId = 0;
         const animate = () => {
-            requestAnimationFrame(animate);
+            animId = requestAnimationFrame(animate);
             const pos = geometry.attributes.position as THREE.BufferAttribute;
             for (let i = 0; i < count; i++) {
                 angles[i] += speeds[i];
@@ -102,6 +112,18 @@ const Background: React.FC = () => {
         };
         animate();
 
+        sceneRef.current = {
+            renderer,
+            scene,
+            camera,
+            geometry,
+            angles,
+            radii,
+            speeds,
+            count,
+            animId,
+        };
+
         const onResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -111,8 +133,34 @@ const Background: React.FC = () => {
 
         return () => {
             window.removeEventListener('resize', onResize);
+            cancelAnimationFrame(animId);
+            renderer.dispose();
+            geometry.dispose();
+            material.dispose();
             mountRef.current?.removeChild(renderer.domElement);
+            sceneRef.current = null;
         };
+    }, []);
+
+    useEffect(() => {
+        const s = sceneRef.current;
+        if (!s) {
+            return;
+        }
+
+        const colorAttr = s.geometry.attributes.color as THREE.BufferAttribute;
+        const arr = colorAttr.array as Float32Array;
+
+        for (let i = 0; i < s.count; i++) {
+            const hue = theme === 'light' ? 170 + Math.random() * 15 : 210;
+            const sat = theme === 'light' ? 85 : 80;
+            const lightness = theme === 'light' ? 55 + Math.random() * 30 : 5 + Math.random() * 60;
+            const c = new THREE.Color(`hsl(${hue}, ${sat}%, ${lightness}%)`);
+            arr[i * 3] = c.r;
+            arr[i * 3 + 1] = c.g;
+            arr[i * 3 + 2] = c.b;
+        }
+        colorAttr.needsUpdate = true;
     }, [theme]);
 
     return (
@@ -129,7 +177,7 @@ const Background: React.FC = () => {
                 zIndex: -1,
                 background:
                     theme === 'light'
-                        ? 'linear-gradient(to bottom, #f1f5f9, #e2e8f0 40%, #cbd5e1 100%)'
+                        ? 'linear-gradient(to bottom, #f1f5f9, #e2e8f0 40%, #d9e2ec 100%)'
                         : 'linear-gradient(to bottom, #1e242b, #0f1214ff 40%, #0c0d0dff 100%)',
             }}
         />

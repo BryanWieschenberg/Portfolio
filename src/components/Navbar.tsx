@@ -1,18 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import {
-    IoDocumentTextOutline,
-    IoDocumentTextSharp,
-    IoPersonCircleOutline,
-    IoPersonCircle,
-} from 'react-icons/io5';
-import { MdWork, MdWorkOutline } from 'react-icons/md';
-import { HiChatBubbleBottomCenterText, HiOutlineChatBubbleBottomCenterText } from 'react-icons/hi2';
+import { IoPersonCircleOutline, IoPersonCircle } from 'react-icons/io5';
+import { MdWork, MdWorkOutline, MdOutlineContactless, MdContactless } from 'react-icons/md';
+import { RiQuillPenFill, RiQuillPenLine } from 'react-icons/ri';
 import { GoHome, GoHomeFill } from 'react-icons/go';
 import { FiPlus, FiX } from 'react-icons/fi';
 import { FaLinkedin, FaGithub, FaFileAlt } from 'react-icons/fa';
 import { IoSunny, IoMoon } from 'react-icons/io5';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '../context/ThemeContext';
 
 const Navbar: React.FC = () => {
     const { theme, toggleTheme } = useTheme();
@@ -20,8 +15,8 @@ const Navbar: React.FC = () => {
     const navigate = useNavigate();
     const homeRef = useRef<HTMLDivElement>(null);
     const aboutRef = useRef<HTMLDivElement>(null);
-    const experienceRef = useRef<HTMLDivElement>(null);
-    const projectsRef = useRef<HTMLDivElement>(null);
+    const workRef = useRef<HTMLDivElement>(null);
+    const blogRef = useRef<HTMLDivElement>(null);
     const contactRef = useRef<HTMLDivElement>(null);
     const [lineStyle, setLineStyle] = useState<{ left: number; width: number }>({
         left: 0,
@@ -29,42 +24,21 @@ const Navbar: React.FC = () => {
     });
     const [isExpanded, setIsExpanded] = useState(false);
 
+    const isWorkActive = location.pathname.startsWith('/work');
+    const isBlogActive = location.pathname.startsWith('/blog');
+
     const updateLinePosition = () => {
-        if (location.pathname === '/' && homeRef.current) {
-            const rect = homeRef.current.getBoundingClientRect();
-            const headerRect = homeRef.current.closest('header')?.getBoundingClientRect();
-            if (headerRect) {
-                const left = rect.left - headerRect.left - 4;
-                const width = rect.width + 8;
-                setLineStyle({ left, width });
-            }
-        } else if (location.pathname === '/about' && aboutRef.current) {
-            const rect = aboutRef.current.getBoundingClientRect();
-            const headerRect = aboutRef.current.closest('header')?.getBoundingClientRect();
-            if (headerRect) {
-                const left = rect.left - headerRect.left - 4;
-                const width = rect.width + 8;
-                setLineStyle({ left, width });
-            }
-        } else if (location.pathname === '/experience' && experienceRef.current) {
-            const rect = experienceRef.current.getBoundingClientRect();
-            const headerRect = experienceRef.current.closest('header')?.getBoundingClientRect();
-            if (headerRect) {
-                const left = rect.left - headerRect.left - 4;
-                const width = rect.width + 8;
-                setLineStyle({ left, width });
-            }
-        } else if (location.pathname === '/projects' && projectsRef.current) {
-            const rect = projectsRef.current.getBoundingClientRect();
-            const headerRect = projectsRef.current.closest('header')?.getBoundingClientRect();
-            if (headerRect) {
-                const left = rect.left - headerRect.left - 4;
-                const width = rect.width + 8;
-                setLineStyle({ left, width });
-            }
-        } else if (location.pathname === '/contact' && contactRef.current) {
-            const rect = contactRef.current.getBoundingClientRect();
-            const headerRect = contactRef.current.closest('header')?.getBoundingClientRect();
+        let ref: React.RefObject<HTMLDivElement | null> | null = null;
+
+        if (location.pathname === '/') {ref = homeRef;}
+        else if (location.pathname === '/about') {ref = aboutRef;}
+        else if (isWorkActive) {ref = workRef;}
+        else if (isBlogActive) {ref = blogRef;}
+        else if (location.pathname === '/contact') {ref = contactRef;}
+
+        if (ref?.current) {
+            const rect = ref.current.getBoundingClientRect();
+            const headerRect = ref.current.closest('header')?.getBoundingClientRect();
             if (headerRect) {
                 const left = rect.left - headerRect.left - 4;
                 const width = rect.width + 8;
@@ -96,8 +70,8 @@ const Navbar: React.FC = () => {
 
     return (
         <div
-            className={`sticky top-0 left-0 w-full z-[100] backdrop-blur-3xl transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.3),0_1px_20px_rgba(255,255,255,0.15)]
-                ${theme === 'light' ? 'bg-white/20 border-white/30' : 'bg-slate-900/40 border-white/10'}`}
+            className={`sticky top-0 left-0 w-full z-[100] backdrop-blur-3xl transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.3),0_1px_20px_rgba(255,255,255,0.15)] border-b
+                ${theme === 'light' ? 'bg-white/20 border-white/30 border-gray-500' : 'bg-slate-900/40 border-white/10 border-gray-900'}`}
         >
             <div
                 className={`w-full overflow-hidden transition-all duration-300 ease-in-out border-b
@@ -200,6 +174,30 @@ const Navbar: React.FC = () => {
                             </li>
                             <li>
                                 <div
+                                    ref={workRef}
+                                    onClick={(e) => handleNavigation(e, '/work')}
+                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
+                                        isWorkActive
+                                            ? theme === 'light'
+                                                ? 'text-blue-700'
+                                                : 'text-blue-300'
+                                            : theme === 'light'
+                                              ? 'text-slate-600 hover:text-blue-600'
+                                              : 'text-gray-400 hover:text-gray-300'
+                                    }`}
+                                >
+                                    {isWorkActive ? (
+                                        <MdWork className="w-8 h-8" />
+                                    ) : (
+                                        <MdWorkOutline className="w-8 h-8" />
+                                    )}
+                                    <span className="hidden lg:block text-sm leading-tight mb-1">
+                                        Work
+                                    </span>
+                                </div>
+                            </li>
+                            <li>
+                                <div
                                     ref={aboutRef}
                                     onClick={(e) => handleNavigation(e, '/about')}
                                     className={`flex flex-col items-center cursor-pointer transition-colors ${
@@ -224,10 +222,10 @@ const Navbar: React.FC = () => {
                             </li>
                             <li>
                                 <div
-                                    ref={experienceRef}
-                                    onClick={(e) => handleNavigation(e, '/experience')}
+                                    ref={blogRef}
+                                    onClick={(e) => handleNavigation(e, '/blog')}
                                     className={`flex flex-col items-center cursor-pointer transition-colors ${
-                                        location.pathname === '/experience'
+                                        isBlogActive
                                             ? theme === 'light'
                                                 ? 'text-blue-700'
                                                 : 'text-blue-300'
@@ -236,37 +234,13 @@ const Navbar: React.FC = () => {
                                               : 'text-gray-400 hover:text-gray-300'
                                     }`}
                                 >
-                                    {location.pathname === '/experience' ? (
-                                        <MdWork className="w-8 h-8" />
+                                    {isBlogActive ? (
+                                        <RiQuillPenFill className="w-8 h-8" />
                                     ) : (
-                                        <MdWorkOutline className="w-8 h-8" />
+                                        <RiQuillPenLine className="w-8 h-8" />
                                     )}
                                     <span className="hidden lg:block text-sm leading-tight mb-1">
-                                        Experience
-                                    </span>
-                                </div>
-                            </li>
-                            <li>
-                                <div
-                                    ref={projectsRef}
-                                    onClick={(e) => handleNavigation(e, '/projects')}
-                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
-                                        location.pathname === '/projects'
-                                            ? theme === 'light'
-                                                ? 'text-blue-700'
-                                                : 'text-blue-300'
-                                            : theme === 'light'
-                                              ? 'text-slate-600 hover:text-blue-600'
-                                              : 'text-gray-400 hover:text-gray-300'
-                                    }`}
-                                >
-                                    {location.pathname === '/projects' ? (
-                                        <IoDocumentTextSharp className="w-8 h-8" />
-                                    ) : (
-                                        <IoDocumentTextOutline className="w-8 h-8" />
-                                    )}
-                                    <span className="hidden lg:block text-sm leading-tight mb-1">
-                                        Projects
+                                        Blog
                                     </span>
                                 </div>
                             </li>
@@ -285,9 +259,9 @@ const Navbar: React.FC = () => {
                                     }`}
                                 >
                                     {location.pathname === '/contact' ? (
-                                        <HiChatBubbleBottomCenterText className="w-8 h-8" />
+                                        <MdContactless className="w-8 h-8" />
                                     ) : (
-                                        <HiOutlineChatBubbleBottomCenterText className="w-8 h-8" />
+                                        <MdOutlineContactless className="w-8 h-8" />
                                     )}
                                     <span className="hidden lg:block text-sm leading-tight mb-1">
                                         Contact
@@ -360,9 +334,8 @@ const Navbar: React.FC = () => {
 
                 {(location.pathname === '/' ||
                     location.pathname === '/about' ||
-                    location.pathname === '/education' ||
-                    location.pathname === '/experience' ||
-                    location.pathname === '/projects' ||
+                    isWorkActive ||
+                    isBlogActive ||
                     location.pathname === '/contact') && (
                     <div
                         className="absolute bg-blue-400"
