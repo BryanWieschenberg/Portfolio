@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
@@ -7,7 +7,6 @@ import { FaArrowLeft, FaClock, FaTag } from 'react-icons/fa';
 const StreamLineBlog: React.FC = () => {
     const { theme } = useTheme();
     const navigate = useNavigate();
-    const topRef = useRef<HTMLParagraphElement | null>(null);
 
     const p = `text-base lg:text-lg leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`;
     const accent =
@@ -35,10 +34,6 @@ const StreamLineBlog: React.FC = () => {
 
     return (
         <>
-            <p id="ToTop" ref={topRef} className="invisible text-white">
-                ToTop
-            </p>
-
             <div className="container mx-auto px-4 lg:px-20 pt-20 pb-20 max-w-4xl">
                 {/* Back */}
                 <motion.button

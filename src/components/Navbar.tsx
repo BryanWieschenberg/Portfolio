@@ -30,11 +30,11 @@ const Navbar: React.FC = () => {
     const updateLinePosition = () => {
         let ref: React.RefObject<HTMLDivElement | null> | null = null;
 
-        if (location.pathname === '/') ref = homeRef;
-        else if (location.pathname === '/about') ref = aboutRef;
-        else if (isWorkActive) ref = workRef;
-        else if (isBlogActive) ref = blogRef;
-        else if (location.pathname === '/contact') ref = contactRef;
+        if (location.pathname === '/') {ref = homeRef;}
+        else if (location.pathname === '/about') {ref = aboutRef;}
+        else if (isWorkActive) {ref = workRef;}
+        else if (isBlogActive) {ref = blogRef;}
+        else if (location.pathname === '/contact') {ref = contactRef;}
 
         if (ref?.current) {
             const rect = ref.current.getBoundingClientRect();

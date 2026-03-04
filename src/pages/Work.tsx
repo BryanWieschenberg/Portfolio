@@ -10,7 +10,6 @@ import { HiSparkles } from 'react-icons/hi2';
 const Work: React.FC = () => {
     const { theme } = useTheme();
     const navigate = useNavigate();
-    const topRef = useRef<HTMLParagraphElement | null>(null);
     const experienceRef = useRef<HTMLDivElement>(null);
     const projectsRef = useRef<HTMLDivElement>(null);
 
@@ -387,10 +386,6 @@ const Work: React.FC = () => {
 
     return (
         <>
-            <p id="ToTop" ref={topRef} className="invisible text-white">
-                ToTop
-            </p>
-
             {/* Hero */}
             <div className="pt-16 lg:pt-20 text-center px-4">
                 <SwipeReveal

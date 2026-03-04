@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from '../components/SwipeReveal';
@@ -19,7 +19,6 @@ import {
 const Contact: React.FC = () => {
     const { theme } = useTheme();
     const [status, setStatus] = useState('');
-    const topRef = useRef<HTMLParagraphElement | null>(null);
 
     const heading = `text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]' : 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)]'}`;
     const divider = `h-[1px] w-full my-14 ${theme === 'light' ? 'bg-gradient-to-r from-transparent via-slate-300 to-transparent' : 'bg-gradient-to-r from-transparent via-gray-700 to-transparent'}`;
@@ -117,10 +116,6 @@ const Contact: React.FC = () => {
 
     return (
         <>
-            <p id="ToTop" ref={topRef} className="invisible text-white">
-                ToTop
-            </p>
-
             {/* Hero */}
             <div className="pt-16 lg:pt-20 text-center px-4">
                 <SwipeReveal

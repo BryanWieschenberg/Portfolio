@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { projects } from '../constants';
 import { motion } from 'framer-motion';
@@ -20,7 +20,6 @@ const ProjectDetail: React.FC = () => {
     const { theme } = useTheme();
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
-    const topRef = useRef<HTMLParagraphElement | null>(null);
 
     const project = projects.find((p) => p.slug === slug);
 
@@ -144,10 +143,6 @@ const ProjectDetail: React.FC = () => {
 
     return (
         <>
-            <p id="ToTop" ref={topRef} className="invisible text-white">
-                ToTop
-            </p>
-
             <div className="container mx-auto px-4 lg:px-20 pt-20 pb-16 max-w-5xl">
                 {/* Back Button */}
                 <motion.button

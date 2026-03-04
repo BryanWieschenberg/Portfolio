@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
@@ -9,7 +9,6 @@ import { blogPosts } from '../constants';
 const Blog: React.FC = () => {
     const { theme } = useTheme();
     const navigate = useNavigate();
-    const topRef = useRef<HTMLParagraphElement | null>(null);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -30,10 +29,6 @@ const Blog: React.FC = () => {
 
     return (
         <>
-            <p id="ToTop" ref={topRef} className="invisible text-white">
-                ToTop
-            </p>
-
             {/* Hero */}
             <div className="pt-16 lg:pt-20 text-center px-4">
                 <SwipeReveal

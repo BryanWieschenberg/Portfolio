@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { projects } from '../constants';
 import { FaLocationDot, FaFileLines, FaGithub, FaEarthAmericas } from 'react-icons/fa6';
@@ -23,7 +23,6 @@ function useLgUp() {
 
 const Home: React.FC = () => {
     const { theme } = useTheme();
-    const topRef = useRef<HTMLParagraphElement | null>(null);
     const featuredRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
     const [isIntroComplete, setIsIntroComplete] = useState(false);
@@ -50,10 +49,7 @@ const Home: React.FC = () => {
 
     const ContactMe = (e: React.MouseEvent) => {
         e.preventDefault();
-        topRef.current?.scrollIntoView();
-        setTimeout(() => {
-            navigate('/contact');
-        }, 0);
+        navigate('/contact');
     };
 
     const containerVariants = {
@@ -77,10 +73,6 @@ const Home: React.FC = () => {
 
     return (
         <>
-            <p id="ToTop" ref={topRef} className="invisible text-white">
-                ToTop
-            </p>
-
             <AnimatePresence>
                 {!isIntroComplete && (
                     <motion.div
@@ -134,12 +126,7 @@ const Home: React.FC = () => {
                                         {isLgUp && (
                                             <PiArrowFatLinesRightFill className="shrink-0 text-xl lg:text-3xl" />
                                         )}
-                                        <span className="lg:pl-2">
-                                            Full-Stack Engineer{' '}
-                                            <span className="pl-1 lg:pl-2 text-sm lg:text-xl">
-                                                (Backend-Focused)
-                                            </span>
-                                        </span>
+                                        <span className="lg:pl-2">Full-Stack Engineer</span>
                                     </motion.p>
 
                                     <motion.div

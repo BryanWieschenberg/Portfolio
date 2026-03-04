@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { skills } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
@@ -27,7 +27,6 @@ interface SkillItem {
 
 const About: React.FC = () => {
     const { theme } = useTheme();
-    const topRef = useRef<HTMLParagraphElement | null>(null);
     const [activeSkill, setActiveSkill] = useState<SkillItem | null>(null);
     const [activeCategory, setActiveCategory] = useState<number | null>(null);
 
@@ -130,10 +129,6 @@ const About: React.FC = () => {
 
     return (
         <>
-            <p id="ToTop" ref={topRef} className="invisible text-white">
-                ToTop
-            </p>
-
             {/* Hero */}
             <div className="pt-16 lg:pt-20 text-center px-4">
                 <SwipeReveal
