@@ -34,7 +34,6 @@ const DSAJourney: React.FC = () => {
     return (
         <>
             <div className="container mx-auto px-4 lg:px-20 pt-20 pb-20 max-w-4xl">
-                {/* Back */}
                 <motion.button
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -47,7 +46,6 @@ const DSAJourney: React.FC = () => {
                 </motion.button>
 
                 <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-                    {/* ── HEADER ── */}
                     <motion.div variants={itemVariants} className="mb-10">
                         <div className="flex flex-wrap items-center gap-3 mb-3">
                             <span className="blog-meta">
@@ -76,14 +74,13 @@ const DSAJourney: React.FC = () => {
                         </p>
                         <p
                             className={`mt-3 text-base lg:text-lg italic
-                            ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
+                            ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
                         >
                             What I actually learned grinding through 250+ problems — and why the
                             grind itself is only half the point.
                         </p>
                     </motion.div>
 
-                    {/* ── WHY I STARTED ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Why I Started</h2>
                         <p className={p}>
@@ -110,7 +107,6 @@ const DSAJourney: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── THE BLIND 75 ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Phase 1: The Blind 75</h2>
                         <p className={subheading}>Learning to see the patterns</p>
@@ -149,7 +145,7 @@ const DSAJourney: React.FC = () => {
                                         ${theme === 'light' ? 'bg-blue-400' : 'bg-[#69f1ff]'}`}
                                     />
                                     <span
-                                        className={`text-sm lg:text-base leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
+                                        className={`text-sm lg:text-base leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                                     >
                                         {point}
                                     </span>
@@ -160,7 +156,6 @@ const DSAJourney: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── THE NEETCODE 150 ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Phase 2: The NeetCode 150</h2>
                         <p className={subheading}>Building depth, not just breadth</p>
@@ -197,7 +192,6 @@ const DSAJourney: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── THE NEETCODE 250 ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Phase 3: The NeetCode 250</h2>
                         <p className={subheading}>Diminishing returns, but real confidence</p>
@@ -224,7 +218,6 @@ const DSAJourney: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── HONEST OPINIONS ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Honest Opinions</h2>
 
@@ -258,7 +251,6 @@ const DSAJourney: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── WHAT I'D DO DIFFERENTLY ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>What I'd Do Differently</h2>
                         <ul className="space-y-3 ml-1">
@@ -286,7 +278,7 @@ const DSAJourney: React.FC = () => {
                                         ${theme === 'light' ? 'bg-blue-400' : 'bg-[#69f1ff]'}`}
                                     />
                                     <span
-                                        className={`text-sm lg:text-base leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
+                                        className={`text-sm lg:text-base leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                                     >
                                         <span className={accent}>{item.bold}</span> {item.text}
                                     </span>
@@ -297,7 +289,6 @@ const DSAJourney: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── CLOSING ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Where I Am Now</h2>
                         <p className={p}>

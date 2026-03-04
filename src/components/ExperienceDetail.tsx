@@ -214,7 +214,7 @@ const ExperienceDetail: React.FC = () => {
                             </div>
                             <p
                                 className={`text-sm lg:text-base leading-relaxed pl-3
-                                ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
+                                ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                             >
                                 {experience.contribution}
                             </p>
@@ -257,7 +257,7 @@ const ExperienceDetail: React.FC = () => {
                                             <div
                                                 key={i}
                                                 className={`rounded-xl overflow-hidden border
-                                                ${theme === 'light' ? 'border-slate-200' : 'border-gray-700'}`}
+                                                ${theme === 'light' ? 'border-slate-200' : 'border-slate-700'}`}
                                             >
                                                 <img
                                                     src={src}

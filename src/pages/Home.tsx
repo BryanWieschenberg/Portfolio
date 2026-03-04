@@ -143,7 +143,7 @@ const Home: React.FC = () => {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.4 }}
-                                        className={`mt-6 text-base lg:text-xl max-w-2xl text-center lg:text-left leading-relaxed italic ${theme === 'light' ? 'text-slate-600' : 'text-gray-300'}`}
+                                        className={`mt-6 text-base lg:text-xl max-w-2xl text-center lg:text-left leading-relaxed italic ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
                                     >
                                         I build full-stack solutions and backend systems that scale,
                                         are secure, and can perform under even the harshest
@@ -168,7 +168,7 @@ const Home: React.FC = () => {
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.4 }}
-                                        className={`mt-6 flex flex-wrap justify-center lg:justify-start gap-6 font-medium ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
+                                        className={`mt-6 flex flex-wrap justify-center lg:justify-start gap-6 font-medium ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
                                     >
                                         <a
                                             href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
@@ -214,7 +214,11 @@ const Home: React.FC = () => {
                                         className="absolute -inset-1 bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] rounded-full blur"
                                     ></motion.div>
                                     <img
-                                        src="/images/photo.png"
+                                        src={
+                                            theme === 'light'
+                                                ? '/images/photo-light.png'
+                                                : '/images/photo-dark.png'
+                                        }
                                         alt="Bryan"
                                         className="relative rounded-full border-4 border-[#3c86ff] object-cover w-64 h-64 lg:w-96 lg:h-96 transform transition duration-500 hover:scale-105 shadow-2xl z-10"
                                     />
@@ -272,7 +276,7 @@ const Home: React.FC = () => {
 
                                     <div
                                         className={`relative z-10 rounded-xl backdrop-blur-sm p-6 h-full flex flex-col border 
-                                        ${theme === 'light' ? 'bg-white/90 border-slate-200' : 'bg-[#0b1021]/90 border-gray-700/50'}`}
+                                        ${theme === 'light' ? 'bg-white/90 border-slate-200' : 'bg-[#0b1021]/90 border-slate-700/50'}`}
                                     >
                                         <div className="flex justify-between items-start mb-4">
                                             <h3 className="card-title text-2xl">{project.name}</h3>
@@ -281,7 +285,7 @@ const Home: React.FC = () => {
                                                     href={project.github}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-gray-400 hover:text-white transition-colors duration-300"
+                                                    className="text-slate-400 hover:text-white transition-colors duration-300"
                                                     title="View Project"
                                                 >
                                                     <FaEarthAmericas size={24} />
@@ -290,7 +294,7 @@ const Home: React.FC = () => {
                                                 <span title="Private Project">
                                                     <FaEarthAmericas
                                                         size={24}
-                                                        className="text-gray-600"
+                                                        className="text-slate-600"
                                                     />
                                                 </span>
                                             )}
@@ -305,7 +309,7 @@ const Home: React.FC = () => {
                                         </p>
 
                                         {project.skills && (
-                                            <div className="mt-auto pt-4 border-t border-gray-700/50">
+                                            <div className="mt-auto pt-4 border-t border-slate-700/50">
                                                 <div className="flex flex-wrap gap-2">
                                                     {Object.entries(project.skills)
                                                         .slice(0, 5)
@@ -318,7 +322,7 @@ const Home: React.FC = () => {
                                                             </span>
                                                         ))}
                                                     {Object.keys(project.skills).length > 5 && (
-                                                        <span className="px-2.5 py-1 text-gray-500 text-xs font-medium self-center">
+                                                        <span className="px-2.5 py-1 text-slate-500 text-xs font-medium self-center">
                                                             +
                                                             {Object.keys(project.skills).length - 5}
                                                         </span>

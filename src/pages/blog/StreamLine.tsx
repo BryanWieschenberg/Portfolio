@@ -34,7 +34,6 @@ const StreamLineBlog: React.FC = () => {
     return (
         <>
             <div className="container mx-auto px-4 lg:px-20 pt-20 pb-20 max-w-4xl">
-                {/* Back */}
                 <motion.button
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -47,7 +46,6 @@ const StreamLineBlog: React.FC = () => {
                 </motion.button>
 
                 <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-                    {/* ── HEADER ── */}
                     <motion.div variants={itemVariants} className="mb-10">
                         <div className="flex flex-wrap items-center gap-3 mb-3">
                             <span className="blog-meta">
@@ -76,14 +74,13 @@ const StreamLineBlog: React.FC = () => {
                         </p>
                         <p
                             className={`mt-3 text-base lg:text-lg italic
-                            ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
+                            ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
                         >
                             Why I chose the hardest possible way to build a chat app — and what that
                             taught me about systems engineering.
                         </p>
                     </motion.div>
 
-                    {/* ── WHY RUST, WHY NOW ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Why Rust, Why a Chat Server</h2>
                         <p className={p}>
@@ -110,7 +107,6 @@ const StreamLineBlog: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── THE CONCURRENCY MODEL ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>The Concurrency Model</h2>
                         <p className={subheading}>Arc, Mutex, and the borrow checker</p>
@@ -144,7 +140,6 @@ const StreamLineBlog: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── ENCRYPTION ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>End-to-End Encryption</h2>
                         <p className={p}>
@@ -174,7 +169,6 @@ const StreamLineBlog: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── THE COMMAND SYSTEM ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>50+ Commands and RBAC</h2>
                         <p className={p}>
@@ -204,7 +198,6 @@ const StreamLineBlog: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── PERFORMANCE ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Performance Under Load</h2>
                         <p className={p}>
@@ -225,7 +218,6 @@ const StreamLineBlog: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── WHAT I LEARNED ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>What StreamLine Taught Me</h2>
                         <ul className="space-y-3 ml-1">
@@ -253,7 +245,7 @@ const StreamLineBlog: React.FC = () => {
                                         ${theme === 'light' ? 'bg-blue-400' : 'bg-[#69f1ff]'}`}
                                     />
                                     <span
-                                        className={`text-sm lg:text-base leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
+                                        className={`text-sm lg:text-base leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                                     >
                                         <span className={accent}>{item.bold}</span> {item.text}
                                     </span>

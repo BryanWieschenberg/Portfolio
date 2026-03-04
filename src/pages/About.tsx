@@ -128,7 +128,6 @@ const About: React.FC = () => {
 
     return (
         <>
-            {/* Hero */}
             <div className="page-hero">
                 <SwipeReveal
                     circleColor="bg-gradient-to-r from-[#3c86ff] to-[#69f1ff]"
@@ -154,12 +153,10 @@ const About: React.FC = () => {
                     viewport={{ once: true }}
                     variants={containerVariants}
                 >
-                    {/* ═══════════════ INTRO + PHOTO ═══════════════ */}
                     <motion.div
                         variants={itemVariants}
                         className="flex flex-col lg:flex-row gap-10 items-center"
                     >
-                        {/* Photo with glow */}
                         <div className="flex-shrink-0">
                             <div className="relative">
                                 <motion.div
@@ -208,7 +205,6 @@ const About: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ═══════════════ HOW I GOT HERE ═══════════════ */}
                     <motion.div variants={itemVariants} className="space-y-5">
                         <h2 className={heading}>How I Got Here</h2>
                         <p className={p}>
@@ -234,7 +230,6 @@ const About: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ═══════════════ WHAT I CARE ABOUT BUILDING ═══════════════ */}
                     <motion.div variants={itemVariants} className="space-y-5">
                         <h2 className={heading}>What I Care About Building</h2>
                         <p className={p}>
@@ -259,7 +254,6 @@ const About: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ═══════════════ WHAT I'M OPTIMIZING FOR ═══════════════ */}
                     <motion.div variants={itemVariants} className="space-y-5">
                         <h2 className={heading}>What I'm Optimizing For</h2>
                         <p className={p}>
@@ -282,7 +276,6 @@ const About: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ═══════════════ WORK STYLE ═══════════════ */}
                     <motion.div variants={itemVariants} className="space-y-6">
                         <h2 className={heading}>How I Work</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
@@ -300,7 +293,6 @@ const About: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ═══════════════ EDUCATION ═══════════════ */}
                     <motion.div variants={itemVariants} className="space-y-5">
                         <h2 className={heading}>Education</h2>
                         <div className="flex items-start gap-5">
@@ -328,11 +320,9 @@ const About: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ═══════════════ SKILLS ═══════════════ */}
                     <motion.div variants={itemVariants} className="space-y-6">
                         <h2 className={heading}>Skills & Technologies</h2>
 
-                        {/* Filter buttons */}
                         <div className="flex flex-wrap gap-2">
                             <button
                                 onClick={() => setActiveCategory(null)}
@@ -342,7 +332,7 @@ const About: React.FC = () => {
                                         ? 'bg-blue-600 text-white shadow-[0_0_12px_rgba(59,130,246,0.4)]'
                                         : theme === 'light'
                                           ? 'text-slate-500 hover:text-blue-600'
-                                          : 'text-gray-500 hover:text-gray-300'
+                                          : 'text-slate-500 hover:text-slate-300'
                                 }`}
                             >
                                 All
@@ -359,7 +349,7 @@ const About: React.FC = () => {
                                             ? `${cat.color} text-white shadow-lg`
                                             : theme === 'light'
                                               ? 'text-slate-500 hover:text-blue-600'
-                                              : 'text-gray-500 hover:text-gray-300'
+                                              : 'text-slate-500 hover:text-slate-300'
                                     }`}
                                 >
                                     <div
@@ -370,7 +360,6 @@ const About: React.FC = () => {
                             ))}
                         </div>
 
-                        {/* Grid */}
                         <motion.div
                             initial="hidden"
                             whileInView="visible"
@@ -419,7 +408,6 @@ const About: React.FC = () => {
                             </AnimatePresence>
                         </motion.div>
 
-                        {/* Tooltip */}
                         <div className="h-16 flex justify-center">
                             <AnimatePresence>
                                 {activeSkill && (
@@ -440,7 +428,7 @@ const About: React.FC = () => {
                                         </span>
                                         {activeSkill.yoe && (
                                             <span
-                                                className={`ml-2 text-sm ${theme === 'light' ? 'text-slate-400' : 'text-gray-500'}`}
+                                                className={`ml-2 text-sm ${theme === 'light' ? 'text-slate-400' : 'text-slate-500'}`}
                                             >
                                                 {activeSkill.yoe}+ yrs
                                             </span>
@@ -453,7 +441,6 @@ const About: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ═══════════════ BEYOND THE CODE ═══════════════ */}
                     <motion.div variants={itemVariants} className="space-y-5">
                         <h2 className={heading}>Beyond the Code</h2>
                         <p className={p}>
@@ -486,7 +473,6 @@ const About: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ═══════════════ CLOSING ═══════════════ */}
                     <motion.div variants={itemVariants} className="text-center space-y-3">
                         <FaRocket className="mx-auto text-3xl icon-accent" />
                         <h2 className={subheading}>Let's Build Something</h2>

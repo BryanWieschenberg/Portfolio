@@ -34,7 +34,6 @@ const MLResearch: React.FC = () => {
     return (
         <>
             <div className="container mx-auto px-4 lg:px-20 pt-20 pb-20 max-w-4xl">
-                {/* Back */}
                 <motion.button
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -47,7 +46,6 @@ const MLResearch: React.FC = () => {
                 </motion.button>
 
                 <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-                    {/* ── HEADER ── */}
                     <motion.div variants={itemVariants} className="mb-10">
                         <div className="flex flex-wrap items-center gap-3 mb-3">
                             <span className="blog-meta">
@@ -76,14 +74,13 @@ const MLResearch: React.FC = () => {
                         </p>
                         <p
                             className={`mt-3 text-base lg:text-lg italic
-                            ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
+                            ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
                         >
                             What happens when a software engineer who's never touched a neural
                             network gets thrown into a robotics lab with a deadline and a camera.
                         </p>
                     </motion.div>
 
-                    {/* ── THE ASSIGNMENT ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>The Assignment</h2>
                         <p className={p}>
@@ -106,7 +103,6 @@ const MLResearch: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── LEARNING ML FROM SCRATCH ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Learning ML from Scratch</h2>
                         <p className={subheading}>Week 1 was humbling</p>
@@ -132,7 +128,6 @@ const MLResearch: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── THE DATA PROBLEM ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>The Data Problem</h2>
                         <p className={p}>
@@ -168,7 +163,6 @@ const MLResearch: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── MAKING IT REAL-TIME ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Making It Real-Time</h2>
                         <p className={p}>
@@ -194,7 +188,6 @@ const MLResearch: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── THE ROS INTEGRATION ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Closing the Loop</h2>
                         <p className={subheading}>Vision → Decision → Actuation</p>
@@ -225,7 +218,6 @@ const MLResearch: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── WHAT I TOOK AWAY ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>What This Taught Me</h2>
                         <ul className="space-y-3 ml-1">
@@ -253,7 +245,7 @@ const MLResearch: React.FC = () => {
                                         ${theme === 'light' ? 'bg-blue-400' : 'bg-[#69f1ff]'}`}
                                     />
                                     <span
-                                        className={`text-sm lg:text-base leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
+                                        className={`text-sm lg:text-base leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                                     >
                                         <span className={accent}>{item.bold}</span> {item.text}
                                     </span>

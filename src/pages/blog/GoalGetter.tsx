@@ -34,7 +34,6 @@ const GoalGetterBlog: React.FC = () => {
     return (
         <>
             <div className="container mx-auto px-4 lg:px-20 pt-20 pb-20 max-w-4xl">
-                {/* Back */}
                 <motion.button
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -47,7 +46,6 @@ const GoalGetterBlog: React.FC = () => {
                 </motion.button>
 
                 <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-                    {/* ── HEADER ── */}
                     <motion.div variants={itemVariants} className="mb-10">
                         <div className="flex flex-wrap items-center gap-3 mb-3">
                             <span className="blog-meta">
@@ -76,14 +74,13 @@ const GoalGetterBlog: React.FC = () => {
                         </p>
                         <p
                             className={`mt-3 text-base lg:text-lg italic
-                            ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
+                            ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
                         >
                             What I learned shipping a real product — from auth nightmares to
                             scheduling math to the moment someone said "I use this every day."
                         </p>
                     </motion.div>
 
-                    {/* ── THE MOTIVATION ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Why I Built This</h2>
                         <p className={p}>
@@ -106,7 +103,6 @@ const GoalGetterBlog: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── THE STACK ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>The Stack and Why</h2>
                         <p className={p}>
@@ -130,7 +126,6 @@ const GoalGetterBlog: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── AUTH ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>Authentication Done Right</h2>
                         <p className={subheading}>The hardest "boring" problem in web dev</p>
@@ -166,7 +161,6 @@ const GoalGetterBlog: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── SCHEDULING ENGINE ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>The Scheduling Engine</h2>
                         <p className={p}>
@@ -194,7 +188,6 @@ const GoalGetterBlog: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── REAL USERS ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>The Real Users Test</h2>
                         <p className={p}>
@@ -215,7 +208,7 @@ const GoalGetterBlog: React.FC = () => {
                                         ${theme === 'light' ? 'bg-blue-400' : 'bg-[#69f1ff]'}`}
                                     />
                                     <span
-                                        className={`text-sm lg:text-base leading-relaxed italic ${theme === 'light' ? 'text-slate-600' : 'text-gray-300'}`}
+                                        className={`text-sm lg:text-base leading-relaxed italic ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
                                     >
                                         {quote}
                                     </span>
@@ -232,7 +225,6 @@ const GoalGetterBlog: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── DEPLOYMENT ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>AWS Deployment</h2>
                         <p className={p}>
@@ -253,7 +245,6 @@ const GoalGetterBlog: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ── WHAT I LEARNED ── */}
                     <motion.div variants={itemVariants} className="space-y-4">
                         <h2 className={heading}>What GoalGetter Taught Me</h2>
                         <ul className="space-y-3 ml-1">
@@ -281,7 +272,7 @@ const GoalGetterBlog: React.FC = () => {
                                         ${theme === 'light' ? 'bg-blue-400' : 'bg-[#69f1ff]'}`}
                                     />
                                     <span
-                                        className={`text-sm lg:text-base leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
+                                        className={`text-sm lg:text-base leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                                     >
                                         <span className={accent}>{item.bold}</span> {item.text}
                                     </span>

@@ -1,11 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { IoPersonCircleOutline, IoPersonCircle } from 'react-icons/io5';
 import { MdWork, MdWorkOutline, MdOutlineContactless, MdContactless } from 'react-icons/md';
 import { RiQuillPenFill, RiQuillPenLine } from 'react-icons/ri';
 import { GoHome, GoHomeFill } from 'react-icons/go';
-import { FiPlus, FiX } from 'react-icons/fi';
-import { FaLinkedin, FaGithub, FaFileAlt } from 'react-icons/fa';
 import { IoSunny, IoMoon } from 'react-icons/io5';
 import { useTheme } from '../context/ThemeContext';
 
@@ -18,11 +16,10 @@ const Navbar: React.FC = () => {
     const workRef = useRef<HTMLDivElement>(null);
     const blogRef = useRef<HTMLDivElement>(null);
     const contactRef = useRef<HTMLDivElement>(null);
-    const [lineStyle, setLineStyle] = useState<{ left: number; width: number }>({
+    const [lineStyle, setLineStyle] = React.useState<{ left: number; width: number }>({
         left: 0,
         width: 0,
     });
-    const [isExpanded, setIsExpanded] = useState(false);
 
     const isWorkActive = location.pathname.startsWith('/work');
     const isBlogActive = location.pathname.startsWith('/blog');
@@ -53,21 +50,13 @@ const Navbar: React.FC = () => {
         }
     };
 
-    const handleResize = () => {
-        const newWidth = window.innerWidth;
-        if (newWidth >= 1024 && isExpanded) {
-            setIsExpanded(false);
-        }
-        updateLinePosition();
-    };
-
     useEffect(() => {
         updateLinePosition();
-        window.addEventListener('resize', handleResize);
+        window.addEventListener('resize', updateLinePosition);
         return () => {
-            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('resize', updateLinePosition);
         };
-    }, [location, isExpanded]);
+    }, [location]);
 
     const handleNavigation = (e: React.MouseEvent, path: string) => {
         e.preventDefault();
@@ -77,63 +66,10 @@ const Navbar: React.FC = () => {
     return (
         <div
             className={`sticky top-0 left-0 w-full z-[100] backdrop-blur-3xl transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.3),0_1px_20px_rgba(255,255,255,0.15)] border-b
-                ${theme === 'light' ? 'bg-white/20 border-white/30 border-gray-500' : 'bg-slate-900/40 border-white/10 border-gray-900'}`}
+                ${theme === 'light' ? 'bg-white/20 border-white/30 border-slate-500' : 'bg-slate-900/40 border-white/10 border-slate-900'}`}
         >
-            <div
-                className={`w-full overflow-hidden transition-all duration-300 ease-in-out border-b
-                    ${isExpanded ? 'h-10 opacity-100' : 'h-0 opacity-0'}`}
-            >
-                <div className="container mx-auto px-2 h-full flex items-center justify-center">
-                    <ul className="flex items-center space-x-1.5 text-lg">
-                        <li>
-                            <a
-                                href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`hover:text-blue-400 flex items-center text-blue-200`}
-                            >
-                                <FaFileAlt className="w-7 h-7" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://github.com/BryanWieschenberg/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`hover:text-blue-400 flex items-center text-blue-200`}
-                            >
-                                <FaGithub className="w-7 h-7" />
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="https://linkedin.com/in/BryanWieschenberg/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`hover:text-blue-400 flex items-center text-blue-200`}
-                            >
-                                <FaLinkedin className="w-7 h-7" />
-                            </a>
-                        </li>
-                        <li>
-                            <button
-                                onClick={toggleTheme}
-                                className={`flex items-center p-1 rounded-full transition-colors ${theme === 'light' ? 'bg-slate-200/50 text-slate-800 hover:bg-slate-300' : 'bg-slate-800/50 text-yellow-400 hover:bg-slate-700'}`}
-                            >
-                                {theme === 'light' ? (
-                                    <IoMoon className="w-5 h-5" />
-                                ) : (
-                                    <IoSunny className="w-5 h-5" />
-                                )}
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
             <header
-                className={`relative flex items-center w-full py-2 transition-all duration-300 
-                    ${isExpanded ? 'mt-0 border-t border-white/10' : ''}
+                className={`relative flex items-center w-full py-1 lg:py-2 transition-all duration-300
                     ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
             >
                 <div className="container mx-auto px-4 flex justify-between items-center">
@@ -142,9 +78,13 @@ const Navbar: React.FC = () => {
                         onClick={(e) => handleNavigation(e, '/')}
                     >
                         <img
-                            src="/images/favicon.ico"
+                            src={
+                                theme === 'light'
+                                    ? '/images/logo-light.png'
+                                    : '/images/logo-dark.png'
+                            }
                             alt="Logo"
-                            className="w-6 h-6 lg:w-10 lg:h-10"
+                            className="w-8 h-8 lg:w-10 lg:h-10"
                         />
                     </div>
 
@@ -248,55 +188,12 @@ const Navbar: React.FC = () => {
                     </nav>
 
                     <div className="flex items-center">
-                        <div className="hidden lg:flex items-center">
-                            <ul className="flex items-center space-x-6 text-lg">
-                                <li>
-                                    <a
-                                        href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="nav-social"
-                                    >
-                                        <FaFileAlt className="w-8 h-8" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="https://github.com/BryanWieschenberg/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="nav-social"
-                                    >
-                                        <FaGithub className="w-8 h-8" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="https://linkedin.com/in/BryanWieschenberg/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={`hover:text-blue-400 flex flex-col items-center text-blue-200`}
-                                    >
-                                        <FaLinkedin className="w-8 h-8" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <button onClick={toggleTheme} className="nav-theme-btn">
-                                        {theme === 'light' ? (
-                                            <IoMoon className="w-6 h-6" />
-                                        ) : (
-                                            <IoSunny className="w-6 h-6" />
-                                        )}
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <button
-                            className="lg:hidden text-blue-300 text-3xl ml-4"
-                            onClick={() => setIsExpanded(!isExpanded)}
-                        >
-                            {isExpanded ? <FiX /> : <FiPlus />}
+                        <button onClick={toggleTheme} className="nav-theme-btn">
+                            {theme === 'light' ? (
+                                <IoMoon className="w-6 h-6" />
+                            ) : (
+                                <IoSunny className="w-6 h-6" />
+                            )}
                         </button>
                     </div>
                 </div>

@@ -29,7 +29,6 @@ const Blog: React.FC = () => {
 
     return (
         <>
-            {/* Hero */}
             <div className="page-hero">
                 <SwipeReveal
                     circleColor="bg-gradient-to-r from-[#3c86ff] to-[#69f1ff]"
@@ -65,18 +64,16 @@ const Blog: React.FC = () => {
                             onClick={() => navigate(`/blog/${post.slug}`)}
                             className="group cursor-pointer relative"
                         >
-                            {/* Left accent line */}
                             <div
                                 className={`absolute left-0 top-0 bottom-0 w-[3px] rounded-full transition-all duration-500
                                 ${
                                     theme === 'light'
                                         ? 'bg-slate-200 group-hover:bg-gradient-to-b group-hover:from-blue-400 group-hover:to-cyan-400'
-                                        : 'bg-gray-700 group-hover:bg-gradient-to-b group-hover:from-[#3c86ff] group-hover:to-[#69f1ff]'
+                                        : 'bg-slate-700 group-hover:bg-gradient-to-b group-hover:from-[#3c86ff] group-hover:to-[#69f1ff]'
                                 }`}
                             />
 
                             <div className="pl-6 py-4">
-                                {/* Meta */}
                                 <div className="flex flex-wrap items-center gap-3 mb-2">
                                     <span className="blog-meta">
                                         <FaClock className="text-[10px]" />
@@ -92,24 +89,20 @@ const Blog: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* Title */}
                                 <h2 className="card-title text-xl lg:text-2xl">{post.title}</h2>
                                 <p className="item-subtitle mb-2">{post.subtitle}</p>
 
-                                {/* Preview */}
                                 <p className="card-text lg:text-base mb-3">{post.preview}</p>
 
-                                {/* Read more */}
                                 <span className="link-arrow">
                                     Read Post
                                     <FaArrowRight className="transform transition-transform duration-300 group-hover:translate-x-1 text-xs" />
                                 </span>
                             </div>
 
-                            {/* Bottom separator */}
                             <div
                                 className={`ml-6 h-[1px]
-                                ${theme === 'light' ? 'bg-slate-100' : 'bg-gray-800'}`}
+                                ${theme === 'light' ? 'bg-slate-100' : 'bg-slate-800'}`}
                             />
                         </motion.article>
                     ))}

@@ -112,7 +112,7 @@ const Timeline: React.FC = () => {
                                         {exp.company}
                                     </h4>
                                     <p
-                                        className={`text-sm ${theme === 'light' ? 'text-slate-500' : 'text-gray-300'}`}
+                                        className={`text-sm ${theme === 'light' ? 'text-slate-500' : 'text-slate-300'}`}
                                     >
                                         {exp.date}
                                     </p>
@@ -136,7 +136,7 @@ const Timeline: React.FC = () => {
                                         <div className="p-3">
                                             <p
                                                 className={`text-sm lg:text-base whitespace-pre-line
-                                                ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
+                                                ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                                             >
                                                 {exp.desc}
                                             </p>
@@ -159,7 +159,7 @@ const Timeline: React.FC = () => {
                                                                     badgeColor = 'bg-fuchsia-600';
                                                                     break;
                                                                 default:
-                                                                    badgeColor = 'bg-gray-600';
+                                                                    badgeColor = 'bg-slate-600';
                                                             }
                                                             return (
                                                                 <span

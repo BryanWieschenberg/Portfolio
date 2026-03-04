@@ -113,10 +113,8 @@ const Work: React.FC = () => {
                 onClick={() => navigate(`/work/projects/${project.slug}`)}
                 className="card group"
             >
-                {/* Animated top gradient border */}
                 <div className="card-top-border" />
 
-                {/* Hover shimmer effect */}
                 <motion.div
                     initial={{ opacity: 0, x: '-100%' }}
                     whileHover={{ opacity: 0.08, x: '200%' }}
@@ -125,7 +123,6 @@ const Work: React.FC = () => {
                 />
 
                 <div className="relative z-10 p-6 flex flex-col h-full">
-                    {/* Header */}
                     <div className="flex justify-between items-start mb-3">
                         <div className="flex-1 mr-3">
                             <h3 className="card-title">{project.name}</h3>
@@ -146,7 +143,7 @@ const Work: React.FC = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={(e) => e.stopPropagation()}
-                                    className={`transition-colors duration-300 ${theme === 'light' ? 'text-slate-400 hover:text-blue-600' : 'text-gray-500 hover:text-white'}`}
+                                    className={`transition-colors duration-300 ${theme === 'light' ? 'text-slate-400 hover:text-blue-600' : 'text-slate-500 hover:text-white'}`}
                                     title="View Repository"
                                 >
                                     <FaGithub size={20} />
@@ -155,12 +152,10 @@ const Work: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* One-line description */}
                     <p className="card-text mb-4 flex-grow line-clamp-2">{firstLine}</p>
 
-                    {/* Skills */}
                     {project.skills && Object.keys(project.skills).length > 0 && (
-                        <div className="mt-auto pt-3 border-t border-gray-700/30">
+                        <div className="mt-auto pt-3 border-t border-slate-700/30">
                             <div className="flex flex-wrap gap-1.5">
                                 {Object.entries(project.skills)
                                     .slice(0, 5)
@@ -174,7 +169,7 @@ const Work: React.FC = () => {
                                     ))}
                                 {Object.keys(project.skills).length > 5 && (
                                     <span
-                                        className={`px-2 py-0.5 text-xs font-medium self-center ${theme === 'light' ? 'text-slate-400' : 'text-gray-500'}`}
+                                        className={`px-2 py-0.5 text-xs font-medium self-center ${theme === 'light' ? 'text-slate-400' : 'text-slate-500'}`}
                                     >
                                         +{Object.keys(project.skills).length - 5}
                                     </span>
@@ -183,7 +178,6 @@ const Work: React.FC = () => {
                         </div>
                     )}
 
-                    {/* View Case Study */}
                     <div className="link-arrow mt-4">
                         <span>View Case Study</span>
                         <FaArrowRight className="transform transition-transform duration-300 group-hover:translate-x-1" />
@@ -206,10 +200,8 @@ const Work: React.FC = () => {
                 onClick={() => navigate(`/work/experience/${exp.slug}`)}
                 className="card group"
             >
-                {/* Animated side gradient border */}
                 <div className="card-side-border" />
 
-                {/* Hover shimmer */}
                 <motion.div
                     initial={{ opacity: 0, x: '-100%' }}
                     whileHover={{ opacity: 0.06, x: '200%' }}
@@ -218,7 +210,6 @@ const Work: React.FC = () => {
                 />
 
                 <div className="relative z-10 p-6 pl-8 flex items-start gap-5">
-                    {/* Company Logo */}
                     <div className="logo-box w-14 h-14 lg:w-16 lg:h-16">
                         <img
                             src={imagePath}
@@ -230,14 +221,12 @@ const Work: React.FC = () => {
                         />
                     </div>
 
-                    {/* Info */}
                     <div className="flex-1 min-w-0">
                         <h3 className="card-title">{exp.role}</h3>
                         <p className="item-subtitle">{exp.company}</p>
                         <p className="text-muted-xs mt-0.5">{exp.date}</p>
                         <p className="card-text mt-2 line-clamp-2">{firstLine}</p>
 
-                        {/* Skills */}
                         {exp.skills && Object.keys(exp.skills).length > 0 && (
                             <div className="mt-3 flex flex-wrap gap-1.5">
                                 {Object.entries(exp.skills)
@@ -252,7 +241,7 @@ const Work: React.FC = () => {
                                     ))}
                                 {Object.keys(exp.skills).length > 5 && (
                                     <span
-                                        className={`text-xs font-medium self-center ${theme === 'light' ? 'text-slate-400' : 'text-gray-500'}`}
+                                        className={`text-xs font-medium self-center ${theme === 'light' ? 'text-slate-400' : 'text-slate-500'}`}
                                     >
                                         +{Object.keys(exp.skills).length - 5}
                                     </span>
@@ -260,7 +249,6 @@ const Work: React.FC = () => {
                             </div>
                         )}
 
-                        {/* CTA */}
                         <div className="link-arrow mt-3">
                             <span>View Case Study</span>
                             <FaArrowRight className="transform transition-transform duration-300 group-hover:translate-x-1" />
@@ -314,7 +302,6 @@ const Work: React.FC = () => {
 
     return (
         <>
-            {/* Hero */}
             <div className="page-hero">
                 <SwipeReveal
                     circleColor="bg-gradient-to-r from-[#3c86ff] to-[#69f1ff]"
@@ -332,7 +319,6 @@ const Work: React.FC = () => {
                     Case studies of projects I've built and professional experience I've gained.
                 </motion.p>
 
-                {/* Section jump buttons */}
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -358,7 +344,6 @@ const Work: React.FC = () => {
                 </motion.div>
             </div>
 
-            {/* Projects Section */}
             <div ref={projectsRef} className="page-section-wide">
                 <motion.div
                     initial="hidden"
@@ -394,12 +379,10 @@ const Work: React.FC = () => {
                 )}
             </div>
 
-            {/* Divider */}
             <div className="container mx-auto px-20 pt-8">
                 <div className="divider my-0" />
             </div>
 
-            {/* Professional Experience Section */}
             <div ref={experienceRef} className="container mx-auto px-4 lg:px-20 pt-20 pb-8">
                 <motion.div
                     initial="hidden"

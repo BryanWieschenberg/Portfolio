@@ -144,7 +144,6 @@ const ProjectDetail: React.FC = () => {
     return (
         <>
             <div className="container mx-auto px-4 lg:px-20 pt-20 pb-16 max-w-5xl">
-                {/* Back Button */}
                 <motion.button
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -157,7 +156,6 @@ const ProjectDetail: React.FC = () => {
                 </motion.button>
 
                 <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-                    {/* Hero Section */}
                     <motion.div variants={itemVariants} className="mb-10">
                         <div className="flex flex-wrap items-start gap-4 mb-3">
                             <h1 className="section-heading-xl from-[#3c86ff] to-[#69f1ff] text-4xl lg:text-6xl">
@@ -180,7 +178,6 @@ const ProjectDetail: React.FC = () => {
                             </span>
                         </div>
 
-                        {/* Action Links */}
                         <div className="flex flex-wrap gap-3">
                             {project.github && (
                                 <a
@@ -215,7 +212,6 @@ const ProjectDetail: React.FC = () => {
                         </div>
                     </motion.div>
 
-                    {/* Overview Section */}
                     <motion.div variants={itemVariants} className="card-static">
                         <div className="flex items-center gap-3 mb-4">
                             <FaClipboardList className="text-xl icon-accent" />
@@ -231,7 +227,6 @@ const ProjectDetail: React.FC = () => {
                         </ul>
                     </motion.div>
 
-                    {/* My Contribution */}
                     {project.contribution && (
                         <motion.div
                             variants={itemVariants}
@@ -242,7 +237,6 @@ const ProjectDetail: React.FC = () => {
                                     : 'bg-gradient-to-br from-[#0b1021] to-[#111b33] border-blue-800/30 shadow-2xl'
                             }`}
                         >
-                            {/* Accent border */}
                             <div
                                 className={`absolute top-0 left-0 bottom-0 w-[3px]
                                 ${theme === 'light' ? 'bg-gradient-to-b from-blue-400 to-cyan-400' : 'bg-gradient-to-b from-[#3c86ff] to-[#69f1ff]'}`}
@@ -260,14 +254,13 @@ const ProjectDetail: React.FC = () => {
                             </div>
                             <p
                                 className={`text-sm lg:text-base leading-relaxed pl-3
-                                ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
+                                ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                             >
                                 {project.contribution}
                             </p>
                         </motion.div>
                     )}
 
-                    {/* Tech Stack */}
                     {project.skills && Object.keys(project.skills).length > 0 && (
                         <motion.div variants={itemVariants} className="card-static">
                             <div className="flex items-center gap-3 mb-4">
@@ -290,7 +283,6 @@ const ProjectDetail: React.FC = () => {
                         </motion.div>
                     )}
 
-                    {/* Artifacts */}
                     {(project.artifacts.screenshots?.length || project.artifacts.writeup) && (
                         <motion.div variants={itemVariants} className="card-static">
                             <div className="flex items-center gap-3 mb-4">
@@ -305,7 +297,7 @@ const ProjectDetail: React.FC = () => {
                                             <div
                                                 key={i}
                                                 className={`rounded-xl overflow-hidden border
-                                                ${theme === 'light' ? 'border-slate-200' : 'border-gray-700'}`}
+                                                ${theme === 'light' ? 'border-slate-200' : 'border-slate-700'}`}
                                             >
                                                 <img
                                                     src={src}

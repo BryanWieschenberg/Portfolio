@@ -111,7 +111,6 @@ const Contact: React.FC = () => {
 
     return (
         <>
-            {/* Hero */}
             <div className="page-hero">
                 <SwipeReveal
                     circleColor="bg-gradient-to-r from-[#3c86ff] to-[#69f1ff]"
@@ -137,7 +136,6 @@ const Contact: React.FC = () => {
                     viewport={{ once: true }}
                     variants={containerVariants}
                 >
-                    {/* ═══════════════ EMAIL — PROMINENT ═══════════════ */}
                     <motion.div variants={itemVariants} className="text-center mb-2">
                         <p className="meta-label mb-3">Fastest way to reach me</p>
                         <a
@@ -154,7 +152,6 @@ const Contact: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ═══════════════ WHAT I'M OPEN TO ═══════════════ */}
                     <motion.div variants={itemVariants} className="space-y-6">
                         <h2 className={heading}>What I'm Open To</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
@@ -172,11 +169,10 @@ const Contact: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ═══════════════ CONTACT FORM ═══════════════ */}
                     <motion.div variants={itemVariants} className="space-y-6">
                         <h2 className={heading}>Send a Message</h2>
                         <p
-                            className={`text-sm ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
+                            className={`text-sm ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
                         >
                             Or fill this out and I'll get back to you within 24 hours.
                         </p>
@@ -266,7 +262,6 @@ const Contact: React.FC = () => {
 
                     <div className={divider} />
 
-                    {/* ═══════════════ SOCIALS ═══════════════ */}
                     <motion.div variants={itemVariants} className="space-y-6">
                         <h2 className={heading}>Elsewhere</h2>
                         <div className="flex flex-col sm:flex-row gap-4">
