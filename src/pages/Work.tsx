@@ -111,22 +111,10 @@ const Work: React.FC = () => {
                 whileHover={{ y: -6 }}
                 transition={{ duration: 0.3 }}
                 onClick={() => navigate(`/work/projects/${project.slug}`)}
-                className={`group relative cursor-pointer rounded-2xl overflow-hidden transition-all duration-500
-                    ${
-                        theme === 'light'
-                            ? 'bg-white/80 backdrop-blur-sm border border-slate-200/80 shadow-lg hover:shadow-[0_12px_40px_rgba(59,130,246,0.15)]'
-                            : 'bg-[#0b1021]/80 backdrop-blur-sm border border-gray-700/50 shadow-2xl hover:shadow-[0_12px_40px_rgba(60,134,255,0.3)]'
-                    }`}
+                className="card group"
             >
                 {/* Animated top gradient border */}
-                <div
-                    className={`absolute top-0 left-0 right-0 h-[2px] transition-all duration-500 group-hover:h-[3px]
-                    ${
-                        theme === 'light'
-                            ? 'bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500'
-                            : 'bg-gradient-to-r from-[#3c86ff] via-[#69f1ff] to-[#3c86ff]'
-                    }`}
-                />
+                <div className="card-top-border" />
 
                 {/* Hover shimmer effect */}
                 <motion.div
@@ -140,20 +128,8 @@ const Work: React.FC = () => {
                     {/* Header */}
                     <div className="flex justify-between items-start mb-3">
                         <div className="flex-1 mr-3">
-                            <h3
-                                className={`text-xl font-bold transition-colors duration-300
-                                ${
-                                    theme === 'light'
-                                        ? 'text-slate-900 group-hover:text-blue-600'
-                                        : 'text-white group-hover:text-[#69f1ff]'
-                                }`}
-                            >
-                                {project.name}
-                            </h3>
-                            <p
-                                className={`text-xs font-semibold mt-1 tracking-wider uppercase
-                                ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
-                            >
+                            <h3 className="card-title">{project.name}</h3>
+                            <p className="date-meta mt-1">
                                 {project.date} • {project.span}
                             </p>
                         </div>
@@ -180,12 +156,7 @@ const Work: React.FC = () => {
                     </div>
 
                     {/* One-line description */}
-                    <p
-                        className={`text-sm leading-relaxed mb-4 flex-grow line-clamp-2
-                        ${theme === 'light' ? 'text-slate-600' : 'text-gray-300'}`}
-                    >
-                        {firstLine}
-                    </p>
+                    <p className="card-text mb-4 flex-grow line-clamp-2">{firstLine}</p>
 
                     {/* Skills */}
                     {project.skills && Object.keys(project.skills).length > 0 && (
@@ -196,7 +167,7 @@ const Work: React.FC = () => {
                                     .map(([skill, level], i) => (
                                         <span
                                             key={i}
-                                            className={`px-2 py-0.5 rounded-md text-xs font-medium border whitespace-nowrap ${getSkillColor(level as number)}`}
+                                            className={`skill-badge ${getSkillColor(level as number)}`}
                                         >
                                             {skill}
                                         </span>
@@ -213,10 +184,7 @@ const Work: React.FC = () => {
                     )}
 
                     {/* View Case Study */}
-                    <div
-                        className={`mt-4 flex items-center gap-2 text-sm font-semibold transition-all duration-300
-                        ${theme === 'light' ? 'text-blue-500 group-hover:text-blue-700' : 'text-blue-400 group-hover:text-[#69f1ff]'}`}
-                    >
+                    <div className="link-arrow mt-4">
                         <span>View Case Study</span>
                         <FaArrowRight className="transform transition-transform duration-300 group-hover:translate-x-1" />
                     </div>
@@ -236,22 +204,10 @@ const Work: React.FC = () => {
                 whileHover={{ y: -6 }}
                 transition={{ duration: 0.3 }}
                 onClick={() => navigate(`/work/experience/${exp.slug}`)}
-                className={`group relative cursor-pointer rounded-2xl overflow-hidden transition-all duration-500
-                    ${
-                        theme === 'light'
-                            ? 'bg-white/80 backdrop-blur-sm border border-slate-200/80 shadow-lg hover:shadow-[0_12px_40px_rgba(59,130,246,0.15)]'
-                            : 'bg-[#0b1021]/80 backdrop-blur-sm border border-gray-700/50 shadow-2xl hover:shadow-[0_12px_40px_rgba(60,134,255,0.3)]'
-                    }`}
+                className="card group"
             >
                 {/* Animated side gradient border */}
-                <div
-                    className={`absolute top-0 left-0 bottom-0 w-[3px] transition-all duration-500 group-hover:w-[4px]
-                    ${
-                        theme === 'light'
-                            ? 'bg-gradient-to-b from-blue-400 via-purple-400 to-blue-500'
-                            : 'bg-gradient-to-b from-[#3c86ff] via-[#8580e7] to-[#69f1ff]'
-                    }`}
-                />
+                <div className="card-side-border" />
 
                 {/* Hover shimmer */}
                 <motion.div
@@ -263,10 +219,7 @@ const Work: React.FC = () => {
 
                 <div className="relative z-10 p-6 pl-8 flex items-start gap-5">
                     {/* Company Logo */}
-                    <div
-                        className={`flex-shrink-0 w-14 h-14 lg:w-16 lg:h-16 rounded-xl overflow-hidden flex items-center justify-center shadow-lg
-                        ${theme === 'light' ? 'bg-white border border-slate-200' : 'bg-white/10 border border-gray-600/50'}`}
-                    >
+                    <div className="logo-box w-14 h-14 lg:w-16 lg:h-16">
                         <img
                             src={imagePath}
                             alt={`${exp.company} logo`}
@@ -279,32 +232,10 @@ const Work: React.FC = () => {
 
                     {/* Info */}
                     <div className="flex-1 min-w-0">
-                        <h3
-                            className={`text-xl font-bold transition-colors duration-300
-                            ${
-                                theme === 'light'
-                                    ? 'text-slate-900 group-hover:text-blue-600'
-                                    : 'text-white group-hover:text-[#69f1ff]'
-                            }`}
-                        >
-                            {exp.role}
-                        </h3>
-                        <p
-                            className={`text-sm font-semibold ${theme === 'light' ? 'text-blue-600' : 'text-blue-300'}`}
-                        >
-                            {exp.company}
-                        </p>
-                        <p
-                            className={`text-xs mt-0.5 ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
-                        >
-                            {exp.date}
-                        </p>
-                        <p
-                            className={`text-sm mt-2 leading-relaxed line-clamp-2
-                            ${theme === 'light' ? 'text-slate-600' : 'text-gray-300'}`}
-                        >
-                            {firstLine}
-                        </p>
+                        <h3 className="card-title">{exp.role}</h3>
+                        <p className="item-subtitle">{exp.company}</p>
+                        <p className="text-muted-xs mt-0.5">{exp.date}</p>
+                        <p className="card-text mt-2 line-clamp-2">{firstLine}</p>
 
                         {/* Skills */}
                         {exp.skills && Object.keys(exp.skills).length > 0 && (
@@ -314,7 +245,7 @@ const Work: React.FC = () => {
                                     .map(([skill, level], i) => (
                                         <span
                                             key={i}
-                                            className={`px-2 py-0.5 rounded-md text-xs font-medium border whitespace-nowrap ${getSkillColor(level as number)}`}
+                                            className={`skill-badge ${getSkillColor(level as number)}`}
                                         >
                                             {skill}
                                         </span>
@@ -330,10 +261,7 @@ const Work: React.FC = () => {
                         )}
 
                         {/* CTA */}
-                        <div
-                            className={`mt-3 flex items-center gap-2 text-sm font-semibold transition-all duration-300
-                            ${theme === 'light' ? 'text-blue-500 group-hover:text-blue-700' : 'text-blue-400 group-hover:text-[#69f1ff]'}`}
-                        >
+                        <div className="link-arrow mt-3">
                             <span>View Case Study</span>
                             <FaArrowRight className="transform transition-transform duration-300 group-hover:translate-x-1" />
                         </div>
@@ -387,28 +315,19 @@ const Work: React.FC = () => {
     return (
         <>
             {/* Hero */}
-            <div className="pt-16 lg:pt-20 text-center px-4">
+            <div className="page-hero">
                 <SwipeReveal
                     circleColor="bg-gradient-to-r from-[#3c86ff] to-[#69f1ff]"
                     shadowColor="shadow-[0_0_50px_rgba(60,134,255,0.6)]"
                     duration={0.6}
                 >
-                    <h1
-                        className={`text-6xl lg:text-8xl font-bold lg:mt-2 pb-2 text-center relative bg-clip-text text-transparent
-                        ${
-                            theme === 'light'
-                                ? 'bg-gradient-to-r from-blue-700 to-cyan-500 drop-shadow-[3px_3px_1px_rgba(30,30,160,0.2)]'
-                                : 'bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'
-                        }`}
-                    >
-                        My Work
-                    </h1>
+                    <h1 className="page-title">My Work</h1>
                 </SwipeReveal>
                 <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
-                    className={`mt-2 text-lg lg:text-xl max-w-2xl mx-auto ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
+                    className="page-subtitle"
                 >
                     Case studies of projects I've built and professional experience I've gained.
                 </motion.p>
@@ -424,24 +343,14 @@ const Work: React.FC = () => {
                         onClick={() =>
                             experienceRef.current?.scrollIntoView({ behavior: 'smooth' })
                         }
-                        className={`px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2
-                        ${
-                            theme === 'light'
-                                ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)]'
-                                : 'bg-blue-600 text-white shadow-[0_0_15px_rgba(30,144,255,0.4)] hover:bg-blue-500 hover:shadow-[0_0_25px_rgba(30,144,255,0.7)]'
-                        }`}
+                        className="btn-solid-sm"
                     >
                         <FaBriefcase />
                         Experience
                     </button>
                     <button
                         onClick={() => projectsRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                        className={`px-5 py-2.5 rounded-xl font-semibold text-sm border-2 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2
-                        ${
-                            theme === 'light'
-                                ? 'border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white'
-                                : 'border-[#69f1ff] text-[#69f1ff] hover:bg-[#69f1ff] hover:text-[#0b1021]'
-                        }`}
+                        className="btn-outline-sm"
                     >
                         <HiSparkles />
                         Projects
@@ -450,7 +359,7 @@ const Work: React.FC = () => {
             </div>
 
             {/* Projects Section */}
-            <div ref={projectsRef} className="container mx-auto px-4 lg:px-20 pt-16 pb-16">
+            <div ref={projectsRef} className="page-section-wide">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
@@ -458,15 +367,8 @@ const Work: React.FC = () => {
                     variants={containerVariants}
                 >
                     <motion.div variants={headerVariants} className="text-center mb-12">
-                        <h2
-                            className={`text-3xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#69f1ff] to-[#3c86ff]
-                            ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)]' : 'drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]'}`}
-                        >
-                            Projects
-                        </h2>
-                        <p
-                            className={`mt-2 text-base lg:text-lg ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
-                        >
+                        <h2 className="section-heading-xl from-[#69f1ff] to-[#3c86ff]">Projects</h2>
+                        <p className="page-subtitle text-base lg:text-lg">
                             Things I've built from scratch.
                         </p>
                     </motion.div>
@@ -494,9 +396,7 @@ const Work: React.FC = () => {
 
             {/* Divider */}
             <div className="container mx-auto px-20 pt-8">
-                <div
-                    className={`h-[1px] w-full ${theme === 'light' ? 'bg-gradient-to-r from-transparent via-slate-300 to-transparent' : 'bg-gradient-to-r from-transparent via-gray-700 to-transparent'}`}
-                />
+                <div className="divider my-0" />
             </div>
 
             {/* Professional Experience Section */}
@@ -508,15 +408,10 @@ const Work: React.FC = () => {
                     variants={containerVariants}
                 >
                     <motion.div variants={headerVariants} className="text-center mb-10">
-                        <h2
-                            className={`text-3xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#8580e7] to-[#3c86ff]
-                            ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)]' : 'drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]'}`}
-                        >
+                        <h2 className="section-heading-xl from-[#8580e7] to-[#3c86ff]">
                             Professional Experience
                         </h2>
-                        <p
-                            className={`mt-2 text-base lg:text-lg ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
-                        >
+                        <p className="page-subtitle text-base lg:text-lg">
                             Roles where I've delivered real impact.
                         </p>
                     </motion.div>

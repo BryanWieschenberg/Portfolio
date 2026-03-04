@@ -30,11 +30,17 @@ const Navbar: React.FC = () => {
     const updateLinePosition = () => {
         let ref: React.RefObject<HTMLDivElement | null> | null = null;
 
-        if (location.pathname === '/') {ref = homeRef;}
-        else if (location.pathname === '/about') {ref = aboutRef;}
-        else if (isWorkActive) {ref = workRef;}
-        else if (isBlogActive) {ref = blogRef;}
-        else if (location.pathname === '/contact') {ref = contactRef;}
+        if (location.pathname === '/') {
+            ref = homeRef;
+        } else if (location.pathname === '/about') {
+            ref = aboutRef;
+        } else if (isWorkActive) {
+            ref = workRef;
+        } else if (isBlogActive) {
+            ref = blogRef;
+        } else if (location.pathname === '/contact') {
+            ref = contactRef;
+        }
 
         if (ref?.current) {
             const rect = ref.current.getBoundingClientRect();
@@ -152,14 +158,8 @@ const Navbar: React.FC = () => {
                                 <div
                                     ref={homeRef}
                                     onClick={(e) => handleNavigation(e, '/')}
-                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
-                                        location.pathname === '/'
-                                            ? theme === 'light'
-                                                ? 'text-blue-700'
-                                                : 'text-blue-300'
-                                            : theme === 'light'
-                                              ? 'text-slate-600 hover:text-blue-600'
-                                              : 'text-gray-400 hover:text-gray-300'
+                                    className={`${
+                                        location.pathname === '/' ? 'nav-item-active' : 'nav-item'
                                     }`}
                                 >
                                     {location.pathname === '/' ? (
@@ -176,15 +176,7 @@ const Navbar: React.FC = () => {
                                 <div
                                     ref={workRef}
                                     onClick={(e) => handleNavigation(e, '/work')}
-                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
-                                        isWorkActive
-                                            ? theme === 'light'
-                                                ? 'text-blue-700'
-                                                : 'text-blue-300'
-                                            : theme === 'light'
-                                              ? 'text-slate-600 hover:text-blue-600'
-                                              : 'text-gray-400 hover:text-gray-300'
-                                    }`}
+                                    className={`${isWorkActive ? 'nav-item-active' : 'nav-item'}`}
                                 >
                                     {isWorkActive ? (
                                         <MdWork className="w-8 h-8" />
@@ -200,14 +192,10 @@ const Navbar: React.FC = () => {
                                 <div
                                     ref={aboutRef}
                                     onClick={(e) => handleNavigation(e, '/about')}
-                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
+                                    className={`${
                                         location.pathname === '/about'
-                                            ? theme === 'light'
-                                                ? 'text-blue-700'
-                                                : 'text-blue-300'
-                                            : theme === 'light'
-                                              ? 'text-slate-600 hover:text-blue-600'
-                                              : 'text-gray-400 hover:text-gray-300'
+                                            ? 'nav-item-active'
+                                            : 'nav-item'
                                     }`}
                                 >
                                     {location.pathname === '/about' ? (
@@ -224,15 +212,7 @@ const Navbar: React.FC = () => {
                                 <div
                                     ref={blogRef}
                                     onClick={(e) => handleNavigation(e, '/blog')}
-                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
-                                        isBlogActive
-                                            ? theme === 'light'
-                                                ? 'text-blue-700'
-                                                : 'text-blue-300'
-                                            : theme === 'light'
-                                              ? 'text-slate-600 hover:text-blue-600'
-                                              : 'text-gray-400 hover:text-gray-300'
-                                    }`}
+                                    className={`${isBlogActive ? 'nav-item-active' : 'nav-item'}`}
                                 >
                                     {isBlogActive ? (
                                         <RiQuillPenFill className="w-8 h-8" />
@@ -248,14 +228,10 @@ const Navbar: React.FC = () => {
                                 <div
                                     ref={contactRef}
                                     onClick={(e) => handleNavigation(e, '/contact')}
-                                    className={`flex flex-col items-center cursor-pointer transition-colors ${
+                                    className={`${
                                         location.pathname === '/contact'
-                                            ? theme === 'light'
-                                                ? 'text-blue-700'
-                                                : 'text-blue-300'
-                                            : theme === 'light'
-                                              ? 'text-slate-600 hover:text-blue-600'
-                                              : 'text-gray-400 hover:text-gray-300'
+                                            ? 'nav-item-active'
+                                            : 'nav-item'
                                     }`}
                                 >
                                     {location.pathname === '/contact' ? (
@@ -279,7 +255,7 @@ const Navbar: React.FC = () => {
                                         href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={`hover:text-blue-400 flex flex-col items-center ${theme === 'light' ? 'text-blue-600' : 'text-blue-200'}`}
+                                        className="nav-social"
                                     >
                                         <FaFileAlt className="w-8 h-8" />
                                     </a>
@@ -289,7 +265,7 @@ const Navbar: React.FC = () => {
                                         href="https://github.com/BryanWieschenberg/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={`hover:text-blue-400 flex flex-col items-center ${theme === 'light' ? 'text-blue-600' : 'text-blue-200'}`}
+                                        className="nav-social"
                                     >
                                         <FaGithub className="w-8 h-8" />
                                     </a>
@@ -305,14 +281,7 @@ const Navbar: React.FC = () => {
                                     </a>
                                 </li>
                                 <li>
-                                    <button
-                                        onClick={toggleTheme}
-                                        className={`ml-2 flex items-center p-2 rounded-full transition-all duration-300 ${
-                                            theme === 'light'
-                                                ? 'bg-blue-100/50 text-blue-600 hover:bg-blue-200'
-                                                : 'bg-slate-800/50 text-yellow-400 hover:bg-slate-700 shadow-[0_0_15px_rgba(250,204,21,0.2)]'
-                                        }`}
-                                    >
+                                    <button onClick={toggleTheme} className="nav-theme-btn">
                                         {theme === 'light' ? (
                                             <IoMoon className="w-6 h-6" />
                                         ) : (

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════ */
+
 body {
     font-family:
         'Fira Sans',
@@ -15,32 +19,669 @@ body {
         sans-serif;
 }
 
-.slogan {
-    @apply font-bold container mx-auto text-center text-white leading-[.9] drop-shadow-[0_0px_10px_rgba(0,0,139,.8)];
+/* ═══════════════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════════════ */
+
+.page-container {
+    @apply container mx-auto px-4 lg:px-20;
 }
 
-.fade-in {
-    opacity: 0;
-    transform: translateY(5px);
-}
-.fade-in.fade-in-active {
-    transition:
-        opacity 300ms,
-        transform 300ms;
-    opacity: 1;
-    transform: translateY(0);
+.page-hero {
+    @apply pt-16 lg:pt-20 text-center px-4;
 }
 
-.scrollbar-dark::-webkit-scrollbar {
-    width: 10px;
+.page-section {
+    @apply container mx-auto px-4 lg:px-20 pt-16 pb-20 max-w-4xl;
 }
-.scrollbar-dark::-webkit-scrollbar-track {
-    background: #0a0a0a;
+
+.page-section-wide {
+    @apply container mx-auto px-4 lg:px-20 pt-16 pb-16;
 }
-.scrollbar-dark::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 5px;
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — PAGE TITLE (<h1> hero headings)
+   ═══════════════════════════════════════════════════════ */
+
+.page-title {
+    @apply text-6xl lg:text-8xl font-bold lg:mt-2 pb-2 text-center relative bg-clip-text text-transparent;
 }
-.scrollbar-dark::-webkit-scrollbar-thumb:hover {
-    background: #777;
+.light .page-title {
+    @apply bg-gradient-to-r from-blue-700 to-cyan-500 drop-shadow-[3px_3px_1px_rgba(30,30,160,0.2)];
+}
+.dark .page-title {
+    @apply bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)];
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — PAGE SUBTITLE (under hero headings)
+   ═══════════════════════════════════════════════════════ */
+
+.page-subtitle {
+    @apply mt-2 text-lg lg:text-xl max-w-2xl mx-auto;
+}
+.light .page-subtitle {
+    @apply text-slate-500;
+}
+.dark .page-subtitle {
+    @apply text-gray-400;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — SECTION HEADING (<h2> section titles)
+   ═══════════════════════════════════════════════════════ */
+
+.section-heading {
+    @apply text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#3c86ff] to-[#69f1ff];
+}
+.light .section-heading {
+    @apply drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)];
+}
+.dark .section-heading {
+    @apply drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)];
+}
+
+.section-heading-lg {
+    @apply text-2xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#3c86ff] to-[#69f1ff];
+}
+.light .section-heading-lg {
+    @apply drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)];
+}
+.dark .section-heading-lg {
+    @apply drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)];
+}
+
+.section-heading-xl {
+    @apply text-3xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r;
+}
+.light .section-heading-xl {
+    @apply drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)];
+}
+.dark .section-heading-xl {
+    @apply drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)];
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — SUBHEADING
+   ═══════════════════════════════════════════════════════ */
+
+.section-subheading {
+    @apply text-lg lg:text-xl font-bold;
+}
+.light .section-subheading {
+    @apply text-slate-800;
+}
+.dark .section-subheading {
+    @apply text-white;
+}
+
+.section-subheading-lg {
+    @apply text-xl lg:text-2xl font-bold;
+}
+.light .section-subheading-lg {
+    @apply text-slate-800;
+}
+.dark .section-subheading-lg {
+    @apply text-white;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — BODY TEXT
+   ═══════════════════════════════════════════════════════ */
+
+.text-body {
+    @apply text-base lg:text-lg leading-relaxed;
+}
+.light .text-body {
+    @apply text-slate-700;
+}
+.dark .text-body {
+    @apply text-gray-200;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — ACCENT (inline highlight text)
+   ═══════════════════════════════════════════════════════ */
+
+.text-accent {
+    @apply font-semibold;
+}
+.light .text-accent {
+    @apply text-blue-700;
+}
+.dark .text-accent {
+    @apply text-[#69f1ff];
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — MUTED
+   ═══════════════════════════════════════════════════════ */
+
+.text-muted {
+    @apply text-sm;
+}
+.light .text-muted {
+    @apply text-slate-500;
+}
+.dark .text-muted {
+    @apply text-gray-400;
+}
+
+.text-muted-xs {
+    @apply text-xs;
+}
+.light .text-muted-xs {
+    @apply text-slate-500;
+}
+.dark .text-muted-xs {
+    @apply text-gray-400;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — LABEL (form labels, meta info)
+   ═══════════════════════════════════════════════════════ */
+
+.text-label {
+    @apply block text-sm font-semibold mb-1.5;
+}
+.light .text-label {
+    @apply text-slate-700;
+}
+.dark .text-label {
+    @apply text-gray-300;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — ICON ACCENT (colored icons)
+   ═══════════════════════════════════════════════════════ */
+
+.icon-accent {
+    @apply flex-shrink-0;
+}
+.light .icon-accent {
+    @apply text-blue-500;
+}
+.dark .icon-accent {
+    @apply text-[#69f1ff];
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — CARD TITLE (interactive card headings)
+   ═══════════════════════════════════════════════════════ */
+
+.card-title {
+    @apply text-xl font-bold transition-colors duration-300;
+}
+.light .card-title {
+    @apply text-slate-900;
+}
+.light .card:hover .card-title,
+.light .group:hover .card-title {
+    @apply text-blue-600;
+}
+.dark .card-title {
+    @apply text-white;
+}
+.dark .card:hover .card-title,
+.dark .group:hover .card-title {
+    @apply text-[#69f1ff];
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — CARD TEXT
+   ═══════════════════════════════════════════════════════ */
+
+.card-text {
+    @apply text-sm leading-relaxed;
+}
+.light .card-text {
+    @apply text-slate-600;
+}
+.dark .card-text {
+    @apply text-gray-300;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY — ITEM TITLE (card sub-labels, bold name)
+   ═══════════════════════════════════════════════════════ */
+
+.item-title {
+    @apply font-bold text-base;
+}
+.light .item-title {
+    @apply text-slate-800;
+}
+.dark .item-title {
+    @apply text-white;
+}
+
+.item-subtitle {
+    @apply text-sm font-semibold;
+}
+.light .item-subtitle {
+    @apply text-blue-600;
+}
+.dark .item-subtitle {
+    @apply text-blue-300;
+}
+
+/* ═══════════════════════════════════════════════════════
+   DIVIDER
+   ═══════════════════════════════════════════════════════ */
+
+.divider {
+    @apply h-[1px] w-full my-14;
+}
+.light .divider {
+    @apply bg-gradient-to-r from-transparent via-slate-300 to-transparent;
+}
+.dark .divider {
+    @apply bg-gradient-to-r from-transparent via-gray-700 to-transparent;
+}
+
+.divider-lg {
+    @apply h-[1px] w-full my-16;
+}
+.light .divider-lg {
+    @apply bg-gradient-to-r from-transparent via-slate-300 to-transparent;
+}
+.dark .divider-lg {
+    @apply bg-gradient-to-r from-transparent via-gray-700 to-transparent;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CARD (glassmorphism container)
+   ═══════════════════════════════════════════════════════ */
+
+.card {
+    @apply relative cursor-pointer rounded-2xl overflow-hidden transition-all duration-500;
+}
+.light .card {
+    @apply bg-white/80 backdrop-blur-sm border border-slate-200/80 shadow-lg hover:shadow-[0_12px_40px_rgba(59,130,246,0.15)];
+}
+.dark .card {
+    @apply bg-[#0b1021]/80 backdrop-blur-sm border border-gray-700/50 shadow-2xl hover:shadow-[0_12px_40px_rgba(60,134,255,0.3)];
+}
+
+.card-static {
+    @apply rounded-2xl p-6 mb-6 border;
+}
+.light .card-static {
+    @apply bg-white/80 backdrop-blur-sm border-slate-200/80 shadow-lg;
+}
+.dark .card-static {
+    @apply bg-[#0b1021]/80 backdrop-blur-sm border-gray-700/50 shadow-2xl;
+}
+
+.card-inner {
+    @apply relative z-10 rounded-xl backdrop-blur-sm p-6 h-full flex flex-col border;
+}
+.light .card-inner {
+    @apply bg-white/90 border-slate-200;
+}
+.dark .card-inner {
+    @apply bg-[#0b1021]/90 border-gray-700/50;
+}
+
+/* ═══════════════════════════════════════════════════════
+   BUTTONS
+   ═══════════════════════════════════════════════════════ */
+
+.btn-primary {
+    @apply px-6 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-[0_0_15px_rgba(30,144,255,0.5)] hover:bg-blue-500 hover:shadow-[0_0_25px_rgba(30,144,255,0.8)] transition-all duration-300 transform hover:-translate-y-1 text-lg lg:text-xl;
+}
+
+.btn-outline {
+    @apply px-6 py-3 border-2 font-bold rounded-xl transition-all duration-300 transform hover:-translate-y-1 text-lg lg:text-xl;
+}
+.light .btn-outline {
+    @apply border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white;
+}
+.dark .btn-outline {
+    @apply border-[#69f1ff] text-[#69f1ff] shadow-[0_0_10px_rgba(105,241,255,0.1)] hover:bg-[#69f1ff] hover:text-[#0b1021] hover:shadow-[0_0_20px_rgba(105,241,255,0.4)];
+}
+
+.btn-outline-sm {
+    @apply px-5 py-2.5 rounded-xl font-semibold text-sm border-2 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2;
+}
+.light .btn-outline-sm {
+    @apply border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white;
+}
+.dark .btn-outline-sm {
+    @apply border-[#69f1ff] text-[#69f1ff] hover:bg-[#69f1ff] hover:text-[#0b1021];
+}
+
+.btn-solid-sm {
+    @apply px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2;
+}
+.light .btn-solid-sm {
+    @apply bg-blue-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)];
+}
+.dark .btn-solid-sm {
+    @apply bg-blue-600 text-white shadow-[0_0_15px_rgba(30,144,255,0.4)] hover:bg-blue-500 hover:shadow-[0_0_25px_rgba(30,144,255,0.7)];
+}
+
+.btn-back {
+    @apply mb-10 flex items-center gap-2 text-sm font-semibold transition-all duration-300;
+}
+.light .btn-back {
+    @apply text-slate-500 hover:text-blue-600;
+}
+.dark .btn-back {
+    @apply text-gray-400 hover:text-[#69f1ff];
+}
+
+.btn-repo {
+    @apply px-4 py-2 rounded-xl font-semibold text-sm flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-0.5;
+}
+.light .btn-repo {
+    @apply bg-slate-900 text-white hover:bg-slate-700;
+}
+.dark .btn-repo {
+    @apply bg-white/10 text-white border border-gray-600 hover:bg-white/20;
+}
+
+.btn-live {
+    @apply px-4 py-2 bg-blue-600 text-white rounded-xl font-semibold text-sm flex items-center gap-2 hover:bg-blue-500 transition-all duration-300 transform hover:-translate-y-0.5;
+}
+
+/* ═══════════════════════════════════════════════════════
+   FORM INPUT
+   ═══════════════════════════════════════════════════════ */
+
+.form-input {
+    @apply w-full px-4 py-3 rounded-xl text-base transition-all duration-300 outline-none;
+}
+.light .form-input {
+    @apply bg-slate-50 text-slate-900 border border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-slate-400;
+}
+.dark .form-input {
+    @apply bg-[#111b33] text-white border border-gray-700/50 focus:border-[#69f1ff]/50 focus:ring-2 focus:ring-[#69f1ff]/10 placeholder-gray-500;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SKILL BADGES
+   ═══════════════════════════════════════════════════════ */
+
+.skill-badge {
+    @apply px-2 py-0.5 rounded-md text-xs font-medium border whitespace-nowrap;
+}
+
+.skill-badge-lg {
+    @apply px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-300 hover:scale-105 cursor-default;
+}
+
+/* ═══════════════════════════════════════════════════════
+   BLOG TAG
+   ═══════════════════════════════════════════════════════ */
+
+.blog-tag {
+    @apply text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1;
+}
+.light .blog-tag {
+    @apply bg-blue-50 text-blue-600;
+}
+.dark .blog-tag {
+    @apply bg-blue-900/30 text-blue-300;
+}
+
+.blog-meta {
+    @apply text-xs font-medium flex items-center gap-1;
+}
+.light .blog-meta {
+    @apply text-slate-400;
+}
+.dark .blog-meta {
+    @apply text-gray-500;
+}
+
+/* ═══════════════════════════════════════════════════════
+   LINK ARROW ("View Case Study →", "Read Post →")
+   ═══════════════════════════════════════════════════════ */
+
+.link-arrow {
+    @apply flex items-center gap-2 text-sm font-semibold transition-all duration-300;
+}
+.light .link-arrow {
+    @apply text-blue-500;
+}
+.light .group:hover .link-arrow {
+    @apply text-blue-700;
+}
+.dark .link-arrow {
+    @apply text-blue-400;
+}
+.dark .group:hover .link-arrow {
+    @apply text-[#69f1ff];
+}
+
+.link-text {
+    @apply text-lg font-medium inline-flex items-center space-x-2;
+}
+.light .link-text {
+    @apply text-slate-500 hover:text-blue-600;
+}
+.dark .link-text {
+    @apply text-gray-400 hover:text-white;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SOCIAL LINK (icon + label rows)
+   ═══════════════════════════════════════════════════════ */
+
+.social-link {
+    @apply flex items-center gap-4 flex-1 px-5 py-4 rounded-xl transition-all duration-300;
+}
+.light .social-link {
+    @apply hover:bg-blue-50;
+}
+.dark .social-link {
+    @apply hover:bg-[#111b33]/80;
+}
+
+.social-icon {
+    @apply text-2xl transition-all duration-300;
+}
+.light .social-icon {
+    @apply text-slate-400;
+}
+.light .group:hover .social-icon,
+.light .social-link:hover .social-icon {
+    @apply text-blue-600;
+}
+.dark .social-icon {
+    @apply text-gray-500;
+}
+.dark .group:hover .social-icon,
+.dark .social-link:hover .social-icon {
+    @apply text-[#69f1ff];
+}
+
+/* ═══════════════════════════════════════════════════════
+   INTEREST PILL
+   ═══════════════════════════════════════════════════════ */
+
+.interest-pill {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 cursor-default;
+}
+.light .interest-pill {
+    @apply bg-blue-50 text-blue-700 hover:bg-blue-100;
+}
+.dark .interest-pill {
+    @apply bg-blue-900/30 text-blue-300 hover:bg-blue-900/50;
+}
+
+/* ═══════════════════════════════════════════════════════
+   INSTITUTION LOGO BOX
+   ═══════════════════════════════════════════════════════ */
+
+.logo-box {
+    @apply flex-shrink-0 rounded-xl overflow-hidden flex items-center justify-center shadow-lg;
+}
+.light .logo-box {
+    @apply bg-white border border-slate-200;
+}
+.dark .logo-box {
+    @apply bg-white/10 border border-gray-600/50;
+}
+
+/* ═══════════════════════════════════════════════════════
+   NAVBAR
+   ═══════════════════════════════════════════════════════ */
+
+.nav-item {
+    @apply flex flex-col items-center cursor-pointer transition-colors;
+}
+.nav-item-active {
+    @apply flex flex-col items-center cursor-pointer transition-colors;
+}
+.light .nav-item-active {
+    @apply text-blue-700;
+}
+.dark .nav-item-active {
+    @apply text-blue-300;
+}
+.light .nav-item {
+    @apply text-slate-600 hover:text-blue-600;
+}
+.dark .nav-item {
+    @apply text-gray-400 hover:text-gray-300;
+}
+
+.nav-social {
+    @apply hover:text-blue-400 flex flex-col items-center;
+}
+.light .nav-social {
+    @apply text-blue-600;
+}
+.dark .nav-social {
+    @apply text-blue-200;
+}
+
+.nav-theme-btn {
+    @apply ml-2 flex items-center p-2 rounded-full transition-all duration-300;
+}
+.light .nav-theme-btn {
+    @apply bg-blue-100/50 text-blue-600 hover:bg-blue-200;
+}
+.dark .nav-theme-btn {
+    @apply bg-slate-800/50 text-yellow-400 hover:bg-slate-700 shadow-[0_0_15px_rgba(250,204,21,0.2)];
+}
+
+/* ═══════════════════════════════════════════════════════
+   CARD GRADIENT BORDERS
+   ═══════════════════════════════════════════════════════ */
+
+.card-top-border {
+    @apply absolute top-0 left-0 right-0 h-[2px] transition-all duration-500;
+}
+.card.group:hover .card-top-border,
+.group:hover .card-top-border {
+    @apply h-[3px];
+}
+.light .card-top-border {
+    @apply bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500;
+}
+.dark .card-top-border {
+    @apply bg-gradient-to-r from-[#3c86ff] via-[#69f1ff] to-[#3c86ff];
+}
+
+.card-side-border {
+    @apply absolute top-0 left-0 bottom-0 w-[3px] transition-all duration-500;
+}
+.card.group:hover .card-side-border,
+.group:hover .card-side-border {
+    @apply w-[4px];
+}
+.light .card-side-border {
+    @apply bg-gradient-to-b from-blue-400 via-purple-400 to-blue-500;
+}
+.dark .card-side-border {
+    @apply bg-gradient-to-b from-[#3c86ff] via-[#8580e7] to-[#69f1ff];
+}
+
+/* ═══════════════════════════════════════════════════════
+   SHIMMER OVERLAY (hover effect on cards)
+   ═══════════════════════════════════════════════════════ */
+
+.card-shimmer {
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none z-0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCALE BADGE (project scale indicator)
+   ═══════════════════════════════════════════════════════ */
+
+.scale-badge {
+    @apply px-2.5 py-1 rounded-full text-xs font-semibold border;
+}
+
+.scale-badge-lg {
+    @apply px-3 py-1.5 rounded-full text-sm font-semibold border flex items-center gap-1.5;
+}
+
+/* ═══════════════════════════════════════════════════════
+   DATE META
+   ═══════════════════════════════════════════════════════ */
+
+.date-meta {
+    @apply text-xs font-semibold tracking-wider uppercase;
+}
+.light .date-meta {
+    @apply text-blue-500;
+}
+.dark .date-meta {
+    @apply text-blue-400;
+}
+
+/* ═══════════════════════════════════════════════════════
+   BULLET DOT
+   ═══════════════════════════════════════════════════════ */
+
+.bullet-dot {
+    @apply mt-2 w-2 h-2 rounded-full flex-shrink-0;
+}
+.light .bullet-dot {
+    @apply bg-blue-400;
+}
+.dark .bullet-dot {
+    @apply bg-[#69f1ff];
+}
+
+.bullet-dot-sm {
+    @apply mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0;
+}
+.light .bullet-dot-sm {
+    @apply bg-blue-400;
+}
+.dark .bullet-dot-sm {
+    @apply bg-[#69f1ff];
+}
+
+/* ═══════════════════════════════════════════════════════
+   BULLET TEXT
+   ═══════════════════════════════════════════════════════ */
+
+.bullet-text {
+    @apply text-sm lg:text-base leading-relaxed;
+}
+.light .bullet-text {
+    @apply text-slate-700;
+}
+.dark .bullet-text {
+    @apply text-gray-200;
+}
+
+/* ═══════════════════════════════════════════════════════
+   UPPERCASE META LABEL  
+   ═══════════════════════════════════════════════════════ */
+
+.meta-label {
+    @apply text-sm font-medium uppercase tracking-widest;
+}
+.light .meta-label {
+    @apply text-slate-400;
+}
+.dark .meta-label {
+    @apply text-gray-500;
 }

@@ -88,12 +88,11 @@ const About: React.FC = () => {
     const filteredSkills =
         activeCategory !== null ? skills.filter((s) => s.type === activeCategory) : skills;
 
-    const p = `text-base lg:text-lg leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`;
-    const accent =
-        theme === 'light' ? 'text-blue-700 font-semibold' : 'text-[#69f1ff] font-semibold';
-    const heading = `text-2xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]' : 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)]'}`;
-    const subheading = `text-xl lg:text-2xl font-bold ${theme === 'light' ? 'text-slate-800' : 'text-white'}`;
-    const divider = `h-[1px] w-full my-16 ${theme === 'light' ? 'bg-gradient-to-r from-transparent via-slate-300 to-transparent' : 'bg-gradient-to-r from-transparent via-gray-700 to-transparent'}`;
+    const p = 'text-body';
+    const accent = 'text-accent';
+    const heading = 'section-heading-lg';
+    const subheading = 'section-subheading-lg';
+    const divider = 'divider-lg';
 
     const workStyleTraits = [
         {
@@ -130,35 +129,25 @@ const About: React.FC = () => {
     return (
         <>
             {/* Hero */}
-            <div className="pt-16 lg:pt-20 text-center px-4">
+            <div className="page-hero">
                 <SwipeReveal
                     circleColor="bg-gradient-to-r from-[#3c86ff] to-[#69f1ff]"
                     shadowColor="shadow-[0_0_50px_rgba(60,134,255,0.6)]"
                     duration={0.6}
                 >
-                    <h1
-                        className={`text-6xl lg:text-8xl font-bold lg:mt-2 pb-2 text-center relative bg-clip-text text-transparent
-                        ${
-                            theme === 'light'
-                                ? 'bg-gradient-to-r from-blue-700 to-cyan-500 drop-shadow-[3px_3px_1px_rgba(30,30,160,0.2)]'
-                                : 'bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'
-                        }`}
-                    >
-                        About Me
-                    </h1>
+                    <h1 className="page-title">About Me</h1>
                 </SwipeReveal>
                 <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
-                    className={`mt-2 text-lg lg:text-xl max-w-2xl mx-auto italic
-                    ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
+                    className="page-subtitle italic"
                 >
                     No fluff. Here's who I actually am.
                 </motion.p>
             </div>
 
-            <div className="container mx-auto px-4 lg:px-20 pt-16 pb-20 max-w-4xl">
+            <div className="page-section">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
@@ -299,22 +288,10 @@ const About: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
                             {workStyleTraits.map((trait, i) => (
                                 <div key={i} className="flex items-start gap-3">
-                                    <span
-                                        className={`mt-1 text-xl flex-shrink-0 ${theme === 'light' ? 'text-blue-500' : 'text-[#69f1ff]'}`}
-                                    >
-                                        {trait.icon}
-                                    </span>
+                                    <span className="mt-1 text-xl icon-accent">{trait.icon}</span>
                                     <div>
-                                        <h3
-                                            className={`font-bold text-base mb-1 ${theme === 'light' ? 'text-slate-800' : 'text-white'}`}
-                                        >
-                                            {trait.title}
-                                        </h3>
-                                        <p
-                                            className={`text-sm leading-relaxed ${theme === 'light' ? 'text-slate-600' : 'text-gray-300'}`}
-                                        >
-                                            {trait.desc}
-                                        </p>
+                                        <h3 className="item-title mb-1">{trait.title}</h3>
+                                        <p className="card-text">{trait.desc}</p>
                                     </div>
                                 </div>
                             ))}
@@ -327,10 +304,7 @@ const About: React.FC = () => {
                     <motion.div variants={itemVariants} className="space-y-5">
                         <h2 className={heading}>Education</h2>
                         <div className="flex items-start gap-5">
-                            <div
-                                className={`flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 rounded-xl overflow-hidden flex items-center justify-center shadow-lg
-                                ${theme === 'light' ? 'bg-white border border-slate-200' : 'bg-white/10 border border-gray-600/50'}`}
-                            >
+                            <div className="logo-box w-16 h-16 lg:w-20 lg:h-20">
                                 <img
                                     src="/images/tcnj.png"
                                     alt="TCNJ"
@@ -339,19 +313,9 @@ const About: React.FC = () => {
                             </div>
                             <div>
                                 <h3 className={subheading}>The College of New Jersey</h3>
-                                <p
-                                    className={`text-sm font-semibold ${theme === 'light' ? 'text-blue-600' : 'text-blue-300'}`}
-                                >
-                                    B.S. Computer Science
-                                </p>
-                                <p
-                                    className={`text-xs mt-0.5 mb-3 ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
-                                >
-                                    Class of 2026 • Senior
-                                </p>
-                                <p
-                                    className={`text-sm lg:text-base leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
-                                >
+                                <p className="item-subtitle">B.S. Computer Science</p>
+                                <p className="text-muted-xs mt-0.5 mb-3">Class of 2026 • Senior</p>
+                                <p className="bullet-text">
                                     Coursework in Operating Systems, Computer Architecture, Data
                                     Structures, Algorithms, Software Engineering, Database Systems,
                                     Computer Networking, and Computational Thinking. Built my
@@ -511,12 +475,7 @@ const About: React.FC = () => {
                                 <motion.span
                                     key={i}
                                     whileHover={{ scale: 1.06 }}
-                                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 cursor-default
-                                    ${
-                                        theme === 'light'
-                                            ? 'bg-blue-50 text-blue-700 hover:bg-blue-100'
-                                            : 'bg-blue-900/30 text-blue-300 hover:bg-blue-900/50'
-                                    }`}
+                                    className="interest-pill"
                                 >
                                     <span className="text-base">{item.icon}</span>
                                     {item.label}
@@ -529,14 +488,9 @@ const About: React.FC = () => {
 
                     {/* ═══════════════ CLOSING ═══════════════ */}
                     <motion.div variants={itemVariants} className="text-center space-y-3">
-                        <FaRocket
-                            className={`mx-auto text-3xl ${theme === 'light' ? 'text-blue-500' : 'text-[#69f1ff]'}`}
-                        />
+                        <FaRocket className="mx-auto text-3xl icon-accent" />
                         <h2 className={subheading}>Let's Build Something</h2>
-                        <p
-                            className={`text-base lg:text-lg max-w-xl mx-auto
-                            ${theme === 'light' ? 'text-slate-600' : 'text-gray-300'}`}
-                        >
+                        <p className="text-body max-w-xl mx-auto">
                             If you're working on hard problems with a team that cares about craft,
                             I'd love to talk. I bring velocity, ownership, and no ego.
                         </p>

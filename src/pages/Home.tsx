@@ -156,16 +156,10 @@ const Home: React.FC = () => {
                                         transition={{ duration: 0.4 }}
                                         className="mt-8 flex flex-row justify-center lg:justify-start space-x-4 w-full"
                                     >
-                                        <button
-                                            onClick={scrollToFeatured}
-                                            className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-[0_0_15px_rgba(30,144,255,0.5)] hover:bg-blue-500 hover:shadow-[0_0_25px_rgba(30,144,255,0.8)] transition-all duration-300 transform hover:-translate-y-1 text-lg lg:text-xl"
-                                        >
+                                        <button onClick={scrollToFeatured} className="btn-primary">
                                             View Work
                                         </button>
-                                        <button
-                                            onClick={ContactMe}
-                                            className="px-6 py-3 border-2 border-[#69f1ff] text-[#69f1ff] font-bold rounded-xl shadow-[0_0_10px_rgba(105,241,255,0.1)] hover:bg-[#69f1ff] hover:text-[#0b1021] hover:shadow-[0_0_20px_rgba(105,241,255,0.4)] transition-all duration-300 transform hover:-translate-y-1 text-lg lg:text-xl"
-                                        >
+                                        <button onClick={ContactMe} className="btn-outline">
                                             Get in Touch
                                         </button>
                                     </motion.div>
@@ -246,10 +240,7 @@ const Home: React.FC = () => {
                         >
                             Featured Work
                         </motion.h2>
-                        <motion.p
-                            variants={itemVariants}
-                            className={`text-center mb-12 text-lg lg:text-xl ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
-                        >
+                        <motion.p variants={itemVariants} className="page-subtitle mb-12">
                             A selection of my strongest engineering projects.
                         </motion.p>
 
@@ -284,12 +275,7 @@ const Home: React.FC = () => {
                                         ${theme === 'light' ? 'bg-white/90 border-slate-200' : 'bg-[#0b1021]/90 border-gray-700/50'}`}
                                     >
                                         <div className="flex justify-between items-start mb-4">
-                                            <h3
-                                                className={`text-2xl font-bold transition-colors duration-300 
-                                                ${theme === 'light' ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-[#69f1ff]'}`}
-                                            >
-                                                {project.name}
-                                            </h3>
+                                            <h3 className="card-title text-2xl">{project.name}</h3>
                                             {project.github ? (
                                                 <a
                                                     href={project.github}
@@ -314,9 +300,7 @@ const Home: React.FC = () => {
                                             {project.date} • {project.span}
                                         </p>
 
-                                        <p
-                                            className={`text-sm leading-relaxed mb-6 flex-grow ${theme === 'light' ? 'text-slate-600' : 'text-gray-300'}`}
-                                        >
+                                        <p className="card-text mb-6 flex-grow">
                                             {project.desc.split('\n')[0].replace('• ', '')}
                                         </p>
 
@@ -351,10 +335,7 @@ const Home: React.FC = () => {
                             variants={itemVariants}
                             className="mt-12 text-center transition-all duration-700 delay-500 ease-out transform"
                         >
-                            <button
-                                onClick={() => navigate('/work')}
-                                className={`text-lg font-medium inline-flex items-center space-x-2 group ${theme === 'light' ? 'text-slate-500 hover:text-blue-600' : 'text-gray-400 hover:text-white'}`}
-                            >
+                            <button onClick={() => navigate('/work')} className="link-text group">
                                 <span>View all projects</span>
                                 <span className="transform transition-transform duration-300 group-hover:translate-x-1">
                                     →

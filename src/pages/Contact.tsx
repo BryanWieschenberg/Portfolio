@@ -20,8 +20,8 @@ const Contact: React.FC = () => {
     const { theme } = useTheme();
     const [status, setStatus] = useState('');
 
-    const heading = `text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]' : 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)]'}`;
-    const divider = `h-[1px] w-full my-14 ${theme === 'light' ? 'bg-gradient-to-r from-transparent via-slate-300 to-transparent' : 'bg-gradient-to-r from-transparent via-gray-700 to-transparent'}`;
+    const heading = 'section-heading';
+    const divider = 'divider';
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -107,39 +107,24 @@ const Contact: React.FC = () => {
         },
     ];
 
-    const inputClass = `w-full px-4 py-3 rounded-xl text-base transition-all duration-300 outline-none
-        ${
-            theme === 'light'
-                ? 'bg-slate-50 text-slate-900 border border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-slate-400'
-                : 'bg-[#111b33] text-white border border-gray-700/50 focus:border-[#69f1ff]/50 focus:ring-2 focus:ring-[#69f1ff]/10 placeholder-gray-500'
-        }`;
+    const inputClass = 'form-input';
 
     return (
         <>
             {/* Hero */}
-            <div className="pt-16 lg:pt-20 text-center px-4">
+            <div className="page-hero">
                 <SwipeReveal
                     circleColor="bg-gradient-to-r from-[#3c86ff] to-[#69f1ff]"
                     shadowColor="shadow-[0_0_50px_rgba(60,134,255,0.6)]"
                     duration={0.6}
                 >
-                    <h1
-                        className={`text-6xl lg:text-8xl font-bold lg:mt-2 pb-2 text-center relative bg-clip-text text-transparent
-                        ${
-                            theme === 'light'
-                                ? 'bg-gradient-to-r from-blue-700 to-cyan-500 drop-shadow-[3px_3px_1px_rgba(30,30,160,0.2)]'
-                                : 'bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'
-                        }`}
-                    >
-                        Get in Touch
-                    </h1>
+                    <h1 className="page-title">Get in Touch</h1>
                 </SwipeReveal>
                 <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
-                    className={`mt-2 text-lg lg:text-xl max-w-2xl mx-auto
-                    ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
+                    className="page-subtitle"
                 >
                     I read every message. Seriously.
                 </motion.p>
@@ -154,11 +139,7 @@ const Contact: React.FC = () => {
                 >
                     {/* ═══════════════ EMAIL — PROMINENT ═══════════════ */}
                     <motion.div variants={itemVariants} className="text-center mb-2">
-                        <p
-                            className={`text-sm font-medium uppercase tracking-widest mb-3 ${theme === 'light' ? 'text-slate-400' : 'text-gray-500'}`}
-                        >
-                            Fastest way to reach me
-                        </p>
+                        <p className="meta-label mb-3">Fastest way to reach me</p>
                         <a
                             href="mailto:bryanwieschenberg@gmail.com"
                             className={`inline-flex items-center gap-3 text-2xl lg:text-3xl font-bold transition-all duration-300 group
@@ -179,22 +160,10 @@ const Contact: React.FC = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
                             {openTo.map((item, i) => (
                                 <div key={i} className="flex items-start gap-3">
-                                    <span
-                                        className={`mt-1 text-lg flex-shrink-0 ${theme === 'light' ? 'text-blue-500' : 'text-[#69f1ff]'}`}
-                                    >
-                                        {item.icon}
-                                    </span>
+                                    <span className="mt-1 text-lg icon-accent">{item.icon}</span>
                                     <div>
-                                        <h3
-                                            className={`font-bold text-base ${theme === 'light' ? 'text-slate-800' : 'text-white'}`}
-                                        >
-                                            {item.title}
-                                        </h3>
-                                        <p
-                                            className={`text-sm ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
-                                        >
-                                            {item.desc}
-                                        </p>
+                                        <h3 className="item-title">{item.title}</h3>
+                                        <p className="text-muted">{item.desc}</p>
                                     </div>
                                 </div>
                             ))}
@@ -215,10 +184,7 @@ const Contact: React.FC = () => {
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label
-                                        htmlFor="contact-name"
-                                        className={`block text-sm font-semibold mb-1.5 ${theme === 'light' ? 'text-slate-700' : 'text-gray-300'}`}
-                                    >
+                                    <label htmlFor="contact-name" className="text-label">
                                         Name
                                     </label>
                                     <input
@@ -231,10 +197,7 @@ const Contact: React.FC = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label
-                                        htmlFor="contact-email"
-                                        className={`block text-sm font-semibold mb-1.5 ${theme === 'light' ? 'text-slate-700' : 'text-gray-300'}`}
-                                    >
+                                    <label htmlFor="contact-email" className="text-label">
                                         Email
                                     </label>
                                     <input
@@ -249,10 +212,7 @@ const Contact: React.FC = () => {
                             </div>
 
                             <div>
-                                <label
-                                    htmlFor="contact-message"
-                                    className={`block text-sm font-semibold mb-1.5 ${theme === 'light' ? 'text-slate-700' : 'text-gray-300'}`}
-                                >
+                                <label htmlFor="contact-message" className="text-label">
                                     Message
                                 </label>
                                 <textarea
@@ -316,30 +276,12 @@ const Contact: React.FC = () => {
                                     href={s.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`group flex items-center gap-4 flex-1 px-5 py-4 rounded-xl transition-all duration-300
-                                    ${
-                                        theme === 'light'
-                                            ? 'hover:bg-blue-50'
-                                            : 'hover:bg-[#111b33]/80'
-                                    }`}
+                                    className="social-link group"
                                 >
-                                    <span
-                                        className={`text-2xl transition-all duration-300
-                                        ${theme === 'light' ? 'text-slate-400 group-hover:text-blue-600' : 'text-gray-500 group-hover:text-[#69f1ff]'}`}
-                                    >
-                                        {s.icon}
-                                    </span>
+                                    <span className="social-icon">{s.icon}</span>
                                     <div>
-                                        <p
-                                            className={`font-bold text-sm ${theme === 'light' ? 'text-slate-800' : 'text-white'}`}
-                                        >
-                                            {s.label}
-                                        </p>
-                                        <p
-                                            className={`text-xs ${theme === 'light' ? 'text-slate-400' : 'text-gray-500'}`}
-                                        >
-                                            {s.handle}
-                                        </p>
+                                        <p className="item-title text-sm">{s.label}</p>
+                                        <p className="text-muted-xs">{s.handle}</p>
                                     </div>
                                 </a>
                             ))}

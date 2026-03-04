@@ -8,12 +8,11 @@ const GoalGetterBlog: React.FC = () => {
     const { theme } = useTheme();
     const navigate = useNavigate();
 
-    const p = `text-base lg:text-lg leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`;
-    const accent =
-        theme === 'light' ? 'text-blue-700 font-semibold' : 'text-[#69f1ff] font-semibold';
-    const heading = `text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]' : 'drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)]'}`;
-    const subheading = `text-lg lg:text-xl font-bold ${theme === 'light' ? 'text-slate-800' : 'text-white'}`;
-    const divider = `h-[1px] w-full my-12 ${theme === 'light' ? 'bg-gradient-to-r from-transparent via-slate-300 to-transparent' : 'bg-gradient-to-r from-transparent via-gray-700 to-transparent'}`;
+    const p = 'text-body';
+    const accent = 'text-accent';
+    const heading = 'section-heading';
+    const subheading = 'section-subheading';
+    const divider = 'divider';
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -41,8 +40,7 @@ const GoalGetterBlog: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3 }}
                     onClick={() => navigate('/blog')}
-                    className={`mb-10 flex items-center gap-2 text-sm font-semibold transition-all duration-300 group
-                    ${theme === 'light' ? 'text-slate-500 hover:text-blue-600' : 'text-gray-400 hover:text-[#69f1ff]'}`}
+                    className="btn-back group"
                 >
                     <FaArrowLeft className="transform transition-transform duration-300 group-hover:-translate-x-1" />
                     <span>Back to Blog</span>
@@ -52,23 +50,12 @@ const GoalGetterBlog: React.FC = () => {
                     {/* ── HEADER ── */}
                     <motion.div variants={itemVariants} className="mb-10">
                         <div className="flex flex-wrap items-center gap-3 mb-3">
-                            <span
-                                className={`text-xs font-medium flex items-center gap-1
-                                ${theme === 'light' ? 'text-slate-400' : 'text-gray-500'}`}
-                            >
+                            <span className="blog-meta">
                                 <FaClock className="text-[10px]" />
                                 Aug 2025 • 11 min read
                             </span>
                             {['Full-Stack', 'Auth', 'Deployment', 'Product'].map((tag, i) => (
-                                <span
-                                    key={i}
-                                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1
-                                    ${
-                                        theme === 'light'
-                                            ? 'bg-blue-50 text-blue-600'
-                                            : 'bg-blue-900/30 text-blue-300'
-                                    }`}
-                                >
+                                <span key={i} className="blog-tag">
                                     <FaTag className="text-[8px]" />
                                     {tag}
                                 </span>

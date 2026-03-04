@@ -150,8 +150,7 @@ const ProjectDetail: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3 }}
                     onClick={() => navigate('/work')}
-                    className={`mb-8 flex items-center gap-2 text-sm font-semibold transition-all duration-300 group
-                    ${theme === 'light' ? 'text-slate-500 hover:text-blue-600' : 'text-gray-400 hover:text-[#69f1ff]'}`}
+                    className="btn-back group mb-8"
                 >
                     <FaArrowLeft className="transform transition-transform duration-300 group-hover:-translate-x-1" />
                     <span>Back to Work</span>
@@ -161,25 +160,17 @@ const ProjectDetail: React.FC = () => {
                     {/* Hero Section */}
                     <motion.div variants={itemVariants} className="mb-10">
                         <div className="flex flex-wrap items-start gap-4 mb-3">
-                            <h1
-                                className={`text-4xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#3c86ff] to-[#69f1ff]
-                                ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)]' : 'drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]'}`}
-                            >
+                            <h1 className="section-heading-xl from-[#3c86ff] to-[#69f1ff] text-4xl lg:text-6xl">
                                 {project.name}
                             </h1>
-                            <span
-                                className={`mt-2 lg:mt-3 px-3 py-1.5 rounded-full text-sm font-semibold border flex items-center gap-1.5 ${scaleInfo.color}`}
-                            >
+                            <span className={`mt-2 lg:mt-3 scale-badge-lg ${scaleInfo.color}`}>
                                 {scaleInfo.icon}
                                 {scaleInfo.label}
                             </span>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-4 mb-4">
-                            <p
-                                className={`text-sm font-semibold tracking-wider uppercase
-                                ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
-                            >
+                            <p className="date-meta">
                                 {project.date} • {project.span}
                             </p>
                             <span
@@ -196,12 +187,7 @@ const ProjectDetail: React.FC = () => {
                                     href={project.github}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`px-4 py-2 rounded-xl font-semibold text-sm flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-0.5
-                                    ${
-                                        theme === 'light'
-                                            ? 'bg-slate-900 text-white hover:bg-slate-700'
-                                            : 'bg-white/10 text-white border border-gray-600 hover:bg-white/20'
-                                    }`}
+                                    className="btn-repo"
                                 >
                                     <FaGithub /> View Repository
                                 </a>
@@ -211,7 +197,7 @@ const ProjectDetail: React.FC = () => {
                                     href={project.artifacts.liveUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-xl font-semibold text-sm flex items-center gap-2 hover:bg-blue-500 transition-all duration-300 transform hover:-translate-y-0.5"
+                                    className="btn-live"
                                 >
                                     <FaExternalLinkAlt /> Live Demo
                                 </a>
@@ -221,12 +207,7 @@ const ProjectDetail: React.FC = () => {
                                     href={project.artifacts.demoUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`px-4 py-2 rounded-xl font-semibold text-sm flex items-center gap-2 border-2 transition-all duration-300 transform hover:-translate-y-0.5
-                                    ${
-                                        theme === 'light'
-                                            ? 'border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white'
-                                            : 'border-[#69f1ff] text-[#69f1ff] hover:bg-[#69f1ff] hover:text-[#0b1021]'
-                                    }`}
+                                    className="btn-outline-sm border-2"
                                 >
                                     <FaExternalLinkAlt /> Watch Demo
                                 </a>
@@ -235,38 +216,16 @@ const ProjectDetail: React.FC = () => {
                     </motion.div>
 
                     {/* Overview Section */}
-                    <motion.div
-                        variants={itemVariants}
-                        className={`rounded-2xl p-6 mb-6 border
-                        ${
-                            theme === 'light'
-                                ? 'bg-white/80 backdrop-blur-sm border-slate-200/80 shadow-lg'
-                                : 'bg-[#0b1021]/80 backdrop-blur-sm border-gray-700/50 shadow-2xl'
-                        }`}
-                    >
+                    <motion.div variants={itemVariants} className="card-static">
                         <div className="flex items-center gap-3 mb-4">
-                            <FaClipboardList
-                                className={`text-xl ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
-                            />
-                            <h2
-                                className={`text-xl lg:text-2xl font-bold ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
-                            >
-                                Overview
-                            </h2>
+                            <FaClipboardList className="text-xl icon-accent" />
+                            <h2 className="section-subheading-lg">Overview</h2>
                         </div>
                         <ul className="space-y-3">
                             {bullets.map((bullet, i) => (
                                 <li key={i} className="flex items-start gap-3">
-                                    <span
-                                        className={`mt-2 w-2 h-2 rounded-full flex-shrink-0
-                                        ${theme === 'light' ? 'bg-blue-400' : 'bg-[#69f1ff]'}`}
-                                    />
-                                    <span
-                                        className={`text-sm lg:text-base leading-relaxed
-                                        ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
-                                    >
-                                        {bullet}
-                                    </span>
+                                    <span className="bullet-dot" />
+                                    <span className="bullet-text">{bullet}</span>
                                 </li>
                             ))}
                         </ul>
@@ -310,30 +269,16 @@ const ProjectDetail: React.FC = () => {
 
                     {/* Tech Stack */}
                     {project.skills && Object.keys(project.skills).length > 0 && (
-                        <motion.div
-                            variants={itemVariants}
-                            className={`rounded-2xl p-6 mb-6 border
-                            ${
-                                theme === 'light'
-                                    ? 'bg-white/80 backdrop-blur-sm border-slate-200/80 shadow-lg'
-                                    : 'bg-[#0b1021]/80 backdrop-blur-sm border-gray-700/50 shadow-2xl'
-                            }`}
-                        >
+                        <motion.div variants={itemVariants} className="card-static">
                             <div className="flex items-center gap-3 mb-4">
-                                <FaCogs
-                                    className={`text-xl ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
-                                />
-                                <h2
-                                    className={`text-xl lg:text-2xl font-bold ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
-                                >
-                                    Tech Stack
-                                </h2>
+                                <FaCogs className="text-xl icon-accent" />
+                                <h2 className="section-subheading-lg">Tech Stack</h2>
                             </div>
                             <div className="flex flex-wrap gap-2.5">
                                 {Object.entries(project.skills).map(([skill, level], i) => (
                                     <div
                                         key={i}
-                                        className={`group relative px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-300 hover:scale-105 cursor-default ${getSkillColor(level as number)}`}
+                                        className={`skill-badge-lg ${getSkillColor(level as number)}`}
                                     >
                                         <span>{skill}</span>
                                         <span className={`ml-1.5 text-[10px] opacity-60`}>
@@ -347,24 +292,10 @@ const ProjectDetail: React.FC = () => {
 
                     {/* Artifacts */}
                     {(project.artifacts.screenshots?.length || project.artifacts.writeup) && (
-                        <motion.div
-                            variants={itemVariants}
-                            className={`rounded-2xl p-6 mb-6 border
-                            ${
-                                theme === 'light'
-                                    ? 'bg-white/80 backdrop-blur-sm border-slate-200/80 shadow-lg'
-                                    : 'bg-[#0b1021]/80 backdrop-blur-sm border-gray-700/50 shadow-2xl'
-                            }`}
-                        >
+                        <motion.div variants={itemVariants} className="card-static">
                             <div className="flex items-center gap-3 mb-4">
-                                <FaImages
-                                    className={`text-xl ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
-                                />
-                                <h2
-                                    className={`text-xl lg:text-2xl font-bold ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
-                                >
-                                    Artifacts
-                                </h2>
+                                <FaImages className="text-xl icon-accent" />
+                                <h2 className="section-subheading-lg">Artifacts</h2>
                             </div>
 
                             {project.artifacts.screenshots &&
@@ -387,10 +318,7 @@ const ProjectDetail: React.FC = () => {
                                 )}
 
                             {project.artifacts.writeup && (
-                                <div
-                                    className={`text-sm leading-relaxed whitespace-pre-line
-                                    ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
-                                >
+                                <div className="bullet-text whitespace-pre-line">
                                     {project.artifacts.writeup}
                                 </div>
                             )}

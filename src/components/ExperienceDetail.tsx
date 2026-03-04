@@ -112,8 +112,7 @@ const ExperienceDetail: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3 }}
                     onClick={() => navigate('/work')}
-                    className={`mb-8 flex items-center gap-2 text-sm font-semibold transition-all duration-300 group
-                    ${theme === 'light' ? 'text-slate-500 hover:text-blue-600' : 'text-gray-400 hover:text-[#69f1ff]'}`}
+                    className="btn-back group mb-8"
                 >
                     <FaArrowLeft className="transform transition-transform duration-300 group-hover:-translate-x-1" />
                     <span>Back to Work</span>
@@ -122,10 +121,7 @@ const ExperienceDetail: React.FC = () => {
                 <motion.div initial="hidden" animate="visible" variants={containerVariants}>
                     <motion.div variants={itemVariants} className="mb-10">
                         <div className="flex items-start gap-6 mb-4">
-                            <div
-                                className={`flex-shrink-0 w-20 h-20 lg:w-24 lg:h-24 rounded-2xl overflow-hidden flex items-center justify-center shadow-xl
-                                ${theme === 'light' ? 'bg-white border-2 border-slate-200' : 'bg-white/10 border-2 border-gray-600/50'}`}
-                            >
+                            <div className="logo-box w-20 h-20 lg:w-24 lg:h-24 rounded-2xl border-2 shadow-xl">
                                 <img
                                     src={imagePath}
                                     alt={`${experience.company} logo`}
@@ -137,28 +133,18 @@ const ExperienceDetail: React.FC = () => {
                             </div>
 
                             <div>
-                                <h1
-                                    className={`text-3xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#8580e7] to-[#3c86ff]
-                                    ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)]' : 'drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]'}`}
-                                >
+                                <h1 className="section-heading-xl from-[#8580e7] to-[#3c86ff] text-3xl lg:text-5xl">
                                     {experience.role}
                                 </h1>
                                 <div className="flex items-center gap-2 mt-1">
                                     <FaBuilding
                                         className={`text-sm ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
                                     />
-                                    <span
-                                        className={`text-lg font-semibold ${theme === 'light' ? 'text-blue-600' : 'text-blue-300'}`}
-                                    >
+                                    <span className="item-subtitle text-lg">
                                         {experience.company}
                                     </span>
                                 </div>
-                                <p
-                                    className={`text-sm font-semibold tracking-wider uppercase mt-1
-                                    ${theme === 'light' ? 'text-slate-500' : 'text-gray-400'}`}
-                                >
-                                    {experience.date}
-                                </p>
+                                <p className="date-meta mt-1">{experience.date}</p>
                             </div>
                         </div>
 
@@ -168,7 +154,7 @@ const ExperienceDetail: React.FC = () => {
                                     href={experience.artifacts.liveUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-xl font-semibold text-sm flex items-center gap-2 hover:bg-blue-500 transition-all duration-300 transform hover:-translate-y-0.5"
+                                    className="btn-live"
                                 >
                                     <FaExternalLinkAlt /> View Live
                                 </a>
@@ -178,12 +164,7 @@ const ExperienceDetail: React.FC = () => {
                                     href={experience.artifacts.repoUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`px-4 py-2 rounded-xl font-semibold text-sm flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-0.5
-                                    ${
-                                        theme === 'light'
-                                            ? 'bg-slate-900 text-white hover:bg-slate-700'
-                                            : 'bg-white/10 text-white border border-gray-600 hover:bg-white/20'
-                                    }`}
+                                    className="btn-repo"
                                 >
                                     <FaGithub /> View Repository
                                 </a>
@@ -191,38 +172,16 @@ const ExperienceDetail: React.FC = () => {
                         </div>
                     </motion.div>
 
-                    <motion.div
-                        variants={itemVariants}
-                        className={`rounded-2xl p-6 mb-6 border
-                        ${
-                            theme === 'light'
-                                ? 'bg-white/80 backdrop-blur-sm border-slate-200/80 shadow-lg'
-                                : 'bg-[#0b1021]/80 backdrop-blur-sm border-gray-700/50 shadow-2xl'
-                        }`}
-                    >
+                    <motion.div variants={itemVariants} className="card-static">
                         <div className="flex items-center gap-3 mb-4">
-                            <FaClipboardList
-                                className={`text-xl ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
-                            />
-                            <h2
-                                className={`text-xl lg:text-2xl font-bold ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
-                            >
-                                Overview
-                            </h2>
+                            <FaClipboardList className="text-xl icon-accent" />
+                            <h2 className="section-subheading-lg">Overview</h2>
                         </div>
                         <ul className="space-y-3">
                             {bullets.map((bullet, i) => (
                                 <li key={i} className="flex items-start gap-3">
-                                    <span
-                                        className={`mt-2 w-2 h-2 rounded-full flex-shrink-0
-                                        ${theme === 'light' ? 'bg-blue-400' : 'bg-[#69f1ff]'}`}
-                                    />
-                                    <span
-                                        className={`text-sm lg:text-base leading-relaxed
-                                        ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
-                                    >
-                                        {bullet}
-                                    </span>
+                                    <span className="bullet-dot" />
+                                    <span className="bullet-text">{bullet}</span>
                                 </li>
                             ))}
                         </ul>
@@ -263,30 +222,16 @@ const ExperienceDetail: React.FC = () => {
                     )}
 
                     {experience.skills && Object.keys(experience.skills).length > 0 && (
-                        <motion.div
-                            variants={itemVariants}
-                            className={`rounded-2xl p-6 mb-6 border
-                            ${
-                                theme === 'light'
-                                    ? 'bg-white/80 backdrop-blur-sm border-slate-200/80 shadow-lg'
-                                    : 'bg-[#0b1021]/80 backdrop-blur-sm border-gray-700/50 shadow-2xl'
-                            }`}
-                        >
+                        <motion.div variants={itemVariants} className="card-static">
                             <div className="flex items-center gap-3 mb-4">
-                                <FaCogs
-                                    className={`text-xl ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
-                                />
-                                <h2
-                                    className={`text-xl lg:text-2xl font-bold ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
-                                >
-                                    Tech Stack
-                                </h2>
+                                <FaCogs className="text-xl icon-accent" />
+                                <h2 className="section-subheading-lg">Tech Stack</h2>
                             </div>
                             <div className="flex flex-wrap gap-2.5">
                                 {Object.entries(experience.skills).map(([skill, level], i) => (
                                     <div
                                         key={i}
-                                        className={`group relative px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-300 hover:scale-105 cursor-default ${getSkillColor(level as number)}`}
+                                        className={`skill-badge-lg ${getSkillColor(level as number)}`}
                                     >
                                         <span>{skill}</span>
                                         <span className={`ml-1.5 text-[10px] opacity-60`}>
@@ -299,24 +244,10 @@ const ExperienceDetail: React.FC = () => {
                     )}
 
                     {(experience.artifacts.screenshots?.length || experience.artifacts.writeup) && (
-                        <motion.div
-                            variants={itemVariants}
-                            className={`rounded-2xl p-6 mb-6 border
-                            ${
-                                theme === 'light'
-                                    ? 'bg-white/80 backdrop-blur-sm border-slate-200/80 shadow-lg'
-                                    : 'bg-[#0b1021]/80 backdrop-blur-sm border-gray-700/50 shadow-2xl'
-                            }`}
-                        >
+                        <motion.div variants={itemVariants} className="card-static">
                             <div className="flex items-center gap-3 mb-4">
-                                <FaImages
-                                    className={`text-xl ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
-                                />
-                                <h2
-                                    className={`text-xl lg:text-2xl font-bold ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
-                                >
-                                    Artifacts
-                                </h2>
+                                <FaImages className="text-xl icon-accent" />
+                                <h2 className="section-subheading-lg">Artifacts</h2>
                             </div>
 
                             {experience.artifacts.screenshots &&
@@ -339,10 +270,7 @@ const ExperienceDetail: React.FC = () => {
                                 )}
 
                             {experience.artifacts.writeup && (
-                                <div
-                                    className={`text-sm leading-relaxed whitespace-pre-line
-                                    ${theme === 'light' ? 'text-slate-700' : 'text-gray-200'}`}
-                                >
+                                <div className="bullet-text whitespace-pre-line">
                                     {experience.artifacts.writeup}
                                 </div>
                             )}

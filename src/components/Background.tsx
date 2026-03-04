@@ -31,11 +31,21 @@ function hslToRgb(h: number, s: number, l: number): [number, number, number] {
         r = g = b = l;
     } else {
         const hue2rgb = (p: number, q: number, t: number) => {
-            if (t < 0) {t += 1;}
-            if (t > 1) {t -= 1;}
-            if (t < 1 / 6) {return p + (q - p) * 6 * t;}
-            if (t < 1 / 2) {return q;}
-            if (t < 2 / 3) {return p + (q - p) * (2 / 3 - t) * 6;}
+            if (t < 0) {
+                t += 1;
+            }
+            if (t > 1) {
+                t -= 1;
+            }
+            if (t < 1 / 6) {
+                return p + (q - p) * 6 * t;
+            }
+            if (t < 1 / 2) {
+                return q;
+            }
+            if (t < 2 / 3) {
+                return p + (q - p) * (2 / 3 - t) * 6;
+            }
             return p;
         };
         const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
@@ -109,21 +119,29 @@ const Background: React.FC = () => {
 
     const resize = useCallback(() => {
         const canvas = canvasRef.current;
-        if (!canvas) {return;}
+        if (!canvas) {
+            return;
+        }
         const dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
         canvas.width = window.innerWidth * dpr;
         canvas.height = window.innerHeight * dpr;
         canvas.style.width = `${window.innerWidth}px`;
         canvas.style.height = `${window.innerHeight}px`;
         const ctx = canvas.getContext('2d');
-        if (ctx) {ctx.setTransform(dpr, 0, 0, dpr, 0, 0);}
+        if (ctx) {
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
     }, []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        if (!canvas) {return;}
+        if (!canvas) {
+            return;
+        }
         const ctx = canvas.getContext('2d', { alpha: true });
-        if (!ctx) {return;}
+        if (!ctx) {
+            return;
+        }
 
         resize();
         window.addEventListener('resize', resize);
@@ -135,7 +153,9 @@ const Background: React.FC = () => {
             animId = requestAnimationFrame(draw);
 
             const delta = now - lastTime;
-            if (delta < TARGET_INTERVAL) {return;}
+            if (delta < TARGET_INTERVAL) {
+                return;
+            }
             lastTime = now - (delta % TARGET_INTERVAL);
 
             const dtSec = Math.min(delta / 1000, 0.1);
@@ -154,7 +174,6 @@ const Background: React.FC = () => {
                 const newX = p.x - p.y * dTheta;
                 const newY = p.y + p.x * dTheta;
 
-                // Renormalise onto the ellipse
                 const nx = newX / p.radiusX;
                 const ny = newY / p.radiusY;
                 const ellipseDist = Math.sqrt(nx * nx + ny * ny) || 1;
