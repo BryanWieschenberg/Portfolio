@@ -1,18 +1,15 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { projects } from '../constants';
+import { normalizeTitle } from '../lib/utils';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import {
     FaArrowLeft,
     FaGithub,
     FaExternalLinkAlt,
-    FaRocket,
-    FaStar,
-    FaBolt,
     FaUserCheck,
     FaCogs,
-    FaImages,
     FaClipboardList,
 } from 'react-icons/fa';
 
@@ -21,7 +18,7 @@ const ProjectDetail: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
 
-    const project = projects.find((p) => p.slug === slug);
+    const project = projects.find((p) => normalizeTitle(p.name) === slug);
 
     if (!project) {
         return (
@@ -41,88 +38,10 @@ const ProjectDetail: React.FC = () => {
         );
     }
 
-    const getScaleInfo = (scale: number) => {
-        switch (scale) {
-            case 0:
-                return {
-                    label: 'Flagship Project',
-                    icon: <FaRocket />,
-                    color:
-                        theme === 'light'
-                            ? 'bg-blue-100 text-blue-700 border-blue-200'
-                            : 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-                    desc: 'Large-scale, 4+ weeks',
-                };
-            case 1:
-                return {
-                    label: 'Medium Project',
-                    icon: <FaStar />,
-                    color:
-                        theme === 'light'
-                            ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
-                            : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-                    desc: 'Mid-scale, 1-4 weeks',
-                };
-            default:
-                return {
-                    label: 'Small Project',
-                    icon: <FaBolt />,
-                    color:
-                        theme === 'light'
-                            ? 'bg-amber-100 text-amber-700 border-amber-200'
-                            : 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-                    desc: 'Quick build, <1 week',
-                };
-        }
-    };
-
-    const getSkillColor = (level: number) => {
-        switch (level) {
-            case 0:
-                return theme === 'light'
-                    ? 'bg-blue-100 text-blue-700 border-blue-200'
-                    : 'bg-blue-900/40 text-blue-300 border-blue-700/50';
-            case 1:
-                return theme === 'light'
-                    ? 'bg-green-100 text-green-700 border-green-200'
-                    : 'bg-green-900/40 text-green-300 border-green-700/50';
-            case 2:
-                return theme === 'light'
-                    ? 'bg-yellow-100 text-yellow-700 border-yellow-200'
-                    : 'bg-yellow-900/40 text-yellow-300 border-yellow-700/50';
-            case 3:
-                return theme === 'light'
-                    ? 'bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200'
-                    : 'bg-fuchsia-900/40 text-fuchsia-300 border-fuchsia-700/50';
-            default:
-                return theme === 'light'
-                    ? 'bg-slate-100 text-slate-600 border-slate-200'
-                    : 'bg-slate-800/40 text-slate-300 border-slate-600/50';
-        }
-    };
-
-    const getSkillTypeLabel = (level: number) => {
-        switch (level) {
-            case 0:
-                return 'Language';
-            case 1:
-                return 'Framework';
-            case 2:
-                return 'Tool';
-            case 3:
-                return 'Research';
-            case 4:
-                return 'Concept';
-            default:
-                return '';
-        }
-    };
-
-    const scaleInfo = getScaleInfo(project.scale);
     const bullets = project.desc
         .split('\n')
-        .map((b) => b.replace(/^•\s*/, '').trim())
-        .filter((b) => b.length > 0);
+        .map((b: string) => b.replace(/^•\s*/, '').trim())
+        .filter((b: string) => b.length > 0);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -161,21 +80,13 @@ const ProjectDetail: React.FC = () => {
                             <h1 className="section-heading-xl from-[#3c86ff] to-[#69f1ff] text-4xl lg:text-6xl">
                                 {project.name}
                             </h1>
-                            <span className={`mt-2 lg:mt-3 scale-badge-lg ${scaleInfo.color}`}>
-                                {scaleInfo.icon}
-                                {scaleInfo.label}
-                            </span>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-4 mb-4">
                             <p className="date-meta">
-                                {project.date} • {project.span}
+                                {project.date}
+                                {project.span ? ` • ${project.span}` : ''}
                             </p>
-                            <span
-                                className={`text-xs px-2 py-0.5 rounded ${theme === 'light' ? 'bg-slate-100 text-slate-500' : 'bg-slate-800 text-slate-400'}`}
-                            >
-                                {scaleInfo.desc}
-                            </span>
                         </div>
 
                         <div className="flex flex-wrap gap-3">
@@ -189,24 +100,14 @@ const ProjectDetail: React.FC = () => {
                                     <FaGithub /> View Repository
                                 </a>
                             )}
-                            {project.artifacts.liveUrl && (
+                            {project.url && (
                                 <a
-                                    href={project.artifacts.liveUrl}
+                                    href={project.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="btn-live"
                                 >
                                     <FaExternalLinkAlt /> Live Demo
-                                </a>
-                            )}
-                            {project.artifacts.demoUrl && (
-                                <a
-                                    href={project.artifacts.demoUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn-outline-sm border-2"
-                                >
-                                    <FaExternalLinkAlt /> Watch Demo
                                 </a>
                             )}
                         </div>
@@ -218,7 +119,7 @@ const ProjectDetail: React.FC = () => {
                             <h2 className="section-subheading-lg">Overview</h2>
                         </div>
                         <ul className="space-y-3">
-                            {bullets.map((bullet, i) => (
+                            {bullets.map((bullet: string, i: number) => (
                                 <li key={i} className="flex items-start gap-3">
                                     <span className="bullet-dot" />
                                     <span className="bullet-text">{bullet}</span>
@@ -227,7 +128,7 @@ const ProjectDetail: React.FC = () => {
                         </ul>
                     </motion.div>
 
-                    {project.contribution && (
+                    {project.role_desc && (
                         <motion.div
                             variants={itemVariants}
                             className={`rounded-2xl p-6 mb-6 border relative overflow-hidden
@@ -256,7 +157,7 @@ const ProjectDetail: React.FC = () => {
                                 className={`text-sm lg:text-base leading-relaxed pl-3
                                 ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                             >
-                                {project.contribution}
+                                {project.role_desc}
                             </p>
                         </motion.div>
                     )}
@@ -267,53 +168,26 @@ const ProjectDetail: React.FC = () => {
                                 <FaCogs className="text-xl icon-accent" />
                                 <h2 className="section-subheading-lg">Tech Stack</h2>
                             </div>
-                            <div className="flex flex-wrap gap-2.5">
-                                {Object.entries(project.skills).map(([skill, level], i) => (
-                                    <div
-                                        key={i}
-                                        className={`skill-badge-lg ${getSkillColor(level as number)}`}
+                            {Object.entries(project.skills).map(([category, skillMap], catIdx) => (
+                                <div key={catIdx} className="mb-4">
+                                    <h3
+                                        className={`text-xs font-semibold uppercase tracking-wider mb-2 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
                                     >
-                                        <span>{skill}</span>
-                                        <span className={`ml-1.5 text-[10px] opacity-60`}>
-                                            {getSkillTypeLabel(level as number)}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {(project.artifacts.screenshots?.length || project.artifacts.writeup) && (
-                        <motion.div variants={itemVariants} className="card-static">
-                            <div className="flex items-center gap-3 mb-4">
-                                <FaImages className="text-xl icon-accent" />
-                                <h2 className="section-subheading-lg">Artifacts</h2>
-                            </div>
-
-                            {project.artifacts.screenshots &&
-                                project.artifacts.screenshots.length > 0 && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                        {project.artifacts.screenshots.map((src, i) => (
+                                        {category}
+                                    </h3>
+                                    <div className="flex flex-wrap gap-2.5">
+                                        {Object.entries(skillMap).map(([skill, desc], i) => (
                                             <div
                                                 key={i}
-                                                className={`rounded-xl overflow-hidden border
-                                                ${theme === 'light' ? 'border-slate-200' : 'border-slate-700'}`}
+                                                className={`skill-badge-lg ${theme === 'light' ? 'bg-slate-100 text-slate-600 border-slate-200' : 'bg-slate-800/40 text-slate-300 border-slate-600/50'}`}
+                                                title={desc}
                                             >
-                                                <img
-                                                    src={src}
-                                                    alt={`${project.name} screenshot ${i + 1}`}
-                                                    className="w-full h-auto"
-                                                />
+                                                <span>{skill}</span>
                                             </div>
                                         ))}
                                     </div>
-                                )}
-
-                            {project.artifacts.writeup && (
-                                <div className="bullet-text whitespace-pre-line">
-                                    {project.artifacts.writeup}
                                 </div>
-                            )}
+                            ))}
                         </motion.div>
                     )}
                 </motion.div>

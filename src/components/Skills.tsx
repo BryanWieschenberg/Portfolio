@@ -1,18 +1,40 @@
 import { useState } from 'react';
-import { skills } from '../constants';
+import { skills, SkillCategory, Skill } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import SwipeReveal from './SwipeReveal';
 import { useTheme } from '../context/ThemeContext';
 
-interface Skill {
+interface FlatSkill {
     name: string;
-    icon: string | React.ReactNode;
+    icon: string;
     type: number;
 }
 
+// Map SkillCategory to a numeric type for color coding
+const categoryTypeMap: Record<SkillCategory, number> = {
+    Languages: 0,
+    Frontend: 1,
+    Backend: 1,
+    Data: 2,
+    'Python Libraries': 2,
+    'Infrastructure & DevOps': 2,
+    'AI Tooling': 2,
+    'Soft Skills': 3,
+};
+
+// Flatten the Record<SkillCategory, Skill[]> into a flat array
+const flatSkills: FlatSkill[] = Object.entries(skills).flatMap(
+    ([category, skillList]: [string, Skill[]]) =>
+        skillList.map((s) => ({
+            name: s.name,
+            icon: `/skills/${s.name.toLowerCase().replace(/[^a-z0-9]/g, '')}.png`,
+            type: categoryTypeMap[category as SkillCategory] ?? 2,
+        })),
+);
+
 const Skills = () => {
     const { theme } = useTheme();
-    const [activeSkill, setActiveSkill] = useState<Skill | null>(null);
+    const [activeSkill, setActiveSkill] = useState<FlatSkill | null>(null);
 
     const categoryColors: { [key: number]: string } = {
         0: 'border-blue-500',
@@ -101,7 +123,7 @@ const Skills = () => {
                 variants={containerVariants}
                 className="mt-10 grid grid-cols-8 lg:grid-cols-12"
             >
-                {skills.map((item, index) => (
+                {flatSkills.map((item, index) => (
                     <motion.div
                         key={index}
                         variants={skillVariants}
@@ -113,22 +135,18 @@ const Skills = () => {
                         className={`relative flex flex-col items-center justify-center mb-[0.25px] border-2 transition-colors duration-300
                             ${categoryColors[item.type]} 
                             ${theme === 'light' ? 'bg-white/40 hover:bg-white/60' : categoryBgColors[item.type] + ' bg-opacity-50'}`}
-                        onMouseEnter={() => setActiveSkill(item as Skill)}
+                        onMouseEnter={() => setActiveSkill(item)}
                         onMouseLeave={() => setActiveSkill(null)}
                     >
                         <div className="w-8 h-8 lg:w-16 lg:h-16 text-white flex items-center justify-center mt-[1.5px] mb-[1.5px]">
-                            {typeof item.icon === 'string' ? (
-                                <img
-                                    src={item.icon}
-                                    alt={item.name}
-                                    className="max-w-full max-h-full object-contain"
-                                    onError={(e) => {
-                                        (e.target as HTMLImageElement).src = '/skills/default.png';
-                                    }}
-                                />
-                            ) : (
-                                (item.icon as React.ReactNode)
-                            )}
+                            <img
+                                src={item.icon}
+                                alt={item.name}
+                                className="max-w-full max-h-full object-contain"
+                                onError={(e) => {
+                                    (e.target as HTMLImageElement).src = '/skills/default.png';
+                                }}
+                            />
                         </div>
                     </motion.div>
                 ))}

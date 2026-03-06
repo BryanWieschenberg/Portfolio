@@ -217,14 +217,14 @@ body {
 }
 .light .card:hover .card-title,
 .light .group:hover .card-title {
-    @apply text-blue-600;
+    @apply text-slate-700;
 }
 .dark .card-title {
     @apply text-white;
 }
 .dark .card:hover .card-title,
 .dark .group:hover .card-title {
-    @apply text-[#69f1ff];
+    @apply text-slate-200;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -232,7 +232,7 @@ body {
    ═══════════════════════════════════════════════════════ */
 
 .card-text {
-    @apply text-sm leading-relaxed;
+    @apply text-base leading-relaxed;
 }
 .light .card-text {
     @apply text-slate-600;
@@ -328,21 +328,21 @@ body {
    ═══════════════════════════════════════════════════════ */
 
 .btn-primary {
-    @apply px-6 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-[0_0_15px_rgba(30,144,255,0.5)] hover:bg-blue-500 hover:shadow-[0_0_25px_rgba(30,144,255,0.8)] transition-all duration-300 transform hover:-translate-y-1 text-lg lg:text-xl;
+    @apply px-6 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-[0_0_15px_rgba(30,144,255,0.5)] hover:bg-blue-500 hover:shadow-[0_0_25px_rgba(30,144,255,0.8)] transition-all duration-300 transform text-lg lg:text-xl;
 }
 
 .btn-outline {
-    @apply px-6 py-3 border-2 font-bold rounded-xl transition-all duration-300 transform hover:-translate-y-1 text-lg lg:text-xl;
+    @apply px-6 py-3 border-2 font-bold rounded-xl transition-all duration-300 transform text-lg lg:text-xl;
 }
 .light .btn-outline {
-    @apply border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white;
+    @apply border-[#3b82f6] text-blue-600 hover:bg-[#3b82f6] hover:text-white hover:shadow-[0_0_25px_rgba(59,130,246,0.5)];
 }
 .dark .btn-outline {
-    @apply border-[#69f1ff] text-[#69f1ff] shadow-[0_0_10px_rgba(105,241,255,0.1)] hover:bg-[#69f1ff] hover:text-[#0b1021] hover:shadow-[0_0_20px_rgba(105,241,255,0.4)];
+    @apply border-[#2563eb] text-blue-400 shadow-[0_0_10px_rgba(37,99,235,0.15)] hover:bg-[#2563eb] hover:text-white hover:shadow-[0_0_25px_rgba(37,99,235,0.5)];
 }
 
 .btn-outline-sm {
-    @apply px-5 py-2.5 rounded-xl font-semibold text-sm border-2 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2;
+    @apply px-5 py-2.5 rounded-xl font-semibold text-sm border-2 transition-all duration-300 transform flex items-center gap-2;
 }
 .light .btn-outline-sm {
     @apply border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white;
@@ -352,7 +352,7 @@ body {
 }
 
 .btn-solid-sm {
-    @apply px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2;
+    @apply px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform flex items-center gap-2;
 }
 .light .btn-solid-sm {
     @apply bg-blue-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)];

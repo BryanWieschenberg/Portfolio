@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { projects } from '../constants';
-import { FaLocationDot, FaFileLines, FaGithub, FaArrowUpRightFromSquare } from 'react-icons/fa6';
+import { FaLocationDot, FaFileLines, FaGithub, FaLinkedin } from 'react-icons/fa6';
 import { motion, AnimatePresence } from 'framer-motion';
 import SwipeReveal from '../components/SwipeReveal';
 import { useTheme } from '../context/ThemeContext';
 import { PiArrowFatLinesRightFill } from 'react-icons/pi';
+import ProjectCard from '../components/ProjectCard';
 
 function useLgUp() {
     const [isLgUp, setIsLgUp] = useState(false);
@@ -39,7 +40,7 @@ const Home: React.FC = () => {
     }, []);
 
     const featuredProjects = projects.filter(
-        (item) => item.name === 'GoalGetter' || item.name === 'StreamLine',
+        (item) => item.name === 'Stellar Papers' || item.name === 'GoalGetter',
     );
 
     const scrollToFeatured = (e: React.MouseEvent) => {
@@ -186,6 +187,14 @@ const Home: React.FC = () => {
                                             <FaGithub />
                                             <span>GitHub</span>
                                         </a>
+                                        <a
+                                            href="https://linkedin.com/in/BryanWieschenberg/"
+                                            target="_blank"
+                                            className={`transition-colors flex items-center gap-2 ${theme === 'light' ? 'hover:text-blue-600' : 'hover:text-white'}`}
+                                        >
+                                            <FaLinkedin />
+                                            <span>LinkedIn</span>
+                                        </a>
                                     </motion.div>
                                 </motion.div>
                             )}
@@ -239,8 +248,8 @@ const Home: React.FC = () => {
                     >
                         <motion.h2
                             variants={itemVariants}
-                            className={`text-4xl lg:text-6xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-[#69f1ff] to-[#3c86ff] 
-                                ${theme === 'light' ? 'drop-shadow-[0_2px_2px_rgba(0,0,0,0.2)]' : 'drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]'}`}
+                            className={`text-4xl lg:text-6xl font-bold mb-4 text-center 
+                                ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
                         >
                             Featured Work
                         </motion.h2>
@@ -253,138 +262,21 @@ const Home: React.FC = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                             {featuredProjects.map((project, index) => (
-                                <motion.div
+                                <ProjectCard
                                     key={index}
+                                    project={project}
                                     variants={itemVariants}
-                                    className={`group relative p-[2px] rounded-2xl shadow-2xl transition-all duration-500 ease-out transform hover:-translate-y-2 
-                                        ${
-                                            theme === 'light'
-                                                ? 'bg-gradient-to-br from-slate-100 via-slate-50 to-slate-100 hover:shadow-[0_10px_30px_rgba(100,116,139,0.25)]'
-                                                : 'bg-gradient-to-br from-[#1a1f2e] via-[#252b3b] to-[#1a1f2e] hover:shadow-[0_10px_30px_rgba(148,163,184,0.15)]'
-                                        } 
-                                        overflow-hidden`}
-                                >
-                                    <motion.div
-                                        initial={{ opacity: 0 }}
-                                        whileHover={{ opacity: 1 }}
-                                        animate={{ opacity: [0, 0.3, 0] }}
-                                        transition={{
-                                            duration: 2,
-                                            repeat: Infinity,
-                                            ease: 'easeInOut',
-                                        }}
-                                        className={`absolute inset-0 bg-gradient-to-r from-transparent z-0 pointer-events-none
-                                            ${theme === 'light' ? 'via-slate-200/30' : 'via-slate-400/10'}`}
-                                    ></motion.div>
-
-                                    <div
-                                        className={`relative z-10 rounded-xl backdrop-blur-sm p-6 h-full flex flex-col border 
-                                        ${theme === 'light' ? 'bg-white/95 border-slate-200' : 'bg-[#0f1322]/95 border-slate-700/50'}`}
-                                    >
-                                        {/* Row 1: Icon + Name | Visit GitHub */}
-                                        <div className="flex justify-between items-center mb-1">
-                                            <div className="flex items-center gap-3">
-                                                <img
-                                                    src={`/artifacts/projects/${project.slug}/icon.png`}
-                                                    alt={`${project.name} logo`}
-                                                    className="w-8 h-8 rounded-lg object-contain"
-                                                />
-                                                <h3 className="card-title text-2xl">
-                                                    {project.name}
-                                                </h3>
-                                            </div>
-                                            {project.github && (
-                                                <a
-                                                    href={project.github}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className={`text-xs font-medium flex items-center gap-1.5 transition-colors duration-300 ${
-                                                        theme === 'light'
-                                                            ? 'text-slate-500 hover:text-slate-800'
-                                                            : 'text-slate-400 hover:text-white'
-                                                    }`}
-                                                >
-                                                    <FaGithub size={14} />
-                                                    <span>Visit GitHub</span>
-                                                </a>
-                                            )}
-                                        </div>
-
-                                        {/* Row 2: Date + Span | View Project */}
-                                        <div className="flex justify-between items-center mb-4">
-                                            <p
-                                                className={`text-xs font-semibold tracking-wider uppercase ${
-                                                    theme === 'light'
-                                                        ? 'text-slate-500'
-                                                        : 'text-slate-400'
-                                                }`}
-                                            >
-                                                {project.date} ({project.span})
-                                            </p>
-                                            <button
-                                                onClick={() => navigate(`/work/${project.slug}`)}
-                                                className={`text-xs font-medium flex items-center gap-1.5 transition-colors duration-300 ${
-                                                    theme === 'light'
-                                                        ? 'text-slate-500 hover:text-slate-800'
-                                                        : 'text-slate-400 hover:text-white'
-                                                }`}
-                                            >
-                                                <FaArrowUpRightFromSquare size={11} />
-                                                <span>View Project</span>
-                                            </button>
-                                        </div>
-
-                                        {/* Row 3: Description */}
-                                        <p className="card-text mb-6 flex-grow">
-                                            {project.desc.split('\n')[0].replace('• ', '')}
-                                        </p>
-
-                                        {/* Row 4: Skill badges */}
-                                        {project.skills && (
-                                            <div
-                                                className={`mt-auto pt-4 border-t ${
-                                                    theme === 'light'
-                                                        ? 'border-slate-200'
-                                                        : 'border-slate-700/50'
-                                                }`}
-                                            >
-                                                <div className="flex flex-wrap gap-2">
-                                                    {Object.entries(project.skills)
-                                                        .slice(0, 5)
-                                                        .map(([skill], i) => (
-                                                            <span
-                                                                key={i}
-                                                                className={`px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap ${
-                                                                    theme === 'light'
-                                                                        ? 'bg-slate-100 text-slate-600 border-slate-200'
-                                                                        : 'bg-slate-800/50 text-slate-300 border-slate-600/50'
-                                                                }`}
-                                                            >
-                                                                {skill}
-                                                            </span>
-                                                        ))}
-                                                    {Object.keys(project.skills).length > 5 && (
-                                                        <span className="px-2.5 py-1 text-slate-500 text-xs font-medium self-center">
-                                                            +
-                                                            {Object.keys(project.skills).length - 5}{' '}
-                                                            more
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </motion.div>
+                                />
                             ))}
                         </div>
 
                         <motion.div
                             variants={itemVariants}
-                            className="mt-12 text-center transition-all duration-700 delay-500 ease-out transform"
+                            className="mt-12 text-center transition-all duration-700 ease-out transform"
                         >
                             <button onClick={() => navigate('/work')} className="link-text group">
-                                <span>View all projects</span>
-                                <span className="transform transition-transform duration-300 group-hover:translate-x-1">
+                                <span>View All Work</span>
+                                <span className="transform transition-transform duration-300 group-hover:translate-x-2">
                                     →
                                 </span>
                             </button>

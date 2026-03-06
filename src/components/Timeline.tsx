@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { work } from '../constants';
+import { experience, Experience } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from './SwipeReveal';
 
 const Timeline: React.FC = () => {
     const { theme } = useTheme();
-    const items = work.map((item) => ({
+    const items = experience.map((item: Experience) => ({
         ...item,
         imagePath: `/images/${item.company.toLowerCase().replace(/\s+/g, '')}.png`,
     }));
@@ -70,7 +70,7 @@ const Timeline: React.FC = () => {
                     viewport={{ once: true, margin: '-50px' }}
                     variants={containerVariants}
                 >
-                    {items.map((exp, index) => (
+                    {items.map((exp: Experience & { imagePath: string }, index: number) => (
                         <motion.div
                             key={index}
                             variants={itemVariants}
@@ -142,35 +142,18 @@ const Timeline: React.FC = () => {
                                             </p>
                                             {exp.skills && Object.keys(exp.skills).length > 0 && (
                                                 <div className="mt-2 flex flex-wrap gap-1">
-                                                    {Object.entries(exp.skills).map(
-                                                        ([skill, level], i) => {
-                                                            let badgeColor;
-                                                            switch (level) {
-                                                                case 0:
-                                                                    badgeColor = 'bg-blue-600';
-                                                                    break;
-                                                                case 1:
-                                                                    badgeColor = 'bg-green-600';
-                                                                    break;
-                                                                case 2:
-                                                                    badgeColor = 'bg-yellow-600';
-                                                                    break;
-                                                                case 3:
-                                                                    badgeColor = 'bg-fuchsia-600';
-                                                                    break;
-                                                                default:
-                                                                    badgeColor = 'bg-slate-600';
-                                                            }
-                                                            return (
-                                                                <span
-                                                                    key={i}
-                                                                    className={`${badgeColor} px-2 py-1 rounded-lg border text-white border-white text-xs inline-block min-w-0 max-w-full truncate`}
-                                                                >
-                                                                    {skill}
-                                                                </span>
-                                                            );
-                                                        },
-                                                    )}
+                                                    {Object.values(exp.skills)
+                                                        .flatMap((category) =>
+                                                            Object.keys(category),
+                                                        )
+                                                        .map((skill: string, i: number) => (
+                                                            <span
+                                                                key={i}
+                                                                className="bg-slate-600 px-2 py-1 rounded-lg border text-white border-white text-xs inline-block min-w-0 max-w-full truncate"
+                                                            >
+                                                                {skill}
+                                                            </span>
+                                                        ))}
                                                 </div>
                                             )}
                                         </div>

@@ -1,27 +1,21 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { work } from '../constants';
+import { experience, Experience } from '../constants';
+import { normalizeTitle } from '../lib/utils';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
-import {
-    FaArrowLeft,
-    FaGithub,
-    FaExternalLinkAlt,
-    FaUserCheck,
-    FaCogs,
-    FaImages,
-    FaClipboardList,
-    FaBuilding,
-} from 'react-icons/fa';
+import { FaArrowLeft, FaCogs, FaClipboardList, FaBuilding } from 'react-icons/fa';
 
 const ExperienceDetail: React.FC = () => {
     const { theme } = useTheme();
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
 
-    const experience = work.find((w) => w.slug === slug);
+    const exp = experience.find(
+        (w: Experience) => normalizeTitle(`${w.role} ${w.company}`) === slug,
+    );
 
-    if (!experience) {
+    if (!exp) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <h1
@@ -39,53 +33,11 @@ const ExperienceDetail: React.FC = () => {
         );
     }
 
-    const getSkillColor = (level: number) => {
-        switch (level) {
-            case 0:
-                return theme === 'light'
-                    ? 'bg-blue-100 text-blue-700 border-blue-200'
-                    : 'bg-blue-900/40 text-blue-300 border-blue-700/50';
-            case 1:
-                return theme === 'light'
-                    ? 'bg-green-100 text-green-700 border-green-200'
-                    : 'bg-green-900/40 text-green-300 border-green-700/50';
-            case 2:
-                return theme === 'light'
-                    ? 'bg-yellow-100 text-yellow-700 border-yellow-200'
-                    : 'bg-yellow-900/40 text-yellow-300 border-yellow-700/50';
-            case 3:
-                return theme === 'light'
-                    ? 'bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200'
-                    : 'bg-fuchsia-900/40 text-fuchsia-300 border-fuchsia-700/50';
-            default:
-                return theme === 'light'
-                    ? 'bg-slate-100 text-slate-600 border-slate-200'
-                    : 'bg-slate-800/40 text-slate-300 border-slate-600/50';
-        }
-    };
-
-    const getSkillTypeLabel = (level: number) => {
-        switch (level) {
-            case 0:
-                return 'Language';
-            case 1:
-                return 'Framework';
-            case 2:
-                return 'Tool';
-            case 3:
-                return 'Research';
-            case 4:
-                return 'Concept';
-            default:
-                return '';
-        }
-    };
-
-    const imagePath = `/images/${experience.company.toLowerCase().replace(/\s+/g, '')}.png`;
-    const bullets = experience.desc
+    const imagePath = `/images/${exp.company.toLowerCase().replace(/\s+/g, '')}.png`;
+    const bullets = exp.desc
         .split('\n')
-        .map((b) => b.replace(/^•\s*/, '').trim())
-        .filter((b) => b.length > 0);
+        .map((b: string) => b.replace(/^•\s*/, '').trim())
+        .filter((b: string) => b.length > 0);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -103,6 +55,11 @@ const ExperienceDetail: React.FC = () => {
             transition: { duration: 0.4, ease: 'easeOut' },
         },
     };
+
+    // Flatten all skills from nested categories
+    const allSkills = Object.values(exp.skills).flatMap((category) =>
+        Object.entries(category).map(([name, description]) => ({ name, description })),
+    );
 
     return (
         <>
@@ -124,7 +81,7 @@ const ExperienceDetail: React.FC = () => {
                             <div className="logo-box w-20 h-20 lg:w-24 lg:h-24 rounded-2xl border-2 shadow-xl">
                                 <img
                                     src={imagePath}
-                                    alt={`${experience.company} logo`}
+                                    alt={`${exp.company} logo`}
                                     className="w-14 h-14 lg:w-16 lg:h-16 object-contain"
                                     onError={(e) => {
                                         (e.target as HTMLImageElement).src = '/images/default.png';
@@ -134,41 +91,16 @@ const ExperienceDetail: React.FC = () => {
 
                             <div>
                                 <h1 className="section-heading-xl from-[#8580e7] to-[#3c86ff] text-3xl lg:text-5xl">
-                                    {experience.role}
+                                    {exp.role}
                                 </h1>
                                 <div className="flex items-center gap-2 mt-1">
                                     <FaBuilding
                                         className={`text-sm ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
                                     />
-                                    <span className="item-subtitle text-lg">
-                                        {experience.company}
-                                    </span>
+                                    <span className="item-subtitle text-lg">{exp.company}</span>
                                 </div>
-                                <p className="date-meta mt-1">{experience.date}</p>
+                                <p className="date-meta mt-1">{exp.date}</p>
                             </div>
-                        </div>
-
-                        <div className="flex flex-wrap gap-3">
-                            {experience.artifacts.liveUrl && (
-                                <a
-                                    href={experience.artifacts.liveUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn-live"
-                                >
-                                    <FaExternalLinkAlt /> View Live
-                                </a>
-                            )}
-                            {experience.artifacts.repoUrl && (
-                                <a
-                                    href={experience.artifacts.repoUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn-repo"
-                                >
-                                    <FaGithub /> View Repository
-                                </a>
-                            )}
                         </div>
                     </motion.div>
 
@@ -178,7 +110,7 @@ const ExperienceDetail: React.FC = () => {
                             <h2 className="section-subheading-lg">Overview</h2>
                         </div>
                         <ul className="space-y-3">
-                            {bullets.map((bullet, i) => (
+                            {bullets.map((bullet: string, i: number) => (
                                 <li key={i} className="flex items-start gap-3">
                                     <span className="bullet-dot" />
                                     <span className="bullet-text">{bullet}</span>
@@ -187,93 +119,32 @@ const ExperienceDetail: React.FC = () => {
                         </ul>
                     </motion.div>
 
-                    {experience.contribution && (
-                        <motion.div
-                            variants={itemVariants}
-                            className={`rounded-2xl p-6 mb-6 border relative overflow-hidden
-                            ${
-                                theme === 'light'
-                                    ? 'bg-gradient-to-br from-purple-50 to-white border-purple-200/80 shadow-lg'
-                                    : 'bg-gradient-to-br from-[#0b1021] to-[#1a1133] border-purple-800/30 shadow-2xl'
-                            }`}
-                        >
-                            <div
-                                className={`absolute top-0 left-0 bottom-0 w-[3px]
-                                ${theme === 'light' ? 'bg-gradient-to-b from-purple-400 to-blue-400' : 'bg-gradient-to-b from-[#8580e7] to-[#3c86ff]'}`}
-                            />
-
-                            <div className="flex items-center gap-3 mb-3 pl-3">
-                                <FaUserCheck
-                                    className={`text-xl ${theme === 'light' ? 'text-purple-600' : 'text-[#8580e7]'}`}
-                                />
-                                <h2
-                                    className={`text-xl lg:text-2xl font-bold ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
-                                >
-                                    My Contribution
-                                </h2>
-                            </div>
-                            <p
-                                className={`text-sm lg:text-base leading-relaxed pl-3
-                                ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
-                            >
-                                {experience.contribution}
-                            </p>
-                        </motion.div>
-                    )}
-
-                    {experience.skills && Object.keys(experience.skills).length > 0 && (
+                    {allSkills.length > 0 && (
                         <motion.div variants={itemVariants} className="card-static">
                             <div className="flex items-center gap-3 mb-4">
                                 <FaCogs className="text-xl icon-accent" />
                                 <h2 className="section-subheading-lg">Tech Stack</h2>
                             </div>
-                            <div className="flex flex-wrap gap-2.5">
-                                {Object.entries(experience.skills).map(([skill, level], i) => (
-                                    <div
-                                        key={i}
-                                        className={`skill-badge-lg ${getSkillColor(level as number)}`}
+                            {Object.entries(exp.skills).map(([category, skillMap], catIdx) => (
+                                <div key={catIdx} className="mb-4">
+                                    <h3
+                                        className={`text-xs font-semibold uppercase tracking-wider mb-2 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
                                     >
-                                        <span>{skill}</span>
-                                        <span className={`ml-1.5 text-[10px] opacity-60`}>
-                                            {getSkillTypeLabel(level as number)}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {(experience.artifacts.screenshots?.length || experience.artifacts.writeup) && (
-                        <motion.div variants={itemVariants} className="card-static">
-                            <div className="flex items-center gap-3 mb-4">
-                                <FaImages className="text-xl icon-accent" />
-                                <h2 className="section-subheading-lg">Artifacts</h2>
-                            </div>
-
-                            {experience.artifacts.screenshots &&
-                                experience.artifacts.screenshots.length > 0 && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                        {experience.artifacts.screenshots.map((src, i) => (
+                                        {category}
+                                    </h3>
+                                    <div className="flex flex-wrap gap-2.5">
+                                        {Object.entries(skillMap).map(([skill, desc], i) => (
                                             <div
                                                 key={i}
-                                                className={`rounded-xl overflow-hidden border
-                                                ${theme === 'light' ? 'border-slate-200' : 'border-slate-700'}`}
+                                                className={`skill-badge-lg ${theme === 'light' ? 'bg-slate-100 text-slate-600 border-slate-200' : 'bg-slate-800/40 text-slate-300 border-slate-600/50'}`}
+                                                title={desc}
                                             >
-                                                <img
-                                                    src={src}
-                                                    alt={`${experience.role} screenshot ${i + 1}`}
-                                                    className="w-full h-auto"
-                                                />
+                                                <span>{skill}</span>
                                             </div>
                                         ))}
                                     </div>
-                                )}
-
-                            {experience.artifacts.writeup && (
-                                <div className="bullet-text whitespace-pre-line">
-                                    {experience.artifacts.writeup}
                                 </div>
-                            )}
+                            ))}
                         </motion.div>
                     )}
                 </motion.div>

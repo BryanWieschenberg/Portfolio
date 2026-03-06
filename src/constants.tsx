@@ -12,7 +12,7 @@
 // res
 // skills (with categories as keys)
 
-// imgs aren't included in constants.tsx. they're deterministically taken from their respective /public/artifacts/projects/<name_normalized_to_lowercase_and_spaces_to_dashes>. the icon lives in icon.png, and in individual project pages, the images section shows every image that isn't icon.png
+// imgs aren't included in constants.tsx. they're deterministically taken from their respective /public/artifacts/projects/<name_normalized_from_/lib/utils.ts>. the icon lives in icon.png, and in individual project pages, the images section shows every image that isn't icon.png
 
 type SkillMap = {
     [skill: string]: string;

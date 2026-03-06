@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { skills } from '../constants';
+import { skills, SkillCategory, Skill } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from '../components/SwipeReveal';
@@ -19,11 +19,33 @@ import {
 
 interface SkillItem {
     name: string;
-    icon: string | React.ReactNode;
+    icon: string;
     type: number;
     yoe: string;
     desc: string;
 }
+
+const categoryTypeMap: Record<SkillCategory, number> = {
+    Languages: 0,
+    Frontend: 1,
+    Backend: 1,
+    Data: 2,
+    'Python Libraries': 2,
+    'Infrastructure & DevOps': 2,
+    'AI Tooling': 2,
+    'Soft Skills': 3,
+};
+
+const flatSkills: SkillItem[] = Object.entries(skills).flatMap(
+    ([category, skillList]: [string, Skill[]]) =>
+        skillList.map((s) => ({
+            name: s.name,
+            icon: `/skills/${s.name.toLowerCase().replace(/[^a-z0-9]/g, '')}.png`,
+            type: categoryTypeMap[category as SkillCategory] ?? 2,
+            yoe: '',
+            desc: s.description,
+        })),
+);
 
 const About: React.FC = () => {
     const { theme } = useTheme();
@@ -86,7 +108,7 @@ const About: React.FC = () => {
     ];
 
     const filteredSkills =
-        activeCategory !== null ? skills.filter((s) => s.type === activeCategory) : skills;
+        activeCategory !== null ? flatSkills.filter((s) => s.type === activeCategory) : flatSkills;
 
     const p = 'text-body';
     const accent = 'text-accent';
