@@ -24,9 +24,10 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, variants })
     return (
         <motion.div
             variants={variants}
+            whileHover={{ y: -8 }}
             onClick={() => navigate(`/work/experience/${slug}`)}
             style={{ cursor: 'pointer' }}
-            className={`group relative p-[1px] rounded-2xl transition-all duration-500 ease-out transform hover:-translate-y-2 
+            className={`group relative p-[1px] rounded-2xl transition-shadow duration-500
                 ${
                     theme === 'light'
                         ? 'bg-slate-200/80 shadow-md hover:shadow-[0_0_25px_rgba(100,116,139,0.3)]'

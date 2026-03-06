@@ -22,6 +22,10 @@ type SkillCategories = {
     [category: string]: SkillMap;
 };
 
+export type ProjectScale = 'S' | 'M' | 'L' | 'XL';
+export type ProjectType = 'Web App' | 'CLI Tool' | 'Automation';
+export type ProjectStatus = 'Completed' | 'Maintained' | 'In Progress';
+
 export interface Project {
     name: string;
     date: string;
@@ -30,6 +34,9 @@ export interface Project {
     url?: string;
     role?: string;
     role_desc?: string;
+    scale: ProjectScale;
+    type: ProjectType;
+    status: ProjectStatus;
     hook: string;
     top_skills: string[];
     intro: string;
@@ -58,8 +65,8 @@ export type SkillCategory =
     | 'Frontend'
     | 'Backend'
     | 'Data'
-    | 'Python Libraries'
     | 'Infrastructure & DevOps'
+    | 'Python Libraries'
     | 'AI Tooling'
     | 'Soft Skills';
 
@@ -91,6 +98,9 @@ export const projects: Project[] = [
         role: 'Technical Lead',
         role_desc:
             'In a team of 4, I led the architectural decisions and tech stack of the system. I also managed key decisions involving both the frontend and backend, as well as the account functionality.',
+        scale: 'L',
+        type: 'Web App',
+        status: 'Maintained',
         hook: 'Discover how research actually connects with this visualizer that turns 200k+ academic papers into an explorable, dynamic citation graph. Sub-50ms API latency and 200+ requests/sec throughput.',
         top_skills: ['Next.js', 'TypeScript', 'MongoDB', 'Neo4j', 'Gemini', 'Python'],
         intro: 'I was researching quantum computing, which is a niche field where finding relevant academic findings meant digging through noisy, flat search results with no way to see how they connected. So I built Stellar Papers!',
@@ -110,7 +120,7 @@ export const projects: Project[] = [
                 'Next.js API Routes':
                     'Server-side API endpoints built directly into the Next.js application',
                 TypeScript: 'Type safety for backend logic and data handling',
-                'NextAuth.js': 'Authentication, session management, and OAuth provider integration',
+                'Auth.js': 'Authentication, session management, and OAuth provider integration',
                 'Node.js': 'Server-side runtime executing backend logic',
             },
             Data: {
@@ -138,6 +148,9 @@ export const projects: Project[] = [
         span: '6 months',
         github: 'https://github.com/BryanWieschenberg/GoalGetter',
         url: 'https://goalgetter.dev/',
+        scale: 'L',
+        type: 'Web App',
+        status: 'Completed',
         hook: 'Unify tasks and calendars into a single high-performance workspace designed for security, speed, and productivity, achieving sub-30ms API latency and defense-in-depth authentication across 10+ security measures.',
         top_skills: ['Next.js', 'TypeScript', 'PostgreSQL', 'Redis', 'AWS'],
         intro: 'I was tired of context-switching between task managers and calendar apps, losing time managing which tool I needed instead of actually getting things done. So I built GoalGetter.',
@@ -151,15 +164,14 @@ export const projects: Project[] = [
                 React: 'Component-based UI managing the complex state of the split-screen productivity interface',
                 TypeScript: 'Static typing for improved reliability and maintainability',
                 'Tailwind CSS': 'Utility-first CSS framework for rapid UI styling',
-                'Framer Motion':
-                    'Smooth animations and micro-interactions that improve perceived responsiveness',
+                Motion: 'Smooth animations and micro-interactions that improve perceived responsiveness',
             },
 
             Backend: {
                 'Next.js API Routes':
                     'Server-side API endpoints integrated directly into the Next.js application',
                 TypeScript: 'Type safety for backend logic and data handling',
-                'NextAuth.js':
+                'Auth.js':
                     'Authentication system providing session management and OAuth provider integration',
                 'Node.js': 'Runtime executing backend application logic',
             },
@@ -188,6 +200,9 @@ export const projects: Project[] = [
         date: 'Jul. 2025 - Aug. 2025',
         span: '2 months',
         github: 'https://github.com/BryanWieschenberg/StreamLine',
+        scale: 'M',
+        type: 'CLI Tool',
+        status: 'Completed',
         hook: 'Rust-powered LAN chat system combining a state-driven TUI, RBAC command infrastructure, and end-to-end encrypted messaging, achieving 3ms round-trip latency and 3.8k operations/sec throughput.',
         top_skills: ['Rust', 'ratatui', 'RSA', 'Argon2'],
         intro: 'I challenged myself to learn Rust, end-to-end encryption, and terminal UI creation by building a LAN chat platform that would be extremely fast while putting full control in the user’s hands. So I built StreamLine.',
@@ -214,6 +229,9 @@ export const projects: Project[] = [
         date: 'Nov. 2025',
         span: '2 weeks',
         github: 'https://github.com/BryanWieschenberg/When2Meet-Analyzer',
+        scale: 'S',
+        type: 'Automation',
+        status: 'Completed',
         hook: 'Automated scheduling engine that converts When2Meet availability data into optimized, constraint-aware staff schedules, achieving a 100% fill rate with sub-second schedule generation.',
         top_skills: ['Python', 'Pandas', 'RegEx'],
         intro: 'I had to manually schedule staff across 40+ day periods, dealing with conflicting availability, constraints, and fairness concerns. The process was slow, error-prone, and biased. So I built When2Meet Analyzer.',
@@ -446,44 +464,6 @@ export const skills: Record<SkillCategory, Skill[]> = {
                 'Used for caching, session storage, and performance optimization in high-throughput applications.',
         },
     ],
-    'Python Libraries': [
-        {
-            name: 'NumPy',
-            proficiency: 'Proficient',
-            description:
-                'Used for high-performance matrix operations and numerical computing in ML and vision pipelines.',
-        },
-        {
-            name: 'Pandas',
-            proficiency: 'Proficient',
-            description:
-                'Used for organizing, analyzing, and manipulating structured datasets across data and ML projects.',
-        },
-        {
-            name: 'Matplotlib',
-            proficiency: 'Proficient',
-            description:
-                'Used to visualize training performance, accuracy curves, and spatial data outputs.',
-        },
-        {
-            name: 'PyTorch',
-            proficiency: 'Proficient',
-            description:
-                'Deep learning framework used for CNN architecture, training, and optimization in robotics research.',
-        },
-        {
-            name: 'scikit-learn',
-            proficiency: 'Familiar',
-            description:
-                'Used for classical ML techniques, model evaluation, and preprocessing workflows.',
-        },
-        {
-            name: 'OpenCV',
-            proficiency: 'Proficient',
-            description:
-                'Used to build preprocessing and data collection pipelines for autonomous robotic navigation.',
-        },
-    ],
     'Infrastructure & DevOps': [
         {
             name: 'Git',
@@ -520,6 +500,44 @@ export const skills: Record<SkillCategory, Skill[]> = {
             proficiency: 'Proficient',
             description:
                 'Daily development environment, particularly for ML workloads, ROS, and server management.',
+        },
+    ],
+    'Python Libraries': [
+        {
+            name: 'NumPy',
+            proficiency: 'Proficient',
+            description:
+                'Used for high-performance matrix operations and numerical computing in ML and vision pipelines.',
+        },
+        {
+            name: 'Pandas',
+            proficiency: 'Proficient',
+            description:
+                'Used for organizing, analyzing, and manipulating structured datasets across data and ML projects.',
+        },
+        {
+            name: 'Matplotlib',
+            proficiency: 'Proficient',
+            description:
+                'Used to visualize training performance, accuracy curves, and spatial data outputs.',
+        },
+        {
+            name: 'PyTorch',
+            proficiency: 'Proficient',
+            description:
+                'Deep learning framework used for CNN architecture, training, and optimization in robotics research.',
+        },
+        {
+            name: 'Scikit-learn',
+            proficiency: 'Familiar',
+            description:
+                'Used for classical ML techniques, model evaluation, and preprocessing workflows.',
+        },
+        {
+            name: 'OpenCV',
+            proficiency: 'Proficient',
+            description:
+                'Used to build preprocessing and data collection pipelines for autonomous robotic navigation.',
         },
     ],
     'AI Tooling': [
