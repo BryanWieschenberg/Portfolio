@@ -33,7 +33,7 @@ const ExperienceDetail: React.FC = () => {
         );
     }
 
-    const imagePath = `/images/${exp.company.toLowerCase().replace(/\s+/g, '')}.png`;
+    const imagePath = `/images/${normalizeTitle(exp.company)}.png`;
     const bullets = exp.desc
         .split('\n')
         .map((b: string) => b.replace(/^•\s*/, '').trim())

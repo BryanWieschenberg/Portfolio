@@ -45,22 +45,53 @@ export const monthMap: Record<string, number> = {
 };
 
 export function computeSpan(dateStr: string): string | null {
-    if (!dateStr.toLowerCase().includes('present')) return null;
+    if (!dateStr.toLowerCase().includes('present')) {
+        return null;
+    }
+
     const startPart = dateStr.split('-')[0].trim();
     const tokens = startPart.split(/\s+/);
-    if (tokens.length < 2) return null;
+
+    if (tokens.length < 2) {
+        return null;
+    }
+
     const monthToken = tokens[0].toLowerCase();
     const yearToken = parseInt(tokens[1], 10);
     const month = monthMap[monthToken];
-    if (month === undefined || isNaN(yearToken)) return null;
+
+    if (month === undefined || isNaN(yearToken)) {
+        return null;
+    }
+
     const start = new Date(yearToken, month, 1);
     const now = new Date();
+
     let totalMonths =
         (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
-    if (totalMonths < 1) totalMonths = 1;
-    if (totalMonths < 12) return `~${totalMonths} month${totalMonths === 1 ? '' : 's'}`;
+
+    if (totalMonths < 1) {
+        totalMonths = 1;
+    }
+    if (totalMonths < 12) {
+        return `~${totalMonths} month${totalMonths === 1 ? '' : 's'}`;
+    }
+
     const years = Math.floor(totalMonths / 12);
     const remaining = totalMonths % 12;
-    if (remaining === 0) return `~${years} year${years === 1 ? '' : 's'}`;
+
+    if (remaining === 0) {
+        return `~${years} year${years === 1 ? '' : 's'}`;
+    }
+
     return `~${years} year${years === 1 ? '' : 's'}, ${remaining} month${remaining === 1 ? '' : 's'}`;
+}
+
+export function getSkillIconPath(skill: string, theme: string): string {
+    const normalized = normalizeTitle(skill);
+    return `/skills/${normalized}_${theme}.png`;
+}
+
+export function getSkillIconFallback(skill: string): string {
+    return `/skills/${normalizeTitle(skill)}.png`;
 }

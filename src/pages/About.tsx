@@ -3,6 +3,7 @@ import { skills, SkillCategory, Skill } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from '../components/SwipeReveal';
+import { getSkillIconPath, getSkillIconFallback } from '../lib/utils';
 import {
     FaGamepad,
     FaMusic,
@@ -19,7 +20,6 @@ import {
 
 interface SkillItem {
     name: string;
-    icon: string;
     type: number;
     yoe: string;
     desc: string;
@@ -40,7 +40,6 @@ const flatSkills: SkillItem[] = Object.entries(skills).flatMap(
     ([category, skillList]: [string, Skill[]]) =>
         skillList.map((s) => ({
             name: s.name,
-            icon: `/skills/${s.name.toLowerCase().replace(/[^a-z0-9]/g, '')}.png`,
             type: categoryTypeMap[category as SkillCategory] ?? 2,
             yoe: '',
             desc: s.description,
@@ -411,19 +410,22 @@ const About: React.FC = () => {
                                         onMouseLeave={() => setActiveSkill(null)}
                                     >
                                         <div className="w-7 h-7 lg:w-12 lg:h-12 flex items-center justify-center">
-                                            {typeof item.icon === 'string' ? (
-                                                <img
-                                                    src={item.icon}
-                                                    alt={item.name}
-                                                    className="max-w-full max-h-full object-contain"
-                                                    onError={(e) => {
-                                                        (e.target as HTMLImageElement).src =
-                                                            '/skills/default.png';
-                                                    }}
-                                                />
-                                            ) : (
-                                                (item.icon as React.ReactNode)
-                                            )}
+                                            <img
+                                                src={getSkillIconPath(item.name, theme)}
+                                                alt={item.name}
+                                                className="max-w-full max-h-full object-contain"
+                                                onError={(e) => {
+                                                    const img = e.target as HTMLImageElement;
+                                                    const fallback = getSkillIconFallback(
+                                                        item.name,
+                                                    );
+                                                    if (img.src.endsWith(fallback)) {
+                                                        img.src = '/skills/default.png';
+                                                    } else {
+                                                        img.src = fallback;
+                                                    }
+                                                }}
+                                            />
                                         </div>
                                     </motion.div>
                                 ))}

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { FaArrowLeft, FaClock, FaTag } from 'react-icons/fa';
 
-const DSAJourney: React.FC = () => {
+const StellarPapersBlog: React.FC = () => {
     const { theme } = useTheme();
     const navigate = useNavigate();
 
@@ -318,4 +318,4 @@ const DSAJourney: React.FC = () => {
     );
 };
 
-export default DSAJourney;
+export default StellarPapersBlog;

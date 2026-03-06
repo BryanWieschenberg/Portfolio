@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Project } from '../constants';
-import { normalizeTitle, computeSpan } from '../lib/utils';
+import { normalizeTitle, computeSpan, getSkillIconPath, getSkillIconFallback } from '../lib/utils';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import { FaGithub } from 'react-icons/fa6';
@@ -136,11 +136,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variants }) => {
                                 }`}
                             >
                                 <img
-                                    src={`/skills/${normalizeTitle(skill)}.png`}
+                                    src={getSkillIconPath(skill, theme)}
                                     alt={skill}
                                     className="w-3.5 h-3.5 object-contain"
                                     onError={(e) => {
-                                        (e.target as HTMLImageElement).style.display = 'none';
+                                        const img = e.target as HTMLImageElement;
+                                        const fallback = getSkillIconFallback(skill);
+                                        if (img.src.endsWith(fallback)) {
+                                            img.style.display = 'none';
+                                        } else {
+                                            img.src = fallback;
+                                        }
                                     }}
                                 />
                                 {skill}

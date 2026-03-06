@@ -3,12 +3,13 @@ import { experience, Experience } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from './SwipeReveal';
+import { normalizeTitle } from '../lib/utils';
 
 const Timeline: React.FC = () => {
     const { theme } = useTheme();
     const items = experience.map((item: Experience) => ({
         ...item,
-        imagePath: `/images/${item.company.toLowerCase().replace(/\s+/g, '')}.png`,
+        imagePath: `/images/${normalizeTitle(item.company)}.png`,
     }));
 
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);

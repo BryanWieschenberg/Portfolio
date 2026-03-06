@@ -8,10 +8,9 @@ import Work from './pages/Work';
 import ProjectDetail from './components/ProjectDetail';
 import ExperienceDetail from './components/ExperienceDetail';
 import Blog from './pages/Blog';
-import DSAJourney from './pages/blog/DSAJourney';
-import MLResearch from './pages/blog/MLResearch';
-import StreamLineBlog from './pages/blog/StreamLine';
+import StellarPapersBlog from './pages/blog/StellarPapers';
 import GoalGetterBlog from './pages/blog/GoalGetter';
+import StreamLineBlog from './pages/blog/StreamLine';
 import Contact from './pages/Contact';
 import ScrollToTop from './components/ScrollToTop';
 import { ThemeProvider } from './context/ThemeContext';
@@ -83,10 +82,9 @@ const App: React.FC = () => (
                         <Route path="/work/projects/:slug" element={<ProjectDetail />} />
                         <Route path="/work/experience/:slug" element={<ExperienceDetail />} />
                         <Route path="/blog" element={<Blog />} />
-                        <Route path="/blog/ml_research" element={<MLResearch />} />
-                        <Route path="/blog/streamline" element={<StreamLineBlog />} />
+                        <Route path="/blog/stellar-papers" element={<StellarPapersBlog />} />
                         <Route path="/blog/goalgetter" element={<GoalGetterBlog />} />
-                        <Route path="/blog/dsa_journey" element={<DSAJourney />} />
+                        <Route path="/blog/streamline" element={<StreamLineBlog />} />
                         <Route path="/contact" element={<Contact />} />
                     </Routes>
                 </div>

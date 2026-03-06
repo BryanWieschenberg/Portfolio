@@ -3,10 +3,10 @@ import { skills, SkillCategory, Skill } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import SwipeReveal from './SwipeReveal';
 import { useTheme } from '../context/ThemeContext';
+import { getSkillIconPath, getSkillIconFallback } from '../lib/utils';
 
 interface FlatSkill {
     name: string;
-    icon: string;
     type: number;
 }
 
@@ -27,7 +27,6 @@ const flatSkills: FlatSkill[] = Object.entries(skills).flatMap(
     ([category, skillList]: [string, Skill[]]) =>
         skillList.map((s) => ({
             name: s.name,
-            icon: `/skills/${s.name.toLowerCase().replace(/[^a-z0-9]/g, '')}.png`,
             type: categoryTypeMap[category as SkillCategory] ?? 2,
         })),
 );
@@ -140,11 +139,17 @@ const Skills = () => {
                     >
                         <div className="w-8 h-8 lg:w-16 lg:h-16 text-white flex items-center justify-center mt-[1.5px] mb-[1.5px]">
                             <img
-                                src={item.icon}
+                                src={getSkillIconPath(item.name, theme)}
                                 alt={item.name}
                                 className="max-w-full max-h-full object-contain"
                                 onError={(e) => {
-                                    (e.target as HTMLImageElement).src = '/skills/default.png';
+                                    const img = e.target as HTMLImageElement;
+                                    const fallback = getSkillIconFallback(item.name);
+                                    if (img.src.endsWith(fallback)) {
+                                        img.src = '/skills/default.png';
+                                    } else {
+                                        img.src = fallback;
+                                    }
                                 }}
                             />
                         </div>

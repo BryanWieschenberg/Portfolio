@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { projects, experience, Project, Experience } from '../constants';
 import { normalizeTitle } from '../lib/utils';
 import { motion } from 'framer-motion';
-import { useTheme } from '../context/ThemeContext';
+// import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from '../components/SwipeReveal';
 import ProjectCard from '../components/ProjectCard';
 import ExperienceCard from '../components/ExperienceCard';
@@ -10,7 +10,7 @@ import { FaBriefcase } from 'react-icons/fa';
 import { HiSparkles } from 'react-icons/hi2';
 
 const Work: React.FC = () => {
-    const { theme } = useTheme();
+    // const { theme } = useTheme(); commented to shut up build errors
     const experienceRef = useRef<HTMLDivElement>(null);
     const projectsRef = useRef<HTMLDivElement>(null);
 
