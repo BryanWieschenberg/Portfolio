@@ -1,56 +1,74 @@
-export interface Class {
-    id: string;
-    name: string;
-    taken: string;
-    click: string;
-    color: string;
-    icon: React.ReactElement;
-}
+// PROJECT FORMAT:
+// name
+// date
+// optional(span), if its ongoing, the span is inferred by calculating today - init month
+// optional(github)
+// optional(website url)
+// optional: role (if group)
+// optional: role desc (if group)
+// intro
+// desc
+// feats
+// res
+// skills (with categories as keys)
 
-export interface Skill {
-    type: number; // 0: Programming Languages, 1: Frameworks/Libraries, 2: Tools/Software, 3: Concepts, 4: Soft Skills
-    name: string;
-    yoe: string;
-    desc: string;
-    icon: string | React.ReactElement;
-}
+// imgs aren't included in constants.tsx. they're deterministically taken from their respective /public/artifacts/projects/<name_normalized_to_lowercase_and_spaces_to_dashes>. the icon lives in icon.png, and in individual project pages, the images section shows every image that isn't icon.png
 
-export interface Artifacts {
-    screenshots?: string[];
-    demoUrl?: string;
-    liveUrl?: string;
-    repoUrl?: string;
-    writeup?: string;
-}
+type SkillMap = {
+    [skill: string]: string;
+};
 
-export interface Work {
-    role: string;
-    company: string;
-    slug: string;
-    date: string;
-    desc: string;
-    skills: Record<string, number>;
-    artifacts: Artifacts;
-    contribution: string;
-}
-
-export interface Role {
-    text: string;
-    icon: React.ReactElement;
-    desc: string;
-}
+type SkillCategories = {
+    [category: string]: SkillMap;
+};
 
 export interface Project {
     name: string;
-    slug: string;
-    scale: number; // 0: Large (>4 weeks), 1: Medium (1-4 weeks), 2: Small (<1 week)
     date: string;
-    span: string;
+    span?: string;
+    github?: string;
+    url?: string;
+    role?: string;
+    role_desc?: string;
+    hook: string;
+    top_skills: string[];
+    intro: string;
     desc: string;
-    skills: Record<string, number>;
-    github: string;
-    artifacts: Artifacts;
-    contribution: string;
+    feats: string;
+    res: string;
+    skills: SkillCategories;
+}
+
+export interface Experience {
+    role: string;
+    company: string;
+    date: string;
+    span?: string;
+    hook: string;
+    top_skills: string[];
+    intro: string;
+    desc: string;
+    feats: string;
+    res: string;
+    skills: SkillCategories;
+}
+
+export type SkillCategory =
+    | 'Languages'
+    | 'Frontend'
+    | 'Backend'
+    | 'Data'
+    | 'Python Libraries'
+    | 'Infrastructure & DevOps'
+    | 'AI Tooling'
+    | 'Soft Skills';
+
+export type ProficiencyLevel = 'Familiar' | 'Proficient' | 'Advanced';
+
+export interface Skill {
+    name: string;
+    proficiency: ProficiencyLevel;
+    description: string;
 }
 
 export interface BlogPost {
@@ -63,473 +81,494 @@ export interface BlogPost {
     preview: string;
 }
 
-export const skills: Skill[] = [
-    {
-        type: 0,
-        name: 'Python',
-        yoe: '4',
-        desc: 'Computer Networking course, Amazon Web Scraper project, Flashcards App project, Computer Lab Finder project, Turtle Stack Hackathon game',
-        icon: '/skills/py.png',
-    },
-    {
-        type: 0,
-        name: 'Rust',
-        yoe: '0.5',
-        desc: 'StreamLine project',
-        icon: '/skills/Rust.svg',
-    },
-    {
-        type: 0,
-        name: 'C',
-        yoe: '1.5',
-        desc: 'Operating Systems course, Computer Architecture course, Analysis of Algorithms course, Command Line Shell Interface project',
-        icon: '/skills/c.png',
-    },
-    {
-        type: 0,
-        name: 'C++',
-        yoe: '2',
-        desc: 'Data Structures course, Matrix Word Scanner project, AVL Tree Data Analyzer project',
-        icon: '/skills/cpp.png',
-    },
-    {
-        type: 0,
-        name: 'Java',
-        yoe: '5',
-        desc: 'Computational Thinking course, Computer Networking course, Name Frequency Analyzer project',
-        icon: '/skills/java.png',
-    },
-    {
-        type: 0,
-        name: 'HTML',
-        yoe: '7',
-        desc: 'This website, Software Engineering course, Database Systems course, Livestock Metrics Visualization App project, Dashboard & Applicant Manager project, Video Sharing Service project',
-        icon: '/skills/html.png',
-    },
-    {
-        type: 0,
-        name: 'CSS',
-        yoe: '7',
-        desc: 'This website, Software Engineering course, Database Systems course, Livestock Metrics Visualization App project, Dashboard & Applicant Manager project, Video Sharing Service project',
-        icon: '/skills/css.png',
-    },
-    {
-        type: 0,
-        name: 'JavaScript',
-        yoe: '3',
-        desc: '',
-        icon: '/skills/js.png',
-    },
-    {
-        type: 0,
-        name: 'TypeScript',
-        yoe: '1',
-        desc: 'This website, Video Sharing Service project',
-        icon: '/skills/ts.png',
-    },
-    {
-        type: 0,
-        name: 'SQL',
-        yoe: '1',
-        desc: 'Software Engineering course, Database Systems course, WorkWell Partnership Software Engineer role, Livestock Metrics Visualization App project, Dashboard & Applicant Manager project',
-        icon: '/skills/sql.png',
-    },
-    {
-        type: 0,
-        name: 'Bash',
-        yoe: '3',
-        desc: 'AI/ML Researcher role, Command Line Shell Interface project',
-        icon: '/skills/bash.png',
-    },
-    {
-        type: 0,
-        name: 'x86-64 Assembly',
-        yoe: '1',
-        desc: 'Operating Systems course, Computer Architecture course',
-        icon: '/skills/asm.png',
-    },
-    {
-        type: 1,
-        name: 'Next.js',
-        yoe: '0.5',
-        desc: 'Video Sharing Service project',
-        icon: '/skills/next.png',
-    },
-    {
-        type: 1,
-        name: 'React',
-        yoe: '0.5',
-        desc: 'This website, Video Sharing Service project',
-        icon: '/skills/react.png',
-    },
-    {
-        type: 1,
-        name: 'Node.js',
-        yoe: '0.5',
-        desc: 'Video Sharing Service project',
-        icon: '/skills/node.png',
-    },
-    {
-        type: 1,
-        name: 'Express.js',
-        yoe: '0.5',
-        desc: 'Productivity App project',
-        icon: '/skills/ex.png',
-    },
-    {
-        type: 1,
-        name: 'Ruby on Rails',
-        yoe: '0.5',
-        desc: 'Software Engineering course, WorkWell Partnership Software Engineer role, Dashboard & Applicant Manager project',
-        icon: '/skills/rails.png',
-    },
-    {
-        type: 1,
-        name: 'Flask',
-        yoe: '1.5',
-        desc: 'Database Systems course, Livestock Metrics Visualization App project',
-        icon: '/skills/flask.png',
-    },
-    {
-        type: 1,
-        name: 'Tailwind CSS',
-        yoe: '0.5',
-        desc: 'This website',
-        icon: '/skills/tw.png',
-    },
-    {
-        type: 1,
-        name: 'OpenCV',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/OpenCV.svg',
-    },
-    {
-        type: 1,
-        name: 'PyTorch',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/PyTorch.svg',
-    },
-    {
-        type: 1,
-        name: 'NumPy',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/NumPy.svg',
-    },
-    {
-        type: 1,
-        name: 'Pandas',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/pandas.svg',
-    },
-    {
-        type: 1,
-        name: 'Matplotlib',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/Matplotlib.svg',
-    },
-    {
-        type: 2,
-        name: 'Git',
-        yoe: '2',
-        desc: 'This website, Software Engineering course, Database Systems course, WorkWell Partnership Software Engineer role, Livestock Metrics Visualization App project, Dashboard & Applicant Manager project, Video Sharing Service project, Hackathon Event Scheduler project',
-        icon: '/skills/git.png',
-    },
-    {
-        type: 2,
-        name: 'GitHub',
-        yoe: '4',
-        desc: 'Many experiences',
-        icon: '/skills/github.png',
-    },
-    {
-        type: 2,
-        name: 'PostgreSQL',
-        yoe: '1.5',
-        desc: 'Software Engineering course, Database Systems course, WorkWell Partnership Software Engineer role, Livestock Metrics Visualization App project, Dashboard & Applicant Manager project',
-        icon: '/skills/psql.png',
-    },
-    {
-        type: 2,
-        name: 'MongoDB',
-        yoe: '0.5',
-        desc: 'Various experiences',
-        icon: '/skills/mdb.png',
-    },
-    {
-        type: 2,
-        name: 'Docker',
-        yoe: '0.5',
-        desc: 'Video Sharing Service project',
-        icon: '/skills/docker.png',
-    },
-    {
-        type: 2,
-        name: 'Jupyter',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/Jupyter.png',
-    },
-    {
-        type: 2,
-        name: 'Robot Operating System (ROS)',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/ROS.svg',
-    },
-    {
-        type: 2,
-        name: 'Linux',
-        yoe: '2',
-        desc: 'Software Engineering course, Database Systems course, WorkWell Partnership Software Engineer role, Livestock Metrics Visualization App project, Dashboard & Applicant Manager project',
-        icon: '/skills/linux.png',
-    },
-    {
-        type: 2,
-        name: 'Ubuntu',
-        yoe: '1',
-        desc: 'Video Sharing Service project',
-        icon: '/skills/ubuntu.png',
-    },
-    {
-        type: 2,
-        name: 'Unified Modeling Language',
-        yoe: '1.5',
-        desc: 'Software Engineering course, Database Systems course, WorkWell Partnership Software Engineer role, Livestock Metrics Visualization App project, Dashboard & Applicant Manager project',
-        icon: '/skills/uml.png',
-    },
-    {
-        type: 2,
-        name: 'Firebase',
-        yoe: '0.5',
-        desc: 'Video Sharing Service project',
-        icon: '/skills/fb.png',
-    },
-    {
-        type: 2,
-        name: 'Google Cloud Platform (GCP)',
-        yoe: '0.5',
-        desc: 'Video Sharing Service project',
-        icon: '/skills/gcp.png',
-    },
-    {
-        type: 2,
-        name: 'Amazon Web Services (AWS)',
-        yoe: '0.5',
-        desc: 'Productivity App project (Elastic Compute Cloud)',
-        icon: '/skills/aws.png',
-    },
-    {
-        type: 3,
-        name: 'Agile Development',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/agile.png',
-    },
-    {
-        type: 3,
-        name: 'Secure Software Practices',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/ssp.png',
-    },
-    {
-        type: 3,
-        name: 'System Design',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/sd.png',
-    },
-    {
-        type: 3,
-        name: 'RESTful APIs',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/rest.png',
-    },
-    {
-        type: 3,
-        name: 'Authentication',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/auth.png',
-    },
-    {
-        type: 3,
-        name: 'OAuth 2.0',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/oauth.png',
-    },
-    {
-        type: 3,
-        name: 'Object-Oriented Programming (OOP)',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/oop.png',
-    },
-    {
-        type: 3,
-        name: 'Concurrency & Multithreadding',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/conc.png',
-    },
-    {
-        type: 3,
-        name: 'Data Structures & Algorithms',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/dsa.png',
-    },
-    {
-        type: 3,
-        name: 'Database Design',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/dd.png',
-    },
-    {
-        type: 3,
-        name: 'Continuous Integration & Continuous Delivery (CI/CD)',
-        yoe: '0.5',
-        desc: '',
-        icon: '/skills/cicd.png',
-    },
-];
-
-export const work: Work[] = [
-    {
-        role: 'Operations Manager',
-        company: 'The College of New Jersey',
-        slug: 'operations-manager',
-        date: 'Aug. 2025 – Present',
-        desc: '• Leading a team of 15 staff in key inventory tracking, streamlining office workflows to support 3,000+ campus residents, resulting in a 40% reduction in key distribution errors and improved operational efficiency\n• Standardizing dormitory procedures through transaction logs, weekly audits, monthly team meetings, and emergency coordination protocols, reducing process overhead for staff and ensuring safe conditions across all properties',
-        skills: {},
-        artifacts: {},
-        contribution:
-            'Sole manager responsible for all key inventory operations and staff coordination across the entire residential campus.',
-    },
-    {
-        role: 'Machine Learning Engineer',
-        company: 'The College of New Jersey',
-        slug: 'machine-learning-engineer',
-        date: 'May 2025 – Jul. 2025',
-        desc: '• Engineered a proprietary computer vision application with OpenCV to extract spatial data using trained model at a stable 30 FPS, ensuring low-latency perception and supporting reliable robotic decision-making\n• Trained and optimized a Convolutional Neural Network (CNN) in PyTorch on 40,000+ real-world images (captured and augmented), using NumPy and Matplotlib for analysis, improving accuracy by 50%+ and ensuring resilience to lighting/color variations\n• Implemented a closed-loop pipeline in ROS that transformed vision outputs into precise autonomous actuation, coordinating multiple robots and reducing manual operator intervention by 25% compared to baseline teleoperation',
-        skills: {
-            Python: 0,
-            OpenCV: 1,
-            PyTorch: 1,
-            Matplotlib: 1,
-            ROS: 2,
-            Ubuntu: 2,
-            'Computer Vision': 3,
-            'Neural Networks': 3,
-        },
-        artifacts: {},
-        contribution:
-            'Designed and implemented the full computer vision pipeline end-to-end: data capture & augmentation, CNN architecture & training, OpenCV spatial extraction, and ROS integration for autonomous actuation.',
-    },
-];
-
 export const projects: Project[] = [
     {
-        name: 'GoalGetter',
-        slug: 'goalgetter',
-        scale: 0,
-        date: 'Aug. 2025',
-        span: '1 month',
-        desc: '• Engineered a production-ready web app with Next.js, TypeScript, Tailwind CSS, and PostgreSQL, integrating tasks and calendar in a dynamic split-screen interface adopted by 30+ active users, with AWS EC2 + Route 53 powering scalable deployment\n• Implemented enterprise-grade authentication with NextAuth.js, OAuth 2.0, bcrypt, SHA-256, and reCAPTCHA v3, reducing unauthorized access by 95%+ and securing sensitive user data through hashed credentials and tokenized email verification\n• Designed a high-performance scheduling engine with cached recurrence expansion and state calculations, improving processing speed by 60% in event-heavy weeks, enabling smooth navigation at all times',
+        name: 'Stellar Papers',
+        date: 'Feb. 2026',
+        span: '1 week',
+        github: 'https://github.com/AidanS39/stellar-papers',
+        url: 'https://stellarpapers.vercel.app',
+        role: 'Technical Lead',
+        role_desc:
+            'In a team of 4, I led the architectural decisions and tech stack of the system. I also managed key decisions involving both the frontend and backend, as well as the account functionality.',
+        hook: 'Discover how research actually connects with this visualizer that turns 200k+ academic papers into an explorable, dynamic citation graph. Sub-50ms API latency and 200+ requests/sec throughput.',
+        top_skills: ['Next.js', 'TypeScript', 'MongoDB', 'Neo4j', 'Gemini', 'Python'],
+        intro: 'I was researching quantum computing, which is a niche field where finding relevant academic findings meant digging through noisy, flat search results with no way to see how they connected. So I built Stellar Papers!',
+        desc: 'An interactive citation graph of academic papers. Instead of lists, you explore relationships, and see which papers are foundational, how topics actually connect, and where cross-disciplinary links exist.',
+        feats: '• Interactive Paper Graph: Physics-based graph capable of rendering thousands of paper nodes at once\n• Dynamic Filtering: Filter by topic, year, citations, author, and field to narrow results instantly\n• Secure Accounts: Secure account authentication and personal bookmarking\n• AI-Powered Analysis: Intelligent insights surfaced directly from graph results\n• Highly Optimized Performance: Caching, indexing, and optimized graph queries throughout',
+        res: '• Massive Dataset: 200,000+ academic papers preprocessed and into a graph database, with connections based of citations\n• Blazing Fast API: Sub-50ms average API latency under concurrent load\n• High Throughput: 200+ requests/second under concurrent load, an 8x improvement over initial implementation',
         skills: {
-            TypeScript: 0,
-            'Next.js': 1,
-            'NextAuth.js': 1,
-            'Tailwind CSS': 1,
-            Bcrypt: 1,
-            PostgreSQL: 2,
-            'AWS EC2': 2,
-            'RESTful API': 4,
-            'OAuth 2.0': 4,
-            'System Design': 4,
-            'Database Design': 4,
-            'CI/CD': 4,
+            Frontend: {
+                'Next.js App Router':
+                    'Full-stack React framework enabling a single-repo architecture',
+                React: 'Component-based UI used to manage the complex interactive state of the graph interface',
+                TypeScript:
+                    'Static typing to catch errors at build time and improve maintainability',
+                'Tailwind CSS': 'Utility-first styling framework for rapid UI development',
+            },
+            Backend: {
+                'Next.js API Routes':
+                    'Server-side API endpoints built directly into the Next.js application',
+                TypeScript: 'Type safety for backend logic and data handling',
+                'NextAuth.js': 'Authentication, session management, and OAuth provider integration',
+                'Node.js': 'Server-side runtime executing backend logic',
+            },
+            Data: {
+                MongoDB: 'NoSQL database used for user accounts and bookmarks',
+                Neo4j: 'Graph database storing academic papers and citation relationships',
+                Cypher: 'Query language used to retrieve and traverse graph relationships',
+                Python: 'Data preprocessing pipeline used to transform and load academic datasets',
+            },
+            External: {
+                'Google Gemini':
+                    'AI model used to convert natural language queries into graph insights',
+                'Google reCAPTCHA': 'Bot protection for authentication and signup forms',
+                'OpenAlex API':
+                    'Large-scale academic paper data source used to populate the graph database',
+                'OAuth 2.0': 'Secure authentication protocol used for Google and GitHub sign-in',
+            },
+            Deployment: {
+                Vercel: 'Serverless deployment platform optimized for Next.js with built-in CI/CD and edge caching',
+            },
         },
+    },
+    {
+        name: 'GoalGetter',
+        date: 'Aug. 2025 - Jan. 2026',
+        span: '6 months',
         github: 'https://github.com/BryanWieschenberg/GoalGetter',
-        artifacts: {
-            repoUrl: 'https://github.com/BryanWieschenberg/GoalGetter',
+        url: 'https://goalgetter.dev/',
+        hook: 'Unify tasks and calendars into a single high-performance workspace designed for security, speed, and productivity, achieving sub-30ms API latency and defense-in-depth authentication across 10+ security measures.',
+        top_skills: ['Next.js', 'TypeScript', 'PostgreSQL', 'Redis', 'AWS'],
+        intro: 'I was tired of context-switching between task managers and calendar apps, losing time managing which tool I needed instead of actually getting things done. So I built GoalGetter.',
+        desc: 'A unified productivity workspace combining tasks and calendar in a single split-screen interface. It removes tab-switching friction and mirrors how people naturally manage workloads by letting tasks and schedules coexist in the same workspace.',
+        feats: '• Split-Screen Workspace: Dynamic resizable split-screen UI allowing tasks and calendar to be viewed and interacted with simultaneously\n• Fully-Featured Organization: Unlimited tasks, categories, tags, and calendars with due dates, priority levels, colors, sorting, filtering, and search\n• Smart Scheduling: Calendar events with recurrence support and automated deadline alerts\n• Enterprise-Grade Security: Social sign-in, bot protection, rate limiting, and email verification built into authentication\n• Highly Optimized Performance: Caching, indexing, pagination, prefetching, debouncing, and query optimization across the stack',
+        res: '• Lightning Fast API: Sub-30ms API latency with 50,000+ entities stress-tested, a 70% improvement over the initial implementation\n• Near-Instant Load Times: ~110ms initial load time via optimized payloads, a 65% improvement\n• Airtight Security: Defense-in-depth authentication with 10+ layered protections securing user accounts',
+        skills: {
+            Frontend: {
+                'Next.js App Router':
+                    'Full-stack React framework enabling a unified frontend/backend architecture',
+                React: 'Component-based UI managing the complex state of the split-screen productivity interface',
+                TypeScript: 'Static typing for improved reliability and maintainability',
+                'Tailwind CSS': 'Utility-first CSS framework for rapid UI styling',
+                'Framer Motion':
+                    'Smooth animations and micro-interactions that improve perceived responsiveness',
+            },
+
+            Backend: {
+                'Next.js API Routes':
+                    'Server-side API endpoints integrated directly into the Next.js application',
+                TypeScript: 'Type safety for backend logic and data handling',
+                'NextAuth.js':
+                    'Authentication system providing session management and OAuth provider integration',
+                'Node.js': 'Runtime executing backend application logic',
+            },
+
+            Data: {
+                PostgreSQL:
+                    'Relational database ensuring integrity for complex task and calendar relationships',
+                SQL: 'Query language used for relational data retrieval and manipulation',
+                Redis: 'High-speed in-memory store used for caching and rate limiting',
+            },
+
+            External: {
+                'Google reCAPTCHA': 'Bot protection for authentication and account creation flows',
+                'OAuth 2.0': 'Secure authentication protocol enabling Google and GitHub sign-in',
+                Resend: 'Transactional email delivery used for account verification',
+            },
+
+            Deployment: {
+                'AWS EC2':
+                    'Cloud compute infrastructure providing scalable and secure application hosting',
+            },
         },
-        contribution:
-            'Solo-developed the entire application end-to-end: frontend UI, backend API, database schema, authentication system, scheduling engine, and AWS deployment infrastructure.',
     },
     {
         name: 'StreamLine',
-        slug: 'streamline',
-        scale: 0,
-        date: 'Jul. 2025',
-        span: '1 month',
-        desc: '• Designed and implemented a multithreaded, multi-room chat platform in Rust with RSA-OAEP (SHA-256) end-to-end encryption, featuring robust data modeling, persistent JSON storage, LAN-based real-time messaging, and shared state management via Arc and Mutex\n• Engineered a modular command system with 50+ commands supporting full account and room management, moderation, message rate limiting, and session timeout control\n• Built a secure system architecture with per-command role-based access control (RBAC) and validated control packet handling, reducing unauthorized actions by over 75% in simulated attack and resilience tests',
-        skills: {
-            Rust: 0,
-            RSA: 1,
-            'PKCS#8': 1,
-            SHA256: 1,
-            Mulithreadding: 4,
-            'Thread Safety': 4,
-            'TCP Sockets': 4,
-            RBAC: 4,
-            'End-to-End Encryption': 4,
-        },
+        date: 'Jul. 2025 - Aug. 2025',
+        span: '2 months',
         github: 'https://github.com/BryanWieschenberg/StreamLine',
-        artifacts: {
-            repoUrl: 'https://github.com/BryanWieschenberg/StreamLine',
-        },
-        contribution:
-            'Solo-architected and built the entire platform: network protocol, encryption layer, multithreaded server, command system, RBAC, and persistent storage.',
-    },
-    {
-        name: 'Personal Website',
-        slug: 'personal-website',
-        scale: 1,
-        date: 'Jan. 2025 – Mar. 2025',
-        span: '3 months',
-        desc: '• Responsive portfolio showcasing skills and projects using TypeScript, React, and Tailwind CSS\n• Modern UI/UX design with dynamic content and interactive animations',
+        hook: 'Rust-powered LAN chat system combining a state-driven TUI, RBAC command infrastructure, and end-to-end encrypted messaging, achieving 3ms round-trip latency and 3.8k operations/sec throughput.',
+        top_skills: ['Rust', 'ratatui', 'RSA', 'Argon2'],
+        intro: 'I challenged myself to learn Rust, end-to-end encryption, and terminal UI creation by building a LAN chat platform that would be extremely fast while putting full control in the user’s hands. So I built StreamLine.',
+        desc: 'A production-grade terminal chat platform written entirely in Rust. It provides high-performance LAN messaging with zero external dependencies, end-to-end encryption, role-based access control, and a powerful command system, all wrapped in a responsive terminal interface.',
+        feats: '• Terminal UI Engine: State-driven terminal interface with smart command completions and multi-panel rendering for rooms and user rosters\n• RBAC Command Dispatcher: Role-based command system supporting 50+ commands for account, moderation, and administration operations\n• End-to-End Encryption: Messages encrypted client-side so the server only handles ciphertext\n• Persistent State Storage: Local JSON-based persistence enabling seamless cross-session usage without external databases',
+        res: '• Lightweight Concurrency: Handles 1,000+ simultaneous TCP connections while using only ~25MB RAM at peak\n• Near-Instant Latency: 3ms average round-trip time under 1,000 parallel clients\n• High Throughput: 3,800 operations/sec sustained on a single-threaded dispatcher\n• Rock-Solid Reliability: Zero dropped packets or connection failures during stress testing',
         skills: {
-            HTML: 0,
-            CSS: 0,
-            TypeScript: 0,
-            React: 1,
-            'Tailwind CSS': 1,
-            Vercel: 2,
-            'Cloud Deployment': 4,
-            Frontend: 4,
+            Core: {
+                Rust: 'Systems programming language providing compile-time memory safety and reliable high-concurrency performance',
+                ratatui:
+                    'State-driven terminal UI framework used to build the multi-panel chat interface',
+            },
+            Security: {
+                Argon2: 'Industry-standard password hashing algorithm used for secure credential storage',
+                'RSA-OAEP': 'Asymmetric encryption scheme enabling end-to-end encrypted messaging',
+            },
+            Data: {
+                JSON: 'Serde-based serialization for human-readable persistent state without requiring an external database',
+            },
         },
-        github: 'https://github.com/BryanWieschenberg/Personal-Website',
-        artifacts: {
-            repoUrl: 'https://github.com/BryanWieschenberg/Personal-Website',
-        },
-        contribution:
-            'Designed and built the entire portfolio site from scratch, including all animations, theming, and deployment.',
     },
     {
-        name: 'Flashcards App',
-        slug: 'flashcards-app',
-        scale: 2,
-        date: 'Feb. 2025',
-        span: '1.5 weeks',
-        desc: '• Interactive study tool developed in Python for memorizing terms and definitions\n• Implements dynamic content switching with keyboard controls for adaptive learning',
-        skills: { Python: 0, Tkinter: 1 },
-        github: 'https://github.com/BryanWieschenberg/Flashcards-App',
-        artifacts: {
-            repoUrl: 'https://github.com/BryanWieschenberg/Flashcards-App',
+        name: 'When2Meet-Analyzer',
+        date: 'Nov. 2025',
+        span: '2 weeks',
+        github: 'https://github.com/BryanWieschenberg/When2Meet-Analyzer',
+        hook: 'Automated scheduling engine that converts When2Meet availability data into optimized, constraint-aware staff schedules, achieving a 100% fill rate with sub-second schedule generation.',
+        top_skills: ['Python', 'Pandas', 'RegEx'],
+        intro: 'I had to manually schedule staff across 40+ day periods, dealing with conflicting availability, constraints, and fairness concerns. The process was slow, error-prone, and biased. So I built When2Meet Analyzer.',
+        desc: 'An automated scheduling engine that scrapes availability data from When2Meet and applies a weighted heuristic algorithm to generate optimized staff schedules. It handles complex constraints, shift capacities, preferences, and fairness requirements with fully deterministic results.',
+        feats: '• Dynamic State Extraction: Uses advanced RegEx to parse embedded JavaScript and extract raw When2Meet availability data without relying on DOM scraping\n• Weighted Heuristic Engine: Multi-factor scoring algorithm balancing hour caps, fairness/diversity, and employee preferences\n• Fully Configurable: Constraints, scoring weights, and shift capacities adjustable through a simple configuration file\n• Schedule Report Generation: Outputs structured CSV reports showing assignments and full coverage visibility',
+        res: '• 100% Coverage: Achieves perfect coverage across complex month-long schedules with consistent 100% fill rates\n• Sub-Second Execution: Processes 2,000+ availability slots and generates full schedule reports in ~650ms\n• Error-Free Scheduling: Zero assignment errors or bias detected compared to manual scheduling',
+        skills: {
+            Core: {
+                Python: 'Primary language used to build the scheduling engine and heuristic assignment system',
+                RegEx: 'Pattern matching used to parse JavaScript state and extract raw When2Meet availability data',
+            },
+            Data: {
+                Pandas: 'Data analysis library used to structure availability data and perform scheduling calculations',
+                CSV: 'Portable schedule report output compatible with Excel and spreadsheet tools',
+                JSON: 'Human-readable configuration format allowing constraints and scoring weights to be adjusted without modifying code',
+            },
         },
-        contribution:
-            'Solo-developed the entire application including UI, session persistence, and adaptive learning logic.',
     },
 ];
+
+export const experience: Experience[] = [
+    {
+        role: 'Operations Manager',
+        company: 'The College of New Jersey',
+        date: 'Aug. 2025 - Present',
+        hook: 'Leading operations for a residential housing office serving 3,000+ residents, managing a team of 15 staff while building automation tools that reduced scheduling time by 70% and cut operational errors by 40%.',
+        top_skills: ['Python', 'Pandas', 'RegEx'],
+        intro: 'As Operations Manager, I oversee key distribution, access control, and office workflow for a branch of the Residential Education & Housing department serving 3,000+ on-campus residents. I lead a team of 15 staff while managing shift scheduling, performance evaluations, and daily operations.',
+        desc: 'Beyond day-to-day responsibilities, I focus on identifying operational bottlenecks and building systems that improve efficiency and accuracy. Many processes, including key distribution tracking and staff scheduling, were previously manual and error-prone, so I implemented structured logging systems and automation tools to streamline operations.',
+        feats: '• Key Distribution & Tracking: Implemented a logging system capturing every key transaction, staff member involved, and relevant details while training staff on tools previously limited to management\n• Scheduling Automation: Built a Python-based scheduling engine that scrapes availability data and applies weighted heuristics to generate optimized schedules\n• Configurable System Design: Enabled non-technical staff to adjust constraints such as shift caps, preferences, and fairness weights through a JSON configuration file\n• Conflict Resolution: Serve on a rotating duty schedule, handling on-call situations and resolving resident and operational conflicts',
+        res: '• 40% Error Reduction: Significantly reduced key distribution errors through improved logging systems and staff training\n• 70% Scheduling Time Reduction: Scheduling that previously took hours now completes in under a second\n• 100% Coverage: Consistently achieved full shift coverage while maintaining fairness and balance across staff assignments',
+        skills: {
+            Core: {
+                Python: 'Built automation tools and scheduling engine to optimize staff coverage and reduce manual work',
+                RegEx: 'Pattern matching used to parse availability data and extract scheduling information',
+            },
+            Data: {
+                Pandas: 'Data analysis library used to structure availability data and compute schedule assignments',
+                CSV: 'Portable format used for exporting schedule reports and operational data',
+                JSON: 'Configuration format enabling non-technical staff to modify scheduling constraints and weights',
+            },
+            Tools: {
+                'Google Sheets':
+                    'Collaborative spreadsheet tool used for operational tracking and team coordination',
+                'Microsoft Excel': 'Used for storing transaction logs and departmental records',
+            },
+        },
+    },
+    {
+        role: 'Machine Learning Researcher',
+        company: 'The College of New Jersey',
+        date: 'May 2025',
+        span: '2.5 months',
+        hook: 'Built a vision-driven pipeline enabling autonomous robotic navigation by training a CNN that improved perception accuracy by 50% and reduced manual operator intervention by 25%.',
+        top_skills: ['Python', 'PyTorch', 'OpenCV'],
+        intro: 'As a Machine Learning Researcher, I designed and implemented a computer vision system enabling autonomous navigation across multiple robots, spanning the full pipeline from raw camera input and dataset creation to model training and real-time closed-loop actuation.',
+        desc: 'I improved existing implementations by developing higher-quality models, expanding and refining the training dataset, and building a modular preprocessing pipeline that made data collection easier to scale and iterate on. The system handled the full workflow from spatial data extraction and camera calibration to ROS integration and multi-robot coordination.',
+        feats: '• Computer Vision Pipeline: Built an OpenCV-based preprocessing and data collection system preparing high-quality inputs for model training\n• CNN Training & Optimization: Designed and trained a convolutional neural network in PyTorch using augmented real-world datasets for robust perception\n• Closed-Loop ROS Integration: Implemented a ROS pipeline translating CNN predictions into real-time robot actuation and coordinated multi-robot navigation',
+        res: '• 50% Accuracy Improvement: Advanced preprocessing, augmentation, and CNN training techniques significantly improved perception reliability\n• 25% Reduction in Manual Intervention: Closed-loop autonomy reduced reliance on manual teleoperation\n• Production-Ready Pipeline: Deployable system functioning across multiple coordinated robots',
+        skills: {
+            Core: {
+                Python: 'Primary language used across the full ML, vision, and robotics pipeline',
+                ROS: 'Robotics middleware enabling real-time perception-to-actuation pipelines and multi-robot coordination',
+                Ubuntu: 'Linux-based development environment optimized for ROS and machine learning workflows',
+            },
+            'ML & Vision': {
+                PyTorch:
+                    'Deep learning framework used to build, train, and optimize CNN architectures',
+                OpenCV: 'Computer vision library for camera calibration, spatial extraction, and preprocessing',
+            },
+            Data: {
+                NumPy: 'High-performance numerical computing for matrix and spatial operations',
+                Pandas: 'Dataset organization and analysis for training and evaluation metrics',
+                Matplotlib:
+                    'Visualization of model performance, training curves, and spatial outputs',
+            },
+        },
+    },
+];
+
+export const skills: Record<SkillCategory, Skill[]> = {
+    Languages: [
+        {
+            name: 'TypeScript',
+            proficiency: 'Advanced',
+            description:
+                'Primary language for all frontend and most backend work, used across every web project.',
+        },
+        {
+            name: 'JavaScript',
+            proficiency: 'Advanced',
+            description:
+                'Foundation of my web development experience before adopting TypeScript full-time.',
+        },
+        {
+            name: 'Python',
+            proficiency: 'Advanced',
+            description:
+                'Go-to language for ML pipelines, data processing, scripting, and automation tools.',
+        },
+        {
+            name: 'SQL',
+            proficiency: 'Proficient',
+            description:
+                'Used for relational data modeling, complex queries, and schema design across multiple projects.',
+        },
+        {
+            name: 'Rust',
+            proficiency: 'Familiar',
+            description:
+                'Explored for its performance and memory safety guarantees in systems-level contexts.',
+        },
+        {
+            name: 'Bash',
+            proficiency: 'Proficient',
+            description:
+                'Used for scripting, automation, and managing Linux-based development environments.',
+        },
+    ],
+    Frontend: [
+        {
+            name: 'React',
+            proficiency: 'Advanced',
+            description:
+                'Core framework for building dynamic, component-driven UIs across my web projects.',
+        },
+        {
+            name: 'Next.js',
+            proficiency: 'Advanced',
+            description:
+                'Used for full-stack web applications, leveraging server-side rendering and API routes.',
+        },
+        {
+            name: 'Tailwind CSS',
+            proficiency: 'Advanced',
+            description:
+                'Primary styling approach for building clean, responsive interfaces quickly.',
+        },
+        {
+            name: 'Motion',
+            proficiency: 'Proficient',
+            description:
+                'Used to add fluid animations and transitions that elevate the feel of web interfaces.',
+        },
+        {
+            name: 'HTML',
+            proficiency: 'Advanced',
+            description: 'Foundational markup language underlying all of my frontend work.',
+        },
+        {
+            name: 'CSS',
+            proficiency: 'Advanced',
+            description:
+                'Used for custom styling and layout beyond what utility frameworks provide.',
+        },
+        {
+            name: 'TanStack Start',
+            proficiency: 'Familiar',
+            description:
+                'Explored as a modern full-stack React framework for type-safe routing and data fetching.',
+        },
+    ],
+    Backend: [
+        {
+            name: 'Node.js',
+            proficiency: 'Advanced',
+            description:
+                'Runtime powering most of my backend services, APIs, and server-side logic.',
+        },
+        {
+            name: 'Express.js',
+            proficiency: 'Advanced',
+            description:
+                'Used to build RESTful APIs with custom middleware, routing, and request handling.',
+        },
+        {
+            name: 'Fastify',
+            proficiency: 'Proficient',
+            description:
+                'Adopted for performance-critical backend services where throughput and low latency matter.',
+        },
+        {
+            name: 'Auth.js',
+            proficiency: 'Proficient',
+            description:
+                'Implemented for session-based authentication with social sign-in support in web projects.',
+        },
+        {
+            name: 'Better Auth',
+            proficiency: 'Proficient',
+            description:
+                'Used as a modern, flexible auth solution with fine-grained control over security policies.',
+        },
+        {
+            name: 'OAuth 2.0',
+            proficiency: 'Proficient',
+            description:
+                'Implemented social authentication flows and token-based authorization across multiple projects.',
+        },
+    ],
+    Data: [
+        {
+            name: 'PostgreSQL',
+            proficiency: 'Proficient',
+            description:
+                'Primary relational database used for structured data storage across web applications.',
+        },
+        {
+            name: 'Drizzle',
+            proficiency: 'Proficient',
+            description:
+                'Type-safe ORM used for schema definition, migrations, and database queries in TypeScript projects.',
+        },
+        {
+            name: 'MongoDB',
+            proficiency: 'Proficient',
+            description:
+                'Used for flexible, document-based storage in projects requiring dynamic or unstructured data.',
+        },
+        {
+            name: 'Neo4j',
+            proficiency: 'Proficient',
+            description:
+                'Graph database used to store and query citation-based relationships across 200,000+ academic papers.',
+        },
+        {
+            name: 'Redis',
+            proficiency: 'Proficient',
+            description:
+                'Used for caching, session storage, and performance optimization in high-throughput applications.',
+        },
+    ],
+    'Python Libraries': [
+        {
+            name: 'NumPy',
+            proficiency: 'Proficient',
+            description:
+                'Used for high-performance matrix operations and numerical computing in ML and vision pipelines.',
+        },
+        {
+            name: 'Pandas',
+            proficiency: 'Proficient',
+            description:
+                'Used for organizing, analyzing, and manipulating structured datasets across data and ML projects.',
+        },
+        {
+            name: 'Matplotlib',
+            proficiency: 'Proficient',
+            description:
+                'Used to visualize training performance, accuracy curves, and spatial data outputs.',
+        },
+        {
+            name: 'PyTorch',
+            proficiency: 'Proficient',
+            description:
+                'Deep learning framework used for CNN architecture, training, and optimization in robotics research.',
+        },
+        {
+            name: 'scikit-learn',
+            proficiency: 'Familiar',
+            description:
+                'Used for classical ML techniques, model evaluation, and preprocessing workflows.',
+        },
+        {
+            name: 'OpenCV',
+            proficiency: 'Proficient',
+            description:
+                'Used to build preprocessing and data collection pipelines for autonomous robotic navigation.',
+        },
+    ],
+    'Infrastructure & DevOps': [
+        {
+            name: 'Git',
+            proficiency: 'Advanced',
+            description:
+                'Used for version control across every project, including branching, merging, and code review workflows.',
+        },
+        {
+            name: 'GitHub',
+            proficiency: 'Advanced',
+            description:
+                'Primary platform for source control, project management, and open source collaboration.',
+        },
+        {
+            name: 'Docker',
+            proficiency: 'Proficient',
+            description:
+                'Used for containerizing applications and ensuring consistent environments across development and production.',
+        },
+        {
+            name: 'AWS',
+            proficiency: 'Familiar',
+            description:
+                'Used for cloud infrastructure, storage, and deploying scalable backend services.',
+        },
+        {
+            name: 'Vercel',
+            proficiency: 'Proficient',
+            description:
+                'Primary deployment platform for Next.js and frontend projects, with CI/CD out of the box.',
+        },
+        {
+            name: 'Linux',
+            proficiency: 'Proficient',
+            description:
+                'Daily development environment, particularly for ML workloads, ROS, and server management.',
+        },
+    ],
+    'AI Tooling': [
+        {
+            name: 'Claude Code',
+            proficiency: 'Familiar',
+            description:
+                'Primary AI coding assistant for accelerating development, debugging, and architectural decisions.',
+        },
+        {
+            name: 'Cursor',
+            proficiency: 'Familiar',
+            description:
+                'AI-powered editor used to streamline development workflows and code generation.',
+        },
+        {
+            name: 'Google Antigravity',
+            proficiency: 'Proficient',
+            description:
+                "Google's agent-first IDE for delegating complex tasks to autonomous AI agents that can plan, code, and verify across editor, terminal, and browser.",
+        },
+    ],
+    'Soft Skills': [
+        {
+            name: 'Communication',
+            proficiency: 'Advanced',
+            description:
+                'Developed through leading a team of 15, providing feedback, resolving conflicts, and coordinating across departments.',
+        },
+        {
+            name: 'Collaboration',
+            proficiency: 'Advanced',
+            description:
+                'Practiced across research, team leadership, and cross-functional project work.',
+        },
+        {
+            name: 'Problem Solving',
+            proficiency: 'Advanced',
+            description:
+                'Core to every project — from debugging distributed systems to identifying workflow bottlenecks in operations.',
+        },
+        {
+            name: 'Leadership',
+            proficiency: 'Advanced',
+            description:
+                'Demonstrated through managing a 15-person team, running scheduling, evaluations, and day-to-day operations.',
+        },
+    ],
+};
 
 export const blogPosts: BlogPost[] = [
     {
