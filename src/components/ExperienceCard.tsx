@@ -27,7 +27,7 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, variants })
             whileHover={{ scale: 1.03 }}
             onClick={() => navigate(`/work/experience/${slug}`)}
             style={{ cursor: 'pointer' }}
-            className={`group relative p-[1px] rounded-2xl transition-shadow duration-500
+            className={`group h-full relative p-[1px] rounded-2xl transition-shadow duration-500
                 ${
                     theme === 'light'
                         ? 'bg-slate-200/80 shadow-md hover:shadow-[0_0_25px_rgba(100,116,139,0.3)]'
@@ -96,7 +96,7 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, variants })
 
                 {/* Row 4: Top skill badges with icons */}
                 <div
-                    className={`mt-auto pt-4 border-t ${
+                    className={`mt-auto pt-4 border-t h-[82px] ${
                         theme === 'light' ? 'border-slate-200' : 'border-slate-700/50'
                     }`}
                 >

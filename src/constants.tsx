@@ -95,7 +95,7 @@ export const projects: Project[] = [
             'Filtering and Bookmarks',
             'AI Analysis',
             'System Architecture',
-            'Hackathon Photo (Won \"Best Use of MongoDB Atlas\")',
+            'Hackathon Photo (Won "Best Use of MongoDB Atlas")',
         ],
         intro: 'I was researching quantum computing, which is a niche field where finding relevant academic findings meant digging through noisy, flat search results with no way to see how they connected. Additionally, I had a hackathon coming up, so I used it to build Stellar Papers!',
         desc: 'An interactive citation graph of academic papers. Instead of lists, you explore relationships, and see which papers are foundational, how topics actually connect, and where cross-disciplinary links exist.',
@@ -232,7 +232,7 @@ export const projects: Project[] = [
         },
     },
     {
-        name: 'When2Meet-Analyzer',
+        name: 'When2Meet Analyzer',
         date: 'Nov. 2025',
         span: '2 weeks',
         github: 'https://github.com/BryanWieschenberg/When2Meet-Analyzer',

@@ -69,7 +69,9 @@ const ProjectDetail: React.FC = () => {
     );
     // Helper to parse bullets and bold the prefix before the first colon
     const renderBullets = (text: string) => {
-        if (!text) return null;
+        if (!text) {
+            return null;
+        }
         const bullets = text
             .split('\n')
             .map((b: string) => b.replace(/^•\s*/, '').trim())

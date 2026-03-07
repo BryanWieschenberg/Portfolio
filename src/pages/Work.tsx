@@ -64,7 +64,9 @@ function parseDateToTimestamp(dateStr: string): number {
     if (tokens.length >= 2) {
         const month = monthMap[tokens[0].toLowerCase()] ?? 0;
         const year = parseInt(tokens[1], 10);
-        if (!isNaN(year)) return new Date(year, month, 1).getTime();
+        if (!isNaN(year)) {
+            return new Date(year, month, 1).getTime();
+        }
     }
     return 0;
 }
@@ -131,7 +133,7 @@ const Work: React.FC = () => {
                 setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
             } else {
                 setSortKey(key);
-                setSortDir('desc');
+                setSortDir(key === 'alphabetical' ? 'asc' : 'desc');
             }
         },
         [sortKey],
@@ -160,7 +162,9 @@ const Work: React.FC = () => {
 
     // Filtered skills for dropdown
     const filteredDropdownSkills = useMemo(() => {
-        if (!skillSearch) return uniqueSkillNames;
+        if (!skillSearch) {
+            return uniqueSkillNames;
+        }
         const lower = skillSearch.toLowerCase();
         return uniqueSkillNames.filter((s) => s.toLowerCase().includes(lower));
     }, [skillSearch]);
@@ -196,8 +200,12 @@ const Work: React.FC = () => {
         if (selectedTeam.length > 0) {
             result = result.filter((p) => {
                 const isTeam = !!p.role;
-                if (selectedTeam.includes('Solo') && !isTeam) return true;
-                if (selectedTeam.includes('Team') && isTeam) return true;
+                if (selectedTeam.includes('Solo') && !isTeam) {
+                    return true;
+                }
+                if (selectedTeam.includes('Team') && isTeam) {
+                    return true;
+                }
                 return false;
             });
         }
@@ -222,13 +230,18 @@ const Work: React.FC = () => {
                 const timestamp = parseDateToTimestamp(p.date);
                 const effectiveTimestamp = isPresent ? now : timestamp;
 
-                if (selectedYears.includes(year)) return true;
-                if (selectedYears.includes('Last 6 Months') && effectiveTimestamp >= sixMonthsAgo)
+                if (selectedYears.includes(year)) {
                     return true;
-                if (selectedYears.includes('Last Year') && effectiveTimestamp >= oneYearAgo)
+                }
+                if (selectedYears.includes('Last 6 Months') && effectiveTimestamp >= sixMonthsAgo) {
                     return true;
-                if (selectedYears.includes('Last 2 Years') && effectiveTimestamp >= twoYearsAgo)
+                }
+                if (selectedYears.includes('Last Year') && effectiveTimestamp >= oneYearAgo) {
                     return true;
+                }
+                if (selectedYears.includes('Last 2 Years') && effectiveTimestamp >= twoYearsAgo) {
+                    return true;
+                }
 
                 return false;
             });
@@ -242,7 +255,9 @@ const Work: React.FC = () => {
         // Sort
         if (sortKey === 'featured') {
             // featured = original order. If desc, reverse it
-            if (sortDir === 'asc') result = result.reverse();
+            if (sortDir === 'asc') {
+                result = result.reverse();
+            }
         } else if (sortKey === 'newest') {
             result.sort((a, b) => {
                 const diff = parseDateToTimestamp(b.date) - parseDateToTimestamp(a.date);
@@ -303,13 +318,18 @@ const Work: React.FC = () => {
                 const timestamp = parseDateToTimestamp(e.date);
                 const effectiveTimestamp = isPresent ? now : timestamp;
 
-                if (selectedYears.includes(year)) return true;
-                if (selectedYears.includes('Last 6 Months') && effectiveTimestamp >= sixMonthsAgo)
+                if (selectedYears.includes(year)) {
                     return true;
-                if (selectedYears.includes('Last Year') && effectiveTimestamp >= oneYearAgo)
+                }
+                if (selectedYears.includes('Last 6 Months') && effectiveTimestamp >= sixMonthsAgo) {
                     return true;
-                if (selectedYears.includes('Last 2 Years') && effectiveTimestamp >= twoYearsAgo)
+                }
+                if (selectedYears.includes('Last Year') && effectiveTimestamp >= oneYearAgo) {
                     return true;
+                }
+                if (selectedYears.includes('Last 2 Years') && effectiveTimestamp >= twoYearsAgo) {
+                    return true;
+                }
 
                 return false;
             });
@@ -317,7 +337,9 @@ const Work: React.FC = () => {
 
         // Sort
         if (sortKey === 'featured') {
-            if (sortDir === 'asc') result = result.reverse();
+            if (sortDir === 'asc') {
+                result = result.reverse();
+            }
         } else if (sortKey === 'newest') {
             result.sort((a, b) => {
                 const diff = parseDateToTimestamp(b.date) - parseDateToTimestamp(a.date);
