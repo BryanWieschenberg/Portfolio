@@ -115,6 +115,8 @@ const ProjectDetail: React.FC = () => {
         },
     };
 
+    const iconPath = `/artifacts/projects/${normalizeTitle(project.name)}/icon.png`;
+
     return (
         <div className="container mx-auto px-4 lg:px-20 pt-8 lg:pt-12 pb-16 max-w-[1200px]">
             <motion.button
@@ -131,40 +133,52 @@ const ProjectDetail: React.FC = () => {
             <motion.div initial="hidden" animate="visible" variants={containerVariants}>
                 {/* Header */}
                 <motion.div variants={itemVariants} className="mb-10 text-center lg:text-left">
-                    <h1
-                        className={`text-5xl lg:text-7xl font-bold mb-4
-                            ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
-                    >
-                        {project.name}
-                    </h1>
+                    <div className="flex flex-col items-center lg:items-start">
+                        <div className="flex items-center gap-4 lg:gap-6 mb-4">
+                            <img
+                                src={iconPath}
+                                alt={`${project.name} logo`}
+                                className="w-14 h-14 lg:w-20 lg:h-20 object-contain shrink-0"
+                                onError={(e) => {
+                                    (e.target as HTMLImageElement).src = '/images/default.png';
+                                }}
+                            />
+                            <h1
+                                className={`text-5xl lg:text-7xl font-bold
+                                    ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                            >
+                                {project.name}
+                            </h1>
+                        </div>
 
-                    <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-6 justify-center lg:justify-start">
-                        <p className="date-meta text-lg">
-                            {project.date}
-                            {project.span ? ` • ${project.span}` : ''}
-                        </p>
+                        <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-6 justify-center lg:justify-start">
+                            <p className="date-meta text-lg">
+                                {project.date}
+                                {project.span ? ` • ${project.span}` : ''}
+                            </p>
 
-                        <div className="flex flex-wrap gap-3">
-                            {project.github && (
-                                <a
-                                    href={project.github}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn-repo"
-                                >
-                                    <FaGithub /> View Repository
-                                </a>
-                            )}
-                            {project.url && (
-                                <a
-                                    href={project.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn-live"
-                                >
-                                    <FaExternalLinkAlt /> Visit Website
-                                </a>
-                            )}
+                            <div className="flex flex-wrap gap-3">
+                                {project.github && (
+                                    <a
+                                        href={project.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn-repo"
+                                    >
+                                        <FaGithub /> View Repository
+                                    </a>
+                                )}
+                                {project.url && (
+                                    <a
+                                        href={project.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn-live"
+                                    >
+                                        <FaExternalLinkAlt /> Visit Website
+                                    </a>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </motion.div>
@@ -270,12 +284,14 @@ const ProjectDetail: React.FC = () => {
                         variants={itemVariants}
                         className="card-static"
                     >
-                        <div className="flex items-center gap-3 mb-4">
+                        <div className="flex items-center gap-3">
                             <h2 className="section-subheading-lg">Key Things Shipped:</h2>
                         </div>
                         <div className="text-lg">{renderBullets(project.feats)}</div>
                     </motion.div>
                 )}
+
+                <div className="!mt-[4px]"></div>
 
                 {/* Results */}
                 {project.res && (
@@ -292,6 +308,9 @@ const ProjectDetail: React.FC = () => {
                         <div className="text-lg">{renderBullets(project.res)}</div>
                     </motion.div>
                 )}
+
+                <div className="!mt-[6px]"></div>
+
                 {/* Tech Used */}
                 {project.skills && Object.keys(project.skills).length > 0 && (
                     <motion.div
