@@ -245,7 +245,7 @@ export const projects: Project[] = [
         intro: 'I had to manually schedule staff across 40+ day periods, dealing with conflicting availability, constraints, and fairness concerns. The process was slow, error-prone, and biased. So I built When2Meet Analyzer.',
         desc: 'An automated scheduling engine that scrapes availability data from When2Meet and applies a weighted heuristic algorithm to generate optimized staff schedules. It handles complex constraints, shift capacities, preferences, and fairness requirements with fully deterministic results.',
         feats: '• Dynamic State Extraction: Uses advanced RegEx to parse embedded JavaScript and extract raw When2Meet availability data without relying on DOM scraping\n• Weighted Heuristic Engine: Multi-factor scoring algorithm balancing hour caps, fairness/diversity, and employee preferences\n• Fully Configurable: Constraints, scoring weights, and shift capacities adjustable through a simple configuration file\n• Schedule Report Generation: Outputs structured CSV reports showing assignments and full coverage visibility',
-        res: '• 100% Coverage: Achieves perfect coverage across complex month-long schedules with consistent 100% fill rates\n• Sub-Second Execution: Processes 2,000+ availability slots and generates full schedule reports in ~650ms\n• Error-Free Scheduling: Zero assignment errors or bias detected compared to manual scheduling',
+        res: '• 100% Coverage: Achieves perfect coverage across complex month-long schedules with consistent 100% fill rates\n• Sub-Second Execution: Processes thousands of availability slots and generates full schedule reports in under 1 second\n• Error-Free Scheduling: Zero assignment errors or bias detected compared to manual scheduling',
         skills: {
             Core: {
                 Python: 'Primary language used to build the scheduling engine and heuristic assignment system',
@@ -292,7 +292,7 @@ export const experience: Experience[] = [
     {
         role: 'Machine Learning Researcher',
         company: 'The College of New Jersey',
-        date: 'May 2025',
+        date: 'May 2025 - Jul. 2025',
         span: '2.5 months',
         hook: 'Built a vision-driven pipeline enabling autonomous robotic navigation by training a CNN that improved perception accuracy by 50% and reduced manual operator intervention by 25%.',
         top_skills: ['Python', 'PyTorch', 'OpenCV'],

@@ -22,9 +22,74 @@ function useLgUp() {
     return isLgUp;
 }
 
+const GooglyEyes: React.FC<{
+    mousePos: { x: number; y: number };
+    profileRef: React.RefObject<HTMLDivElement>;
+}> = ({ mousePos, profileRef }) => {
+    const [eyeOffsets, setEyeOffsets] = useState({ left: { x: 0, y: 0 }, right: { x: 0, y: 0 } });
+
+    useEffect(() => {
+        if (!profileRef.current) {
+            return;
+        }
+        const rect = profileRef.current.getBoundingClientRect();
+
+        const calculateOffset = (eyeXPercent: number, eyeYPercent: number) => {
+            const eyeX = rect.left + rect.width * eyeXPercent;
+            const eyeY = rect.top + rect.height * eyeYPercent;
+
+            const dx = mousePos.x - eyeX;
+            const dy = mousePos.y - eyeY;
+            const angle = Math.atan2(dy, dx);
+            const distance = Math.min(Math.sqrt(dx * dx + dy * dy) / 8, 10);
+
+            return {
+                x: Math.cos(angle) * distance,
+                y: Math.sin(angle) * distance,
+            };
+        };
+
+        setEyeOffsets({
+            left: calculateOffset(0.41, 0.42),
+            right: calculateOffset(0.59, 0.42),
+        });
+    }, [mousePos, profileRef]);
+
+    return (
+        <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            {/* Left Eye */}
+            <div
+                className="absolute w-4 h-4 lg:w-6 lg:h-6 bg-white rounded-full border-[1px] border-black flex items-center justify-center overflow-hidden shadow-inner"
+                style={{ left: '41%', top: '42%', transform: 'translate(-50%, -50%)' }}
+            >
+                <div
+                    className="w-2 h-2 lg:w-3 lg:h-3 bg-black rounded-full"
+                    style={{
+                        transform: `translate(${eyeOffsets.left.x / 2}px, ${eyeOffsets.left.y / 2}px)`,
+                    }}
+                />
+            </div>
+            {/* Right Eye */}
+            <div
+                className="absolute w-4 h-4 lg:w-6 lg:h-6 bg-white rounded-full border-[1px] border-black flex items-center justify-center overflow-hidden shadow-inner"
+                style={{ left: '59%', top: '42%', transform: 'translate(-50%, -50%)' }}
+            >
+                <div
+                    className="w-2 h-2 lg:w-3 lg:h-3 bg-black rounded-full"
+                    style={{
+                        transform: `translate(${eyeOffsets.right.x / 2}px, ${eyeOffsets.right.y / 2}px)`,
+                    }}
+                />
+            </div>
+        </div>
+    );
+};
+
 const Home: React.FC = () => {
     const { theme } = useTheme();
     const featuredRef = useRef<HTMLDivElement>(null);
+    const profileRef = useRef<HTMLDivElement>(null);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const navigate = useNavigate();
     const [isIntroComplete, setIsIntroComplete] = useState(false);
 
@@ -205,6 +270,8 @@ const Home: React.FC = () => {
                         <AnimatePresence>
                             {isIntroComplete && (
                                 <motion.div
+                                    ref={profileRef}
+                                    onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ duration: 0.5 }}
@@ -231,6 +298,7 @@ const Home: React.FC = () => {
                                         alt="Bryan"
                                         className="relative rounded-full border-4 border-[#3c86ff] object-cover w-64 h-64 lg:w-96 lg:h-96 transform transition duration-500 hover:scale-105 shadow-2xl z-10"
                                     />
+                                    <GooglyEyes mousePos={mousePos} profileRef={profileRef} />
                                 </motion.div>
                             )}
                         </AnimatePresence>

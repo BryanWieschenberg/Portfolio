@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from '../components/SwipeReveal';
 import { getSkillIconPath, getSkillIconFallback } from '../lib/utils';
+import InteractiveFace from '../components/InteractiveFace';
 import {
     FaGamepad,
     FaMusic,
@@ -192,10 +193,13 @@ const About: React.FC = () => {
                                     }}
                                     className="absolute -inset-2 bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] rounded-2xl blur-lg"
                                 />
-                                <img
-                                    src="/images/photo.png"
-                                    alt="Bryan"
-                                    className="relative rounded-2xl border-2 border-[#3c86ff]/40 object-cover w-48 h-48 lg:w-64 lg:h-64 shadow-2xl z-10"
+                                <InteractiveFace
+                                    src={
+                                        theme === 'light'
+                                            ? '/images/photo-light.png'
+                                            : '/images/photo-dark.png'
+                                    }
+                                    theme={theme}
                                 />
                             </div>
                         </div>
