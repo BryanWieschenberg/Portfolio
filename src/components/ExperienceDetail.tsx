@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { experience, Experience } from '../constants';
+import { experience } from '../constants';
 import { normalizeTitle, getSkillIconPath, getSkillIconFallback } from '../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import {
     FaArrowLeft,
-    FaCogs,
-    FaClipboardList,
-    FaBuilding,
+    FaChevronDown,
+    FaChevronUp,
     FaChevronLeft,
     FaChevronRight,
     FaSearchPlus,
@@ -20,15 +19,30 @@ const ExperienceDetail: React.FC = () => {
     const { theme } = useTheme();
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
+    const [expandedTech, setExpandedTech] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     // Lightbox State
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const [zoomLevel, setZoomLevel] = useState(1);
 
-    const exp = experience.find(
-        (w: Experience) => normalizeTitle(`${w.role} ${w.company}`) === slug,
-    );
+    const expIndex = experience.findIndex((e) => normalizeTitle(e.role) === slug);
+    const exp = experience[expIndex];
+
+    // const prevExp = experience[(expIndex - 1 + experience.length) % experience.length];
+    const nextExp = experience[(expIndex + 1) % experience.length];
+
+    const handleNavigate = (targetRole: string) => {
+        navigate(`/work/experience/${normalizeTitle(targetRole)}`);
+        window.scrollTo(0, 0);
+    };
+
+    // Reset gallery state when slug changes
+    useEffect(() => {
+        setCurrentImageIndex(0);
+        setIsLightboxOpen(false);
+        setZoomLevel(1);
+    }, [slug]);
 
     if (!exp) {
         return (
@@ -42,27 +56,69 @@ const ExperienceDetail: React.FC = () => {
                     onClick={() => navigate('/work')}
                     className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-500 transition-all"
                 >
-                    ← Back to Work
+                    ← Back to All Works
                 </button>
             </div>
         );
     }
 
-    const imagePath = `/images/${normalizeTitle(exp.company)}.png`;
-    const expSlug = normalizeTitle(exp.role);
     const projectImages = (exp.artifacts ?? []).map(
-        (_, i) => `/artifacts/experience/${expSlug}/image${i + 1}.png`,
+        (_, i) => `/artifacts/experience/${slug}/image${i + 1}.png`,
     );
-    const bullets = exp.desc
-        .split('\n')
-        .map((b: string) => b.replace(/^•\s*/, '').trim())
-        .filter((b: string) => b.length > 0);
+
+    // Helper to parse bullets and bold the prefix before the first colon
+    const renderBullets = (text: string) => {
+        if (!text) {
+            return null;
+        }
+        const bullets = text
+            .split('\n')
+            .map((b: string) => b.replace(/^•\s*/, '').trim())
+            .filter((b: string) => b.length > 0);
+
+        return (
+            <ul className="space-y-3">
+                {bullets.map((bullet: string, i: number) => {
+                    const colonIndex = bullet.indexOf(':');
+                    if (colonIndex !== -1) {
+                        const prefix = bullet.substring(0, colonIndex + 1);
+                        const rest = bullet.substring(colonIndex + 1);
+                        return (
+                            <li key={i} className="flex items-start gap-3">
+                                <span className="bullet-dot mt-2" />
+                                <span
+                                    className={`text-lg leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-slate-300'}`}
+                                >
+                                    <strong
+                                        className={`${theme === 'light' ? 'text-slate-900' : 'text-slate-100'}`}
+                                    >
+                                        {prefix}
+                                    </strong>
+                                    {rest}
+                                </span>
+                            </li>
+                        );
+                    }
+                    return (
+                        <li key={i} className="flex items-start gap-3">
+                            <span className="bullet-dot mt-2" />
+                            <span
+                                className={`text-lg leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-slate-300'}`}
+                            >
+                                {bullet}
+                            </span>
+                        </li>
+                    );
+                })}
+            </ul>
+        );
+    };
 
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
-            transition: { staggerChildren: 0.08 },
+            transition: { staggerChildren: 0.1 },
         },
     };
 
@@ -75,152 +131,172 @@ const ExperienceDetail: React.FC = () => {
         },
     };
 
-    // Flatten all skills from nested categories
-    const allSkills = Object.values(exp.skills).flatMap((category) =>
-        Object.entries(category).map(([name, description]) => ({ name, description })),
-    );
+    const iconPath = `/artifacts/experience/${slug}/icon.png`;
 
     return (
-        <>
-            <div className="container mx-auto px-4 lg:px-20 pt-8 lg:pt-12 pb-16 max-w-5xl">
+        <div
+            key={slug}
+            className="container mx-auto px-4 lg:px-20 pt-8 lg:pt-12 pb-16 max-w-[1200px]"
+        >
+            <div className="flex items-center justify-between mb-10">
                 <motion.button
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3 }}
                     onClick={() => navigate('/work')}
-                    className="btn-back group mb-8"
+                    className="btn-back group"
                 >
                     <FaArrowLeft className="transform transition-transform duration-300 group-hover:-translate-x-1" />
                     <span>Back to Work</span>
                 </motion.button>
 
-                <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-                    <motion.div variants={itemVariants} className="mb-10">
-                        <div className="flex items-start gap-6 mb-4">
-                            <div className="logo-box w-20 h-20 lg:w-24 lg:h-24 rounded-2xl border-2 shadow-xl">
+                <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex items-center gap-3"
+                >
+                    {/* <button
+                        onClick={() => handleNavigate(prevExp.role)}
+                        className="btn-nav-compact group"
+                        title={`Previous: ${prevExp.role}`}
+                    >
+                        <FaChevronLeft className="text-sm transform transition-transform duration-300 group-hover:-translate-x-0.5" />
+                        <span className="hidden sm:inline">Prev</span>
+                    </button> */}
+                    <button
+                        onClick={() => handleNavigate(nextExp.role)}
+                        className="btn-nav-compact group"
+                        title={`Next: ${nextExp.role}`}
+                    >
+                        <span className="hidden sm:inline">Next</span>
+                        <FaChevronRight className="text-sm transform transition-transform duration-300 group-hover:translate-x-0.5" />
+                    </button>
+                </motion.div>
+            </div>
+
+            <motion.div initial="hidden" animate="visible" variants={containerVariants}>
+                {/* Header */}
+                <motion.div variants={itemVariants} className="mb-10 text-center lg:text-left">
+                    <div className="flex flex-col items-center lg:items-start">
+                        <h1
+                            className={`text-5xl lg:text-7xl font-bold mb-6
+                                ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                        >
+                            {exp.role}
+                        </h1>
+
+                        <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-8 justify-center lg:justify-start">
+                            <div className="flex items-center gap-4">
                                 <img
-                                    src={imagePath}
+                                    src={iconPath}
                                     alt={`${exp.company} logo`}
-                                    className="w-14 h-14 lg:w-16 lg:h-16 object-contain"
+                                    className="w-10 h-10 lg:w-14 lg:h-14 object-contain shrink-0"
                                     onError={(e) => {
                                         (e.target as HTMLImageElement).src = '/images/default.png';
                                     }}
                                 />
+                                <span
+                                    className={`text-2xl lg:text-4xl font-bold ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
+                                >
+                                    {exp.company}
+                                </span>
                             </div>
 
-                            <div>
-                                <h1 className="section-heading-xl from-[#8580e7] to-[#3c86ff] text-3xl lg:text-5xl">
-                                    {exp.role}
-                                </h1>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <FaBuilding
-                                        className={`text-sm ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
-                                    />
-                                    <span className="item-subtitle text-lg">{exp.company}</span>
-                                </div>
-                                <p className="date-meta mt-1">{exp.date}</p>
+                            <p className="date-meta text-lg">
+                                {exp.date}
+                                {exp.span ? ` • ${exp.span}` : ''}
+                            </p>
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Artifact Gallery Carousel */}
+                {projectImages.length > 0 && (
+                    <motion.div variants={itemVariants} className="mb-12 max-w-4xl mx-auto">
+                        <div
+                            className={`relative rounded-2xl overflow-hidden shadow-lg border group aspect-video flex items-center justify-center bg-black/95 ${theme === 'light' ? 'border-slate-200' : 'border-slate-800'}`}
+                        >
+                            <div
+                                className="w-full h-full flex items-center justify-center cursor-zoom-in"
+                                onClick={() => {
+                                    setZoomLevel(1);
+                                    setIsLightboxOpen(true);
+                                }}
+                            >
+                                <img
+                                    src={projectImages[currentImageIndex]}
+                                    alt={
+                                        exp.artifacts?.[currentImageIndex] ||
+                                        `${exp.role} Artifact ${currentImageIndex + 1}`
+                                    }
+                                    className="w-full h-full object-contain transition-opacity duration-300"
+                                />
                             </div>
+
+                            {/* Artifact Description Overlay (Main Gallery) */}
+                            {exp.artifacts && exp.artifacts[currentImageIndex] && (
+                                <div className="absolute bottom-0 left-0 right-0 pb-8 pt-4 px-4 bg-gradient-to-t from-black/80 to-transparent pointer-events-none">
+                                    <p className="text-white text-sm font-medium text-center drop-shadow-md">
+                                        {exp.artifacts[currentImageIndex]}
+                                    </p>
+                                </div>
+                            )}
+
+                            {projectImages.length > 1 && (
+                                <>
+                                    <button
+                                        onClick={() =>
+                                            setCurrentImageIndex((prev) =>
+                                                prev === 0 ? projectImages.length - 1 : prev - 1,
+                                            )
+                                        }
+                                        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+                                    >
+                                        <FaChevronLeft />
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            setCurrentImageIndex((prev) =>
+                                                prev === projectImages.length - 1 ? 0 : prev + 1,
+                                            )
+                                        }
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+                                    >
+                                        <FaChevronRight />
+                                    </button>
+
+                                    {/* Dots */}
+                                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                                        {projectImages.map((_, i) => (
+                                            <button
+                                                key={i}
+                                                onClick={() => setCurrentImageIndex(i)}
+                                                className={`w-2 h-2 rounded-full transition-all ${i === currentImageIndex ? 'bg-white w-4' : 'bg-white/50 hover:bg-white/80'}`}
+                                            />
+                                        ))}
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </motion.div>
+                )}
+            </motion.div>
 
-                    {/* Artifact Gallery Carousel */}
-                    {projectImages.length > 0 && (
-                        <motion.div variants={itemVariants} className="mb-12 max-w-4xl mx-auto">
-                            <div
-                                className={`relative rounded-2xl overflow-hidden shadow-lg border group aspect-video flex items-center justify-center bg-black/95 ${theme === 'light' ? 'border-slate-200' : 'border-slate-800'}`}
-                            >
-                                <div
-                                    className="w-full h-full flex items-center justify-center cursor-zoom-in"
-                                    onClick={() => {
-                                        setZoomLevel(1);
-                                        setIsLightboxOpen(true);
-                                    }}
-                                >
-                                    <img
-                                        src={projectImages[currentImageIndex]}
-                                        alt={
-                                            exp.artifacts?.[currentImageIndex] ||
-                                            `${exp.role} Artifact ${currentImageIndex + 1}`
-                                        }
-                                        className="w-full h-full object-contain transition-opacity duration-300"
-                                    />
-                                </div>
-
-                                {/* Artifact Description Overlay (Main Gallery) */}
-                                {exp.artifacts && exp.artifacts[currentImageIndex] && (
-                                    <div className="absolute bottom-0 left-0 right-0 pb-10 pt-4 px-4 bg-gradient-to-t from-black/80 to-transparent pointer-events-none">
-                                        <p className="text-white text-sm font-medium text-center drop-shadow-md">
-                                            {exp.artifacts[currentImageIndex]}
-                                        </p>
-                                    </div>
-                                )}
-
-                                {projectImages.length > 1 && (
-                                    <>
-                                        <button
-                                            onClick={() =>
-                                                setCurrentImageIndex((prev) =>
-                                                    prev === 0
-                                                        ? projectImages.length - 1
-                                                        : prev - 1,
-                                                )
-                                            }
-                                            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
-                                        >
-                                            <FaChevronLeft />
-                                        </button>
-                                        <button
-                                            onClick={() =>
-                                                setCurrentImageIndex((prev) =>
-                                                    prev === projectImages.length - 1
-                                                        ? 0
-                                                        : prev + 1,
-                                                )
-                                            }
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
-                                        >
-                                            <FaChevronRight />
-                                        </button>
-
-                                        {/* Dots */}
-                                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-                                            {projectImages.map((_, i) => (
-                                                <button
-                                                    key={i}
-                                                    onClick={() => setCurrentImageIndex(i)}
-                                                    className={`w-2 h-2 rounded-full transition-all ${i === currentImageIndex ? 'bg-white w-4' : 'bg-white/50 hover:bg-white/80'}`}
-                                                />
-                                            ))}
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        </motion.div>
-                    )}
+            {/* Intro */}
+            {exp.intro && (
+                <motion.div variants={itemVariants} className="mb-12 max-w-4xl mx-auto">
+                    <p
+                        className={`text-xl text-center lg:text-2xl ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
+                    >
+                        {exp.intro}
+                    </p>
                 </motion.div>
+            )}
 
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-50px' }}
-                    variants={itemVariants}
-                    className="card-static"
-                >
-                    <div className="flex items-center gap-3 mb-4">
-                        <FaClipboardList className="text-xl icon-accent" />
-                        <h2 className="section-subheading-lg">Overview</h2>
-                    </div>
-                    <ul className="space-y-3">
-                        {bullets.map((bullet: string, i: number) => (
-                            <li key={i} className="flex items-start gap-3">
-                                <span className="bullet-dot" />
-                                <span className="bullet-text">{bullet}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </motion.div>
-
-                {allSkills.length > 0 && (
+            <div className="flex flex-col space-y-8 mb-12 max-w-4xl mx-auto">
+                {/* description */}
+                {exp.desc && (
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
@@ -229,74 +305,230 @@ const ExperienceDetail: React.FC = () => {
                         className="card-static"
                     >
                         <div className="flex items-center gap-3 mb-4">
-                            <FaCogs className="text-xl icon-accent" />
-                            <h2 className="section-subheading-lg">Tech Stack</h2>
+                            <h2 className="section-subheading-lg">Overview</h2>
                         </div>
-                        <div
-                            className={`w-full border rounded-xl ${theme === 'light' ? 'bg-white border-slate-200' : 'bg-[#111318]/50 border-slate-700/50'}`}
+                        <p
+                            className={`text-lg leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-slate-300'}`}
                         >
-                            {Object.entries(exp.skills).map(([category, skillMap], catIdx) => (
-                                <div
-                                    key={catIdx}
-                                    className={`flex flex-col md:flex-row border-b last:border-b-0 first:rounded-t-xl last:rounded-b-xl ${theme === 'light' ? 'border-slate-200' : 'border-slate-700/50'}`}
-                                >
-                                    <div
-                                        className={`w-full md:w-36 shrink-0 p-4 font-semibold text-sm uppercase tracking-wider flex items-center md:first:rounded-tl-xl md:last:rounded-bl-xl ${theme === 'light' ? 'bg-slate-50 text-slate-500' : 'bg-slate-800/30 text-slate-400'}`}
-                                    >
-                                        {category}
-                                    </div>
-                                    <div className="flex-1 p-4 flex flex-wrap gap-2">
-                                        {Object.entries(skillMap).map(([skill, desc], i) => (
-                                            <div
-                                                key={i}
-                                                className={`group relative px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 ${
-                                                    theme === 'light'
-                                                        ? 'bg-slate-100 text-slate-600 border-slate-200 hover:border-slate-300'
-                                                        : 'bg-slate-800/50 text-slate-300 border-slate-600/50 hover:border-slate-500'
-                                                }`}
-                                            >
-                                                <img
-                                                    src={getSkillIconPath(skill, theme)}
-                                                    alt={skill}
-                                                    className="w-[18px] h-[18px] object-contain"
-                                                    onError={(e) => {
-                                                        const img = e.target as HTMLImageElement;
-                                                        const fallback =
-                                                            getSkillIconFallback(skill);
-                                                        if (img.src.endsWith(fallback)) {
-                                                            img.style.display = 'none';
-                                                        } else {
-                                                            img.src = fallback;
-                                                        }
-                                                    }}
-                                                />
-                                                {skill}
+                            {exp.desc}
+                        </p>
+                    </motion.div>
+                )}
 
-                                                {/* Custom Floating Panel */}
-                                                <div
-                                                    className={`absolute bottom-[calc(100%+10px)] left-0 min-w-[200px] w-max max-w-[280px] p-3 text-sm font-normal rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-[100] whitespace-normal pointer-events-none text-left border ${
-                                                        theme === 'light'
-                                                            ? 'bg-white text-slate-700 border-slate-200/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)]'
-                                                            : 'bg-[#111318] text-slate-300 border-slate-700/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]'
-                                                    }`}
+                {/* Key Things Shipped */}
+                {exp.feats && (
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                        className="card-static"
+                    >
+                        <div className="flex items-center gap-3 mb-4">
+                            <h2 className="section-subheading-lg">Key Responsibilities:</h2>
+                        </div>
+                        <div className="text-lg">{renderBullets(exp.feats)}</div>
+                    </motion.div>
+                )}
+
+                <div className="!mt-[4px]"></div>
+
+                {/* Results */}
+                {exp.res && (
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                        className="card-static"
+                    >
+                        <div className="flex items-center gap-3 mb-4">
+                            <h2 className="section-subheading-lg">Impact:</h2>
+                        </div>
+                        <div className="text-lg">{renderBullets(exp.res)}</div>
+                    </motion.div>
+                )}
+
+                <div className="!mt-[6px]"></div>
+
+                {/* Tech Used */}
+                {exp.skills && Object.keys(exp.skills).length > 0 && (
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                        className="card-static"
+                    >
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="flex items-center gap-3">
+                                <h2 className="section-subheading-lg !mb-0">Tech Stack:</h2>
+                            </div>
+                            <button
+                                onClick={() => setExpandedTech(!expandedTech)}
+                                className={`p-2 rounded-lg transition-colors ${theme === 'light' ? 'bg-slate-100 hover:bg-slate-200 text-slate-600' : 'bg-slate-800 hover:bg-slate-700 text-slate-300'}`}
+                                title={expandedTech ? 'Show Compact View' : 'Show Expanded View'}
+                            >
+                                {expandedTech ? (
+                                    <FaChevronUp size={14} />
+                                ) : (
+                                    <FaChevronDown size={14} />
+                                )}
+                            </button>
+                        </div>
+
+                        <AnimatePresence mode="wait">
+                            {expandedTech ? (
+                                <motion.div
+                                    key="expanded"
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="space-y-6"
+                                >
+                                    {Object.entries(exp.skills).map(
+                                        ([category, skillMap], catIdx) => (
+                                            <div key={catIdx}>
+                                                <h3
+                                                    className={`text-sm font-bold uppercase tracking-wider mb-3 ${theme === 'light' ? 'text-slate-800' : 'text-slate-200'}`}
                                                 >
-                                                    <div className="flex items-center gap-2 mb-1.5">
-                                                        <span
-                                                            className={`font-semibold ${theme === 'light' ? 'text-slate-900' : 'text-slate-100'}`}
-                                                        >
-                                                            {skill}
-                                                        </span>
-                                                    </div>
-                                                    <div className="leading-relaxed opacity-90">
-                                                        {desc}
-                                                    </div>
+                                                    {category}
+                                                </h3>
+                                                <div className="space-y-2">
+                                                    {Object.entries(skillMap).map(
+                                                        ([skill, desc], i) => (
+                                                            <div
+                                                                key={i}
+                                                                className={`flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 p-3 rounded-lg border ${theme === 'light' ? 'bg-slate-50 border-slate-200' : 'bg-slate-800/20 border-slate-700/50'}`}
+                                                            >
+                                                                <div className="flex items-center gap-3 shrink-0 w-56">
+                                                                    <img
+                                                                        src={getSkillIconPath(
+                                                                            skill,
+                                                                            theme,
+                                                                        )}
+                                                                        alt={skill}
+                                                                        className="w-5 h-5 object-contain"
+                                                                        onError={(e) => {
+                                                                            const img =
+                                                                                e.target as HTMLImageElement;
+                                                                            const fallback =
+                                                                                getSkillIconFallback(
+                                                                                    skill,
+                                                                                );
+                                                                            if (
+                                                                                img.src.endsWith(
+                                                                                    fallback,
+                                                                                )
+                                                                            ) {
+                                                                                img.style.display =
+                                                                                    'none';
+                                                                            } else {
+                                                                                img.src = fallback;
+                                                                            }
+                                                                        }}
+                                                                    />
+                                                                    <span
+                                                                        className={`font-semibold text-base ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
+                                                                    >
+                                                                        {skill}
+                                                                    </span>
+                                                                </div>
+                                                                <span
+                                                                    className={`text-sm leading-relaxed flex-1 ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
+                                                                >
+                                                                    {desc}
+                                                                </span>
+                                                            </div>
+                                                        ),
+                                                    )}
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                                        ),
+                                    )}
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="compact"
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className={`w-full border rounded-xl ${theme === 'light' ? 'bg-white border-slate-200' : 'bg-[#111318]/50 border-slate-700/50'}`}
+                                >
+                                    {Object.entries(exp.skills).map(
+                                        ([category, skillMap], catIdx) => (
+                                            <div
+                                                key={catIdx}
+                                                className={`flex flex-col md:flex-row border-b last:border-b-0 first:rounded-t-xl last:rounded-b-xl ${theme === 'light' ? 'border-slate-200' : 'border-slate-700/50'}`}
+                                            >
+                                                <div
+                                                    className={`w-full md:w-36 shrink-0 p-4 font-semibold text-sm uppercase tracking-wider flex items-center md:first:rounded-tl-xl md:last:rounded-bl-xl ${theme === 'light' ? 'bg-slate-50 text-slate-500' : 'bg-slate-800/30 text-slate-400'}`}
+                                                >
+                                                    {category}
+                                                </div>
+                                                <div className="flex-1 p-4 flex flex-wrap gap-2">
+                                                    {Object.entries(skillMap).map(
+                                                        ([skill, desc], i) => (
+                                                            <div
+                                                                key={i}
+                                                                className={`group relative px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 ${
+                                                                    theme === 'light'
+                                                                        ? 'bg-slate-100 text-slate-600 border-slate-200 hover:border-slate-300'
+                                                                        : 'bg-slate-800/50 text-slate-300 border-slate-600/50 hover:border-slate-500'
+                                                                }`}
+                                                            >
+                                                                <img
+                                                                    src={getSkillIconPath(
+                                                                        skill,
+                                                                        theme,
+                                                                    )}
+                                                                    alt={skill}
+                                                                    className="w-[18px] h-[18px] object-contain"
+                                                                    onError={(e) => {
+                                                                        const img =
+                                                                            e.target as HTMLImageElement;
+                                                                        const fallback =
+                                                                            getSkillIconFallback(
+                                                                                skill,
+                                                                            );
+                                                                        if (
+                                                                            img.src.endsWith(
+                                                                                fallback,
+                                                                            )
+                                                                        ) {
+                                                                            img.style.display =
+                                                                                'none';
+                                                                        } else {
+                                                                            img.src = fallback;
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                {skill}
+
+                                                                {/* Custom Floating Panel */}
+                                                                <div
+                                                                    className={`absolute bottom-[calc(100%+10px)] left-0 min-w-[200px] w-max max-w-[280px] p-3 text-sm font-normal rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-[100] whitespace-normal pointer-events-none text-left border ${
+                                                                        theme === 'light'
+                                                                            ? 'bg-white text-slate-700 border-slate-200/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)]'
+                                                                            : 'bg-[#111318] text-slate-300 border-slate-700/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]'
+                                                                    }`}
+                                                                >
+                                                                    <div className="leading-relaxed opacity-90">
+                                                                        {desc}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        ),
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ),
+                                    )}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </motion.div>
                 )}
             </div>
@@ -424,9 +656,57 @@ const ExperienceDetail: React.FC = () => {
                 )}
             </AnimatePresence>
 
-            <br />
-            <br />
-        </>
+            {/* Bottom Navigation */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className={`mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-6 ${theme === 'light' ? 'border-slate-200' : 'border-slate-800'}`}
+            >
+                <div className="flex flex-col items-center sm:items-start order-2 sm:order-1">
+                    <button onClick={() => navigate('/work')} className="btn-back group !mb-0">
+                        <FaArrowLeft className="transform transition-transform duration-300 group-hover:-translate-x-1" />
+                        <span>Back to All Works</span>
+                    </button>
+                </div>
+
+                <div className="flex items-center gap-4 order-1 sm:order-2">
+                    {/* <button
+                        onClick={() => handleNavigate(prevExp.role)}
+                        className="btn-nav-full group pr-6"
+                    >
+                        <div className="flex flex-col items-end">
+                            <span className="text-[10px] uppercase tracking-widest opacity-50 font-bold mb-0.5">
+                                Previous
+                            </span>
+                            <div className="flex items-center gap-2">
+                                <FaChevronLeft className="text-xs transition-transform group-hover:-translate-x-1" />
+                                <span className="font-bold text-sm sm:text-base">
+                                    {prevExp.role}
+                                </span>
+                            </div>
+                        </div>
+                    </button> */}
+
+                    <button
+                        onClick={() => handleNavigate(nextExp.role)}
+                        className="btn-nav-full group pl-6"
+                    >
+                        <div className="flex flex-col items-start text-right">
+                            <span className="text-[10px] uppercase tracking-widest opacity-50 font-bold mb-0.5">
+                                Next Role
+                            </span>
+                            <div className="flex items-center gap-2">
+                                <span className="font-bold text-sm sm:text-base">
+                                    {nextExp.role}
+                                </span>
+                                <FaChevronRight className="text-xs transition-transform group-hover:translate-x-1" />
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </motion.div>
+        </div>
     );
 };
 

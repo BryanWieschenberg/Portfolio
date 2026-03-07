@@ -342,7 +342,7 @@ const ProjectDetail: React.FC = () => {
                         variants={itemVariants}
                         className="card-static"
                     >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 mb-4">
                             <h2 className="section-subheading-lg">Key Things Shipped:</h2>
                         </div>
                         <div className="text-lg">{renderBullets(project.feats)}</div>
