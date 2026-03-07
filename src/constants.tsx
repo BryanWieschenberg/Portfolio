@@ -1,3 +1,15 @@
+import {
+    FaLaptopCode,
+    FaDatabase,
+    FaChartBar,
+    FaNetworkWired,
+    FaServer,
+    FaMicrochip,
+    FaProjectDiagram,
+    FaPuzzlePiece,
+    FaLightbulb,
+} from 'react-icons/fa';
+
 type SkillMap = {
     [skill: string]: string;
 };
@@ -65,16 +77,45 @@ export type SkillCategory =
     | 'Frontend'
     | 'Backend'
     | 'Data'
-    | 'Infrastructure & DevOps'
+    | 'Infra/Devops'
     | 'Python Libraries'
     | 'AI Tooling'
     | 'Soft Skills';
+
+export const courses = [
+    {
+        name: 'Software Engineering',
+        icon: <FaLaptopCode />,
+    },
+    { name: 'Database Systems', icon: <FaDatabase /> },
+    { name: 'Data Science', icon: <FaChartBar /> },
+    {
+        name: 'Computer Networking',
+        icon: <FaNetworkWired />,
+    },
+    { name: 'Operating Systems', icon: <FaServer /> },
+    {
+        name: 'Computer Architecture',
+        icon: <FaMicrochip />,
+    },
+    {
+        name: 'Data Structures & Algorithms',
+        icon: <FaProjectDiagram />,
+    },
+    {
+        name: 'Discrete Structures',
+        icon: <FaPuzzlePiece />,
+    },
+    {
+        name: 'Computational Problem Solving',
+        icon: <FaLightbulb />,
+    },
+];
 
 export type ProficiencyLevel = 'Familiar' | 'Proficient' | 'Advanced';
 
 export interface Skill {
     name: string;
-    concepts?: Concepts[];
     proficiency: ProficiencyLevel;
     description: string;
 }
@@ -363,287 +404,254 @@ export const skills: Record<SkillCategory, Skill[]> = {
     Languages: [
         {
             name: 'TypeScript',
-            concepts: ['Full-Stack', 'Frontend', 'Backend'],
             proficiency: 'Advanced',
             description:
-                'Primary language for all frontend and most backend work, used across every web project.',
+                'My primary language for production work, used across every web project in both the frontend and backend with full end-to-end type safety.',
         },
         {
             name: 'JavaScript',
-            concepts: ['Full-Stack', 'Frontend', 'Backend'],
             proficiency: 'Advanced',
             description:
-                'Foundation of my web development experience before adopting TypeScript full-time.',
+                'The foundation my TypeScript knowledge is built on, with a deep understanding of the underlying language semantics, async patterns, and runtime behavior.',
         },
         {
             name: 'Python',
-            concepts: ['Backend', 'AI/ML', 'Data Processing'],
             proficiency: 'Advanced',
             description:
-                'Go-to language for ML pipelines, data processing, scripting, and automation tools.',
+                'My other primary language, used across several projects and professional roles in a variety of different contexts, including data preprocessing for Neo4j in Stellar Papers, the full scheduling engine in my Operations Manager scheduling tool, the entire ML/vision pipeline in my ML Research role, and more.',
         },
         {
             name: 'SQL',
-            concepts: ['DB Design', 'Backend'],
             proficiency: 'Proficient',
             description:
-                'Used for relational data modeling, complex queries, and schema design across multiple projects.',
+                'Used to query and manage PostgreSQL in GoalGetter and AskJet, handling complex relational data for users, tasks, categories, calendars, and recurrent events.',
         },
         {
             name: 'Rust',
-            concepts: ['Backend', 'Auth/Security'],
-            proficiency: 'Familiar',
+            proficiency: 'Proficient',
             description:
-                'Explored for its performance and memory safety guarantees in systems-level contexts.',
+                'Primary language for StreamLine, used to build a high-performance LAN chat system, terminal UI, and end-to-end encryption.',
         },
         {
             name: 'Bash',
-            concepts: ['Infra/DevOps'],
             proficiency: 'Proficient',
             description:
-                'Used for scripting, automation, and managing Linux-based development environments.',
+                'Highly comfortable navigating and operating in the terminal across Linux environments, with working knowledge of shell scripting for automation tasks.',
         },
     ],
     Frontend: [
         {
             name: 'React',
-            concepts: ['Frontend'],
             proficiency: 'Advanced',
             description:
-                'Core framework for building dynamic, component-driven UIs across my web projects.',
+                'Core UI framework for every web project, managing complex interactive state including a dynamic graph interface and a split-screen productivity workspace.',
         },
         {
             name: 'Next.js',
-            concepts: ['Full-Stack', 'Frontend', 'Backend'],
             proficiency: 'Advanced',
             description:
-                'Used for full-stack web applications, leveraging server-side rendering and API routes.',
+                'Used as the full-stack framework for both Stellar Papers and GoalGetter, leveraging both the App Router and API routes.',
         },
         {
             name: 'Tailwind CSS',
-            concepts: ['Frontend'],
             proficiency: 'Advanced',
             description:
-                'Primary styling approach for building clean, responsive interfaces quickly.',
+                'Primary styling approach across every web project for building responsive, consistent interfaces rapidly.',
         },
         {
             name: 'Motion',
-            concepts: ['Frontend'],
             proficiency: 'Proficient',
             description:
-                'Used to add fluid animations and transitions that elevate the feel of web interfaces.',
+                'Used in GoalGetter, AskJet, and this website to add smooth animations and micro-interactions that make the split-screen UI feel polished and responsive.',
         },
         {
             name: 'HTML',
-            concepts: ['Frontend'],
             proficiency: 'Advanced',
-            description: 'Foundational markup language underlying all of my frontend work.',
+            description:
+                'Foundational markup language underlying all my frontend work, used throughout every web project.',
         },
         {
             name: 'CSS',
-            concepts: ['Frontend'],
-            proficiency: 'Advanced',
+            proficiency: 'Proficient',
             description:
-                'Used for custom styling and layout beyond what utility frameworks provide.',
+                'Solid understanding of core styling and layout principles, though I primarily work through Tailwind CSS over raw CSS.',
         },
         {
             name: 'TanStack Start',
-            concepts: ['Full-Stack', 'Frontend', 'Backend'],
-            proficiency: 'Familiar',
+            proficiency: 'Proficient',
             description:
-                'Explored as a modern full-stack React framework for type-safe routing and data fetching.',
+                'Adopted as the full-stack framework for AskJet, leveraging its type-safe routing and server function model.',
         },
     ],
     Backend: [
         {
             name: 'Node.js',
-            concepts: ['Backend'],
             proficiency: 'Advanced',
             description:
-                'Runtime powering most of my backend services, APIs, and server-side logic.',
+                'Server-side runtime powering every web project, handling API logic and server-side execution.',
         },
         {
             name: 'Express.js',
-            concepts: ['Backend', 'API Design'],
-            proficiency: 'Advanced',
+            proficiency: 'Proficient',
             description:
-                'Used to build RESTful APIs with custom middleware, routing, and request handling.',
+                "Solid foundation in building RESTful APIs and middleware pipelines, though I've migrated toward more modern backend frameworks for recent projects.",
         },
         {
             name: 'Fastify',
-            concepts: ['Backend', 'API Design'],
             proficiency: 'Proficient',
             description:
-                'Adopted for performance-critical backend services where throughput and low latency matter.',
+                'Adopted as the primary backend framework in AskJet, chosen for its performance, schema validation, and modern plugin architecture.',
         },
         {
             name: 'Auth.js',
-            concepts: ['Backend', 'Auth/Security'],
-            proficiency: 'Proficient',
+            proficiency: 'Advanced',
             description:
-                'Implemented for session-based authentication with social sign-in support in web projects.',
+                'Used in both Stellar Papers and GoalGetter for JWT session management, OAuth 2.0 social sign-in, email verifications, and general auth flows.',
         },
         {
             name: 'Better Auth',
-            concepts: ['Backend', 'Auth/Security'],
             proficiency: 'Proficient',
             description:
-                'Used as a modern, flexible auth solution with fine-grained control over security policies.',
+                'Integrated in AskJet as a flexible, modern auth solution for JWT session management, OAuth 2.0 social sign-in, email verifications, and general auth flows.',
         },
         {
             name: 'OAuth 2.0',
-            concepts: ['Backend', 'Auth/Security'],
             proficiency: 'Proficient',
             description:
-                'Implemented social authentication flows and token-based authorization across multiple projects.',
+                'Implemented secure Google and GitHub social sign-in across Stellar Papers, GoalGetter, and AskJet.',
         },
     ],
     Data: [
         {
             name: 'PostgreSQL',
-            concepts: ['DB Design'],
-            proficiency: 'Proficient',
+            proficiency: 'Advanced',
             description:
-                'Primary relational database used for structured data storage across web applications.',
+                "Relational database powering GoalGetter's data layer, ensuring integrity across complex task, category, tag, and calendar event relationships.",
         },
         {
             name: 'Drizzle',
-            concepts: ['DB Design'],
             proficiency: 'Proficient',
             description:
-                'Type-safe ORM used for schema definition, migrations, and database queries in TypeScript projects.',
+                'Used in AskJet as a type-safe ORM for schema definition, migrations, and database queries in a TypeScript-first environment.',
         },
         {
             name: 'MongoDB',
-            concepts: ['DB Design'],
-            proficiency: 'Proficient',
+            proficiency: 'Familiar',
             description:
-                'Used for flexible, document-based storage in projects requiring dynamic or unstructured data.',
+                'Used in Stellar Papers for flexible NoSQL storage of user data and bookmarks alongside the graph database.',
         },
         {
             name: 'Neo4j',
-            concepts: ['DB Design'],
-            proficiency: 'Proficient',
+            proficiency: 'Familiar',
             description:
-                'Graph database used to store and query citation-based relationships across 200,000+ academic papers.',
+                'Graph database at the core of Stellar Papers, storing and querying citation-based relationships across academic papers using Cypher.',
         },
         {
             name: 'Redis',
-            concepts: ['Backend', 'DB Design'],
             proficiency: 'Proficient',
             description:
-                'Used for caching, session storage, and performance optimization in high-throughput applications.',
+                'Used in GoalGetter for fast rate limiting and caching to improve API latency and support horizontal scaling.',
         },
     ],
-    'Infrastructure & DevOps': [
+    'Infra/Devops': [
         {
             name: 'Git',
-            concepts: ['Infra/DevOps'],
             proficiency: 'Advanced',
             description:
-                'Used for version control across every project, including branching, merging, and code review workflows.',
+                'Used in every project for version control, branching, and maintaining clean commit history across solo and collaborative work.',
         },
         {
             name: 'GitHub',
-            concepts: ['Infra/DevOps'],
             proficiency: 'Advanced',
             description:
-                'Primary platform for source control, project management, and open source collaboration.',
+                'Primary platform for source control, project management, and collaboration across every project.',
         },
         {
             name: 'Docker',
-            concepts: ['Infra/DevOps'],
             proficiency: 'Proficient',
             description:
-                'Used for containerizing applications and ensuring consistent environments across development and production.',
+                'Used across various side projects and adopted more heavily in AskJet for containerizing services and ensuring consistent environments across development and deployment.',
         },
         {
             name: 'AWS',
-            concepts: ['Infra/DevOps'],
-            proficiency: 'Familiar',
+            proficiency: 'Proficient',
             description:
-                'Used for cloud infrastructure, storage, and deploying scalable backend services.',
+                'Deployed GoalGetter on AWS EC2 for reliable compute infrastructure with full control over scaling and security configuration.',
         },
         {
             name: 'Vercel',
-            concepts: ['Infra/DevOps'],
-            proficiency: 'Proficient',
+            proficiency: 'Advanced',
             description:
-                'Primary deployment platform for Next.js and frontend projects, with CI/CD out of the box.',
+                'Used to deploy Stellar Papers and this website with serverless hosting and with built-in CI/CD and edge caching.',
         },
         {
             name: 'Linux',
-            concepts: ['Infra/DevOps'],
-            proficiency: 'Proficient',
+            proficiency: 'Advanced',
             description:
-                'Daily development environment, particularly for ML workloads, ROS, and server management.',
+                'Daily environment, and used heavily during ML Research role to run ROS and ML frameworks like PyTorch within Ubuntu.',
         },
     ],
     'Python Libraries': [
         {
             name: 'NumPy',
-            concepts: ['Data Processing'],
             proficiency: 'Proficient',
             description:
-                'Used for high-performance matrix operations and numerical computing in ML and vision pipelines.',
+                'Used in the robotics ML pipeline for matrix operations and numerical computing of spatial and image data.',
         },
         {
             name: 'Pandas',
-            concepts: ['Data Processing'],
             proficiency: 'Proficient',
             description:
-                'Used for organizing, analyzing, and manipulating structured datasets across data and ML projects.',
+                'Used across both the scheduling engine and ML Research for organizing, structuring, and analyzing datasets.',
         },
         {
             name: 'Matplotlib',
-            concepts: ['Data Processing'],
             proficiency: 'Proficient',
             description:
-                'Used to visualize training performance, accuracy curves, and spatial data outputs.',
+                'Used during ML Research to visualize training performance, accuracy curves, and spatial data outputs.',
         },
         {
             name: 'PyTorch',
-            concepts: ['AI/ML'],
             proficiency: 'Proficient',
             description:
-                'Deep learning framework used for CNN architecture, training, and optimization in robotics research.',
+                'Deep learning framework used to design, train, and optimize a CNN for autonomous robotic navigation.',
         },
         {
             name: 'Scikit-learn',
-            concepts: ['AI/ML'],
             proficiency: 'Familiar',
             description:
-                'Used for classical ML techniques, model evaluation, and preprocessing workflows.',
+                'Used during Research for ML techniques, model evaluation utilities, and data preprocessing workflows.',
         },
         {
             name: 'OpenCV',
-            concepts: ['Data Processing'],
             proficiency: 'Proficient',
             description:
-                'Used to build preprocessing and data collection pipelines for autonomous robotic navigation.',
+                'Used in the preprocessing and data collection pipeline for the robotics vision system, handling camera calibration and image preprocessing to feed high-quality inputs into the CNN, and applied during autonomous robot operation.',
+        },
+        {
+            name: 'PyGame',
+            proficiency: 'Proficient',
+            description:
+                'Used to build a responsive, session-persistent flashcard study app with a dynamic UI that scales fluidly with window resizing and real-time HUD tracking.',
         },
     ],
     'AI Tooling': [
         {
-            name: 'Claude Code',
-            concepts: ['AI/ML'],
-            proficiency: 'Familiar',
+            name: 'Google Antigravity',
+            proficiency: 'Proficient',
             description:
-                'Primary AI coding assistant for accelerating development, debugging, and architectural decisions.',
+                'Agent-first IDE for delegating complex, multi-step tasks to autonomous agents that can plan, code, and verify across editor, terminal, and browser environments simultaneously.',
+        },
+        {
+            name: 'Claude Code',
+            proficiency: 'Proficient',
+            description:
+                'Agentic coding tool used for accelerating development, handling complex refactors, and navigating large codebases with high autonomy.',
         },
         {
             name: 'Cursor',
-            concepts: ['AI/ML'],
             proficiency: 'Familiar',
-            description:
-                'AI-powered editor used to streamline development workflows and code generation.',
-        },
-        {
-            name: 'Google Antigravity',
-            concepts: ['AI/ML'],
-            proficiency: 'Proficient',
-            description:
-                "Google's agent-first IDE for delegating complex tasks to autonomous AI agents that can plan, code, and verify across editor, terminal, and browser.",
+            description: 'Used in a variety of projects as an AI-powered editor.',
         },
     ],
     'Soft Skills': [
@@ -651,25 +659,25 @@ export const skills: Record<SkillCategory, Skill[]> = {
             name: 'Communication',
             proficiency: 'Advanced',
             description:
-                'Developed through leading a team of 15, providing feedback, resolving conflicts, and coordinating across departments.',
+                'Developed across various experiences, including leading a 15-person team as Operations Manager, coordinating with a teammate during ML research, and directing a 4-person team as Technical Lead on Stellar Papers, all requiring clear feedback, delegation, and cross-functional coordination.',
         },
         {
             name: 'Collaboration',
             proficiency: 'Advanced',
             description:
-                'Practiced across research, team leadership, and cross-functional project work.',
+                'Practiced as Technical Lead in a 4-person team on Stellar Papers, and through ongoing cross-functional coordination in my Operations Manager role.',
         },
         {
             name: 'Problem Solving',
             proficiency: 'Advanced',
             description:
-                'Core to every project — from debugging distributed systems to identifying workflow bottlenecks in operations.',
+                'Core to every project, from identifying scheduling bottlenecks in GoalGetter to architecting a graph database system for 200,000+ academic papers in Stellar Papers and building a closed-loop robotics pipeline from scratch.',
         },
         {
             name: 'Leadership',
             proficiency: 'Advanced',
             description:
-                'Demonstrated through managing a 15-person team, running scheduling, evaluations, and day-to-day operations.',
+                'Demonstrated through managing a 15-person team and building internal tooling as Operations Manager, driving architectural decisions as Technical Lead on Stellar Papers, and independently designing and shipping multiple production systems end-to-end.',
         },
     ],
 };

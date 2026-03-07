@@ -7,6 +7,7 @@ import {
     ProjectType,
     ProjectStatus,
     ProjectScale,
+    Concepts,
 } from '../constants';
 import { normalizeTitle, getSkillIconPath, getSkillIconFallback } from '../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -42,6 +43,18 @@ const projectTypes: ProjectType[] = ['Web App', 'CLI Tool', 'Automation'];
 const projectStatuses: ProjectStatus[] = ['Completed', 'Maintained', 'In Progress'];
 const scaleValues: ProjectScale[] = ['S', 'M', 'L', 'XL'];
 const recencyOptions = ['Last 6 Months', 'Last Year', 'Last 2 Years'];
+const conceptValues: Concepts[] = [
+    'Auth/Security',
+    'API Design',
+    'DB Design',
+    'AI/ML',
+    'Full-Stack',
+    'Frontend',
+    'Backend',
+    'Infra/DevOps',
+    'Data Processing',
+    'Real-Time',
+];
 
 // Parse date like "Sep. 2024 - Present" or "Jul. 2025 - Aug. 2025" into a sortable timestamp
 function parseDateToTimestamp(dateStr: string): number {
@@ -99,6 +112,7 @@ const Work: React.FC = () => {
     const [selectedScales, setSelectedScales] = useState<ProjectScale[]>([]);
     const [selectedYears, setSelectedYears] = useState<(number | string)[]>([]);
     const [selectedStatuses, setSelectedStatuses] = useState<ProjectStatus[]>([]);
+    const [selectedConcepts, setSelectedConcepts] = useState<Concepts[]>([]);
 
     const skillDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -148,6 +162,7 @@ const Work: React.FC = () => {
         setSelectedScales([]);
         setSelectedYears([]);
         setSelectedStatuses([]);
+        setSelectedConcepts([]);
     }, []);
 
     const hasActiveFilters = Boolean(
@@ -157,7 +172,8 @@ const Work: React.FC = () => {
         selectedTeam.length ||
         selectedScales.length ||
         selectedYears.length ||
-        selectedStatuses.length,
+        selectedStatuses.length ||
+        selectedConcepts.length,
     );
 
     // Filtered skills for dropdown
@@ -252,6 +268,13 @@ const Work: React.FC = () => {
             result = result.filter((p) => selectedStatuses.includes(p.status));
         }
 
+        // Concepts filter
+        if (selectedConcepts.length > 0) {
+            result = result.filter(
+                (p) => p.concepts && selectedConcepts.some((c) => p.concepts!.includes(c)),
+            );
+        }
+
         // Sort
         if (sortKey === 'featured') {
             // featured = original order. If desc, reverse it
@@ -279,6 +302,7 @@ const Work: React.FC = () => {
         selectedScales,
         selectedYears,
         selectedStatuses,
+        selectedConcepts,
         sortKey,
         sortDir,
     ]);
@@ -335,6 +359,12 @@ const Work: React.FC = () => {
             });
         }
 
+        if (selectedConcepts.length > 0) {
+            result = result.filter(
+                (e) => e.concepts && selectedConcepts.some((c) => e.concepts!.includes(c)),
+            );
+        }
+
         // Sort
         if (sortKey === 'featured') {
             if (sortDir === 'asc') {
@@ -353,7 +383,7 @@ const Work: React.FC = () => {
         }
 
         return result;
-    }, [debouncedName, selectedSkills, selectedYears, sortKey, sortDir]);
+    }, [debouncedName, selectedSkills, selectedYears, selectedConcepts, sortKey, sortDir]);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -469,6 +499,7 @@ const Work: React.FC = () => {
                                         selectedScales.length ? 1 : 0,
                                         selectedYears.length ? 1 : 0,
                                         selectedStatuses.length ? 1 : 0,
+                                        selectedConcepts.length ? 1 : 0,
                                     ].reduce((a, b) => a + b, 0)}
                                 </span>
                             ) : null}
@@ -505,7 +536,7 @@ const Work: React.FC = () => {
                                     )}
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-5">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3">
                                     {/* --- Row 1 --- */}
                                     {/* Name search */}
                                     <div>
@@ -557,7 +588,7 @@ const Work: React.FC = () => {
                                     )}
 
                                     {/* Skills Select Dropdown */}
-                                    <div className="lg:row-span-3">
+                                    <div className="lg:row-span-4">
                                         <div ref={skillDropdownRef}>
                                             <div className="flex justify-between items-center mb-1">
                                                 <p className="filter-label !mb-0">Skills</p>
@@ -661,7 +692,7 @@ const Work: React.FC = () => {
                                     </div>
 
                                     {/* Selected Skills */}
-                                    <div className="lg:row-span-3">
+                                    <div className="lg:row-span-4">
                                         <div className="flex justify-between items-center mb-1">
                                             <p className="filter-label !mb-0">Selected Skills</p>
                                         </div>
@@ -820,6 +851,28 @@ const Work: React.FC = () => {
                                             </div>
                                         </>
                                     )}
+
+                                    {/* --- Concepts --- */}
+                                    <div className="lg:col-span-2">
+                                        <p className="filter-label">Concepts</p>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {conceptValues.map((concept) => (
+                                                <button
+                                                    key={concept}
+                                                    onClick={() =>
+                                                        toggleChip(
+                                                            selectedConcepts,
+                                                            concept,
+                                                            setSelectedConcepts,
+                                                        )
+                                                    }
+                                                    className={`filter-chip ${selectedConcepts.includes(concept) ? 'active' : ''}`}
+                                                >
+                                                    {concept}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>

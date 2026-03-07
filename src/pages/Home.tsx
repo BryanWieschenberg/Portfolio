@@ -270,7 +270,7 @@ const Home: React.FC = () => {
                                 >
                                     <motion.div
                                         animate={{
-                                            scale: [0.8, 1, 0.8],
+                                            scale: [0.95, 1.05, 0.95],
                                             opacity: [0.25, 0.6, 0.25],
                                         }}
                                         transition={{

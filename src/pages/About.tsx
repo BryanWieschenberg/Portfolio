@@ -1,5 +1,15 @@
-import React, { useState } from 'react';
-import { skills, SkillCategory, Skill } from '../constants';
+import React, { useState, useMemo } from 'react';
+import {
+    skills,
+    SkillCategory,
+    Skill,
+    courses,
+    projects,
+    experience,
+    Project,
+    Experience,
+    ProficiencyLevel,
+} from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from '../components/SwipeReveal';
@@ -12,52 +22,128 @@ import {
     FaDumbbell,
     FaChess,
     FaBrain,
+    FaFilter,
+    FaSearch,
+    FaTimes,
+    FaChevronDown,
+    FaCheck,
+    FaSortAmountDown,
+    FaSortAmountUp,
+    FaSortAlphaDown,
+    FaSortAlphaUp,
     FaRocket,
-    FaBalanceScale,
-    FaTachometerAlt,
-    FaShieldAlt,
-    FaUsers,
+    FaTable,
+    FaThList,
 } from 'react-icons/fa';
 
-interface SkillItem {
-    name: string;
-    type: number;
-    yoe: string;
-    desc: string;
+interface SkillWithUsage extends Skill {
+    category: SkillCategory;
+    usedInProjects: Project[];
+    usedInExperience: Experience[];
 }
 
-const categoryTypeMap: Record<SkillCategory, number> = {
-    Languages: 0,
-    Frontend: 1,
-    Backend: 1,
-    Data: 2,
-    'Python Libraries': 2,
-    'Infrastructure & DevOps': 2,
-    'AI Tooling': 2,
-    'Soft Skills': 3,
-};
-
-const flatSkills: SkillItem[] = Object.entries(skills).flatMap(
-    ([category, skillList]: [string, Skill[]]) =>
-        skillList.map((s) => ({
-            name: s.name,
-            type: categoryTypeMap[category as SkillCategory] ?? 2,
-            yoe: '',
-            desc: s.description,
-        })),
+const allSkills: SkillWithUsage[] = Object.entries(skills).flatMap(([category, skillList]) =>
+    skillList.map((s) => {
+        const usedInProjects = projects.filter(
+            (p) =>
+                p.top_skills.includes(s.name) ||
+                Object.values(p.skills).some((catSkills) =>
+                    Object.keys(catSkills).includes(s.name),
+                ),
+        );
+        const usedInExperience = experience.filter(
+            (e) =>
+                e.top_skills.includes(s.name) ||
+                Object.values(e.skills).some((catSkills) =>
+                    Object.keys(catSkills).includes(s.name),
+                ),
+        );
+        return {
+            ...s,
+            category: category as SkillCategory,
+            usedInProjects,
+            usedInExperience,
+        };
+    }),
 );
+
+const allCategories: SkillCategory[] = [
+    'Languages',
+    'Frontend',
+    'Backend',
+    'Data',
+    'Infra/Devops',
+    'Python Libraries',
+    'AI Tooling',
+    'Soft Skills',
+];
+
+const allProficiencies: ProficiencyLevel[] = ['Advanced', 'Proficient', 'Familiar'];
+
+const toggleChip = <T,>(list: T[], item: T, setList: React.Dispatch<React.SetStateAction<T[]>>) => {
+    if (list.includes(item)) {
+        setList(list.filter((i) => i !== item));
+    } else {
+        setList([...list, item]);
+    }
+};
 
 const About: React.FC = () => {
     const { theme } = useTheme();
-    const [activeSkill, setActiveSkill] = useState<SkillItem | null>(null);
-    const [activeCategory, setActiveCategory] = useState<number | null>(null);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.1 },
-        },
+    // Filter states
+    const [showFilters, setShowFilters] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [debouncedQuery, setDebouncedQuery] = useState('');
+    const [selectedCategories, setSelectedCategories] = useState<SkillCategory[]>([]);
+    const [selectedProficiency, setSelectedProficiency] = useState<ProficiencyLevel[]>([]);
+    const [selectedUsedIn, setSelectedUsedIn] = useState<string[]>([]);
+    const [showUsedInDropdown, setShowUsedInDropdown] = useState(false);
+    const usedInDropdownRef = React.useRef<HTMLDivElement>(null);
+
+    // Sort and View states
+    const [sortBy, setSortBy] = useState<'featured' | 'proficiency' | 'used' | 'alphabetical'>(
+        'featured',
+    );
+    const [sortAsc, setSortAsc] = useState(true);
+    const [viewMode, setViewMode] = useState<'compact' | 'expanded'>('compact');
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setIsInitialLoad(false), 700);
+        return () => clearTimeout(timer);
+    }, []);
+
+    React.useEffect(() => {
+        const timer = setTimeout(() => setDebouncedQuery(searchQuery), 300);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
+
+    React.useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                usedInDropdownRef.current &&
+                !usedInDropdownRef.current.contains(event.target as Node)
+            ) {
+                setShowUsedInDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const hasActiveFilters =
+        debouncedQuery !== '' ||
+        selectedCategories.length > 0 ||
+        selectedProficiency.length > 0 ||
+        selectedUsedIn.length > 0;
+
+    const clearFilters = () => {
+        setSearchQuery('');
+        setDebouncedQuery('');
+        setSelectedCategories([]);
+        setSelectedProficiency([]);
+        setSelectedUsedIn([]);
     };
 
     const itemVariants = {
@@ -65,7 +151,11 @@ const About: React.FC = () => {
         visible: {
             opacity: 1,
             y: 0,
-            transition: { duration: 0.6, ease: 'easeOut' },
+            transition: {
+                duration: 0.6,
+                ease: 'easeOut',
+                delay: isInitialLoad ? 0.6 : 0,
+            },
         },
     };
 
@@ -78,7 +168,7 @@ const About: React.FC = () => {
     };
 
     const skillVariants = {
-        hidden: { opacity: 0, scale: 0.8 },
+        hidden: { opacity: 0, scale: 0.8, transition: { duration: 0.2 } },
         visible: {
             opacity: 1,
             scale: 1,
@@ -86,58 +176,72 @@ const About: React.FC = () => {
         },
     };
 
-    const categoryColors: { [key: number]: string } = {
-        0: 'border-blue-500',
-        1: 'border-green-500',
-        2: 'border-yellow-500',
-        3: 'border-fuchsia-500',
-    };
+    const filteredSkillsList = useMemo(() => {
+        return allSkills
+            .filter((skill) => {
+                if (
+                    debouncedQuery &&
+                    !skill.name.toLowerCase().includes(debouncedQuery.toLowerCase())
+                )
+                    return false;
+                if (selectedCategories.length > 0 && !selectedCategories.includes(skill.category))
+                    return false;
+                if (
+                    selectedProficiency.length > 0 &&
+                    !selectedProficiency.includes(skill.proficiency)
+                )
+                    return false;
 
-    const categoryBgColors: { [key: number]: string } = {
-        0: theme === 'light' ? 'bg-blue-50' : 'bg-blue-900',
-        1: theme === 'light' ? 'bg-green-50' : 'bg-green-900',
-        2: theme === 'light' ? 'bg-yellow-50' : 'bg-yellow-900',
-        3: theme === 'light' ? 'bg-fuchsia-50' : 'bg-fuchsia-900',
-    };
+                if (selectedUsedIn.length > 0) {
+                    const usedInNames = [
+                        ...skill.usedInProjects.map((p) => p.name),
+                        ...skill.usedInExperience.map((e) => e.role), // Using company or role
+                    ];
+                    if (!selectedUsedIn.some((u) => usedInNames.includes(u))) return false;
+                }
 
-    const categoryLabels = [
-        { color: 'bg-blue-500', label: 'Languages' },
-        { color: 'bg-green-500', label: 'Frameworks' },
-        { color: 'bg-yellow-500', label: 'Tools' },
-        { color: 'bg-fuchsia-500', label: 'Concepts' },
-    ];
+                return true;
+            })
+            .sort((a, b) => {
+                let res = 0;
+                if (sortBy === 'featured') {
+                    const indexA = allSkills.indexOf(a);
+                    const indexB = allSkills.indexOf(b);
+                    res = indexA - indexB;
+                } else if (sortBy === 'alphabetical') {
+                    res = a.name.localeCompare(b.name);
+                } else if (sortBy === 'proficiency') {
+                    const profWeight: Record<ProficiencyLevel, number> = {
+                        Familiar: 1,
+                        Proficient: 2,
+                        Advanced: 3,
+                    };
+                    res = profWeight[a.proficiency] - profWeight[b.proficiency];
+                } else if (sortBy === 'used') {
+                    const countA = a.usedInProjects.length + a.usedInExperience.length;
+                    const countB = b.usedInProjects.length + b.usedInExperience.length;
+                    res = countA - countB;
+                }
+                return sortAsc ? res : -res;
+            });
+    }, [
+        allSkills,
+        debouncedQuery,
+        selectedCategories,
+        selectedProficiency,
+        selectedUsedIn,
+        sortBy,
+        sortAsc,
+    ]);
 
-    const filteredSkills =
-        activeCategory !== null ? flatSkills.filter((s) => s.type === activeCategory) : flatSkills;
+    const allUsedInOptions = useMemo(() => {
+        return [...projects.map((p) => p.name), ...experience.map((e) => e.role)];
+    }, [projects, experience]);
 
     const p = 'text-body';
-    const accent = 'text-accent';
     const heading = 'section-heading-lg';
     const subheading = 'section-subheading-lg';
     const divider = 'divider-lg';
-
-    const workStyleTraits = [
-        {
-            icon: <FaBalanceScale />,
-            title: 'Tradeoffs',
-            desc: "I don't chase perfection when good-enough ships today. But I also don't ship garbage that I'll rewrite next week. I think about the lifecycle of every decision.",
-        },
-        {
-            icon: <FaShieldAlt />,
-            title: 'Quality',
-            desc: "If it touches a user or another dev's codebase, I want it clean, readable, and defensible. I write code I'd walk through line-by-line in review.",
-        },
-        {
-            icon: <FaTachometerAlt />,
-            title: 'Speed',
-            desc: 'I move fast by scoping ruthlessly. I figure out what actually matters, do that well, and skip the rest. Tight MVP over bloated half-finished feature.',
-        },
-        {
-            icon: <FaUsers />,
-            title: 'Collaboration',
-            desc: "Plain English, not jargon. Direct feedback, dumb questions early. I'd rather overcommunicate than surprise someone at the 11th hour.",
-        },
-    ];
 
     const interests = [
         { icon: <FaDumbbell />, label: 'Fitness & lifting' },
@@ -168,308 +272,769 @@ const About: React.FC = () => {
                 </motion.p>
             </div>
 
-            <div className="page-section">
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    variants={containerVariants}
-                >
+            <div className="page-section -mt-2">
+                <div>
                     <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
                         variants={itemVariants}
-                        className="flex flex-col lg:flex-row gap-10 items-center"
+                        className="flex flex-col gap-8 lg:gap-12 w-full !max-w-4xl mx-auto"
                     >
-                        <div className="flex-shrink-0">
-                            <div className="relative">
-                                <motion.div
-                                    animate={{
-                                        scale: [0.85, 1, 0.85],
-                                        opacity: [0.15, 0.45, 0.15],
-                                    }}
-                                    transition={{
-                                        duration: 2.5,
-                                        repeat: Infinity,
-                                        ease: 'easeInOut',
-                                    }}
-                                    className="absolute -inset-2 bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] rounded-2xl blur-lg"
-                                />
-                                <InteractiveFace
-                                    src={
-                                        theme === 'light'
-                                            ? '/images/photo-light.png'
-                                            : '/images/photo-dark.png'
-                                    }
-                                    theme={theme}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="flex-1 space-y-4">
-                            <p className={p}>
-                                I'm Bryan — a 22-year-old full-stack engineer who's genuinely
-                                obsessed with building things that work under pressure. Not "works
-                                in the demo" — works when 1,000 users hit it at once, works when
-                                someone tries to break it, works when the requirements change
-                                halfway through.
-                            </p>
-                            <p className={p}>
-                                I think like a systems person but I ship like a product person. I
-                                care about architecture, security, and performance — but I care even
-                                more about whether the thing actually solves the problem it's
-                                supposed to solve.
-                            </p>
-                            <p className={p}>
-                                <span className={accent}>Why I'm a good bet:</span> I take full
-                                ownership. I don't wait for tickets. When I see something broken, I
-                                fix it. When something's missing, I build it. Every project in my
-                                portfolio was built end-to-end by me — from database schema to
-                                deployment pipeline.
-                            </p>
-                        </div>
-                    </motion.div>
-
-                    <div className={divider} />
-
-                    <motion.div variants={itemVariants} className="space-y-5">
-                        <h2 className={heading}>How I Got Here</h2>
-                        <p className={p}>
-                            I started coding when I was 15 — HTML and CSS, hacking together little
-                            websites just to see if I could. That turned into Java in high school,
-                            then C++ and data structures in college, and eventually into the
-                            full-stack, systems-level engineering that I do now.
-                        </p>
-                        <p className={p}>
-                            At TCNJ, I didn't just take classes — I built things outside of them.
-                            While everyone else was studying for exams, I was shipping side
-                            projects: a multithreaded encrypted chat server in Rust, a productivity
-                            app with real users, a computer vision pipeline for autonomous robots.
-                            The classroom gave me foundations; the projects gave me the instincts.
-                        </p>
-                        <p className={p}>
-                            The ML engineering role was a turning point — it was the first time I
-                            saw my code directly control a physical system. Writing software that
-                            moves a robot is a different kind of accountability. Bugs aren't just
-                            errors in a log — they're a machine doing the wrong thing in real life.
-                        </p>
-                    </motion.div>
-
-                    <div className={divider} />
-
-                    <motion.div variants={itemVariants} className="space-y-5">
-                        <h2 className={heading}>What I Care About Building</h2>
-                        <p className={p}>
-                            I'm most excited about backend systems and infrastructure — the stuff
-                            that has to be correct, fast, and resilient. I love working on problems
-                            where you can <em>feel</em> the engineering: real-time messaging,
-                            concurrency, auth systems, scheduling engines, data pipelines.
-                        </p>
-                        <p className={p}>
-                            That said, I'm not allergic to frontend. I built this entire portfolio
-                            in React + TypeScript + Tailwind, and I care about making things look
-                            and feel premium. I just gravitate toward the problems that live below
-                            the surface.
-                        </p>
-                        <p className={p}>
-                            Right now I'm leaning into Rust and distributed systems — I like
-                            languages and paradigms that force you to think harder up front so you
-                            ship fewer bugs. The harder the constraints, the more I enjoy the
-                            puzzle.
-                        </p>
-                    </motion.div>
-
-                    <div className={divider} />
-
-                    <motion.div variants={itemVariants} className="space-y-5">
-                        <h2 className={heading}>What I'm Optimizing For</h2>
-                        <p className={p}>
-                            <span className={accent}>Problems:</span> Systems with real constraints
-                            — scale, security, concurrency, latency. I want to work on things where
-                            "it depends" is the honest answer and the tradeoffs actually matter.
-                        </p>
-                        <p className={p}>
-                            <span className={accent}>Teams:</span> Small, high-trust groups where
-                            people ship fast and hold each other to a high bar. I want to learn from
-                            engineers better than me and teach what I know.
-                        </p>
-                        <p className={p}>
-                            <span className={accent}>Domains:</span> Developer tools,
-                            infrastructure, security, real-time systems, anything with a strong
-                            technical core. I'm less interested in what the product is and more
-                            interested in whether the engineering is challenging.
-                        </p>
-                    </motion.div>
-
-                    <div className={divider} />
-
-                    <motion.div variants={itemVariants} className="space-y-6">
-                        <h2 className={heading}>How I Work</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
-                            {workStyleTraits.map((trait, i) => (
-                                <div key={i} className="flex items-start gap-3">
-                                    <span className="mt-1 text-xl icon-accent">{trait.icon}</span>
-                                    <div>
-                                        <h3 className="item-title mb-1">{trait.title}</h3>
-                                        <p className="card-text">{trait.desc}</p>
-                                    </div>
+                        {/* Top row with Image & First Text block */}
+                        <div className="flex flex-col lg:flex-row gap-10 items-center lg:justify-between w-full">
+                            <div className="flex-shrink-0">
+                                <div className="relative">
+                                    <motion.div
+                                        animate={{
+                                            scale: [0.9, 0.96, 0.9],
+                                            opacity: [0.15, 0.45, 0.15],
+                                        }}
+                                        transition={{
+                                            duration: 2.5,
+                                            repeat: Infinity,
+                                            ease: 'easeInOut',
+                                        }}
+                                        className="absolute -inset-2 bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] rounded-2xl blur-lg"
+                                    />
+                                    <InteractiveFace
+                                        src={
+                                            theme === 'light'
+                                                ? '/images/photo-light.png'
+                                                : '/images/photo-dark.png'
+                                        }
+                                        theme={theme}
+                                    />
                                 </div>
-                            ))}
-                        </div>
-                    </motion.div>
-
-                    <div className={divider} />
-
-                    <motion.div variants={itemVariants} className="space-y-5">
-                        <h2 className={heading}>Education</h2>
-                        <div className="flex items-start gap-5">
-                            <div className="logo-box w-16 h-16 lg:w-20 lg:h-20">
-                                <img
-                                    src="/images/tcnj.png"
-                                    alt="TCNJ"
-                                    className="w-12 h-12 lg:w-14 lg:h-14 object-contain"
-                                />
                             </div>
-                            <div>
-                                <h3 className={subheading}>The College of New Jersey</h3>
-                                <p className="item-subtitle">B.S. Computer Science</p>
-                                <p className="text-muted-xs mt-0.5 mb-3">Class of 2026 • Senior</p>
-                                <p className="bullet-text">
-                                    Coursework in Operating Systems, Computer Architecture, Data
-                                    Structures, Algorithms, Software Engineering, Database Systems,
-                                    Computer Networking, and Computational Thinking. Built my
-                                    strongest projects outside of class, applying what I learned to
-                                    real systems.
+
+                            <div className="flex-1 max-w-xl text-center">
+                                <p
+                                    className={`text-xl lg:text-2xl leading-relaxed lg:leading-relaxed ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
+                                >
+                                    I build things that{' '}
+                                    <span
+                                        className={`font-bold underline ${theme === 'light' ? 'text-sky-500' : 'text-sky-300'}`}
+                                    >
+                                        just work
+                                    </span>
+                                    . Fast response times, airtight security, and systems that hold
+                                    up under real load are what I care about. If it's slow or
+                                    insecure, it's not getting shipped.
                                 </p>
                             </div>
                         </div>
+
+                        {/* Bottom Text Row */}
+                        <div className="w-full">
+                            <p
+                                className={`text-lg lg:text-xl leading-relaxed lg:leading-relaxed text-center lg:text-justify ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
+                            >
+                                I'm currently focused on full-stack product work. I build things
+                                that solve real friction, including better productivity workflows,
+                                genuinely helpful AI integration, and replacements for tools that
+                                have no business being as bad as they are. I have a long list of
+                                projects I want to ship, so I'm not slowing down anytime soon!
+                            </p>
+                        </div>
                     </motion.div>
 
                     <div className={divider} />
 
-                    <motion.div variants={itemVariants} className="space-y-6">
-                        <h2 className={heading}>Skills & Technologies</h2>
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                    >
+                        <h2
+                            className={`text-4xl lg:text-6xl font-bold mb-4 text-center 
+                                ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                        >
+                            Education
+                        </h2>
 
-                        <div className="flex flex-wrap gap-2">
-                            <button
-                                onClick={() => setActiveCategory(null)}
-                                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-300
-                                ${
-                                    activeCategory === null
-                                        ? 'bg-blue-600 text-white shadow-[0_0_12px_rgba(59,130,246,0.4)]'
-                                        : theme === 'light'
-                                          ? 'text-slate-500 hover:text-blue-600'
-                                          : 'text-slate-500 hover:text-slate-300'
-                                }`}
-                            >
-                                All
-                            </button>
-                            {categoryLabels.map((cat, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() =>
-                                        setActiveCategory(activeCategory === i ? null : i)
-                                    }
-                                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 flex items-center gap-1.5
-                                    ${
-                                        activeCategory === i
-                                            ? `${cat.color} text-white shadow-lg`
-                                            : theme === 'light'
-                                              ? 'text-slate-500 hover:text-blue-600'
-                                              : 'text-slate-500 hover:text-slate-300'
-                                    }`}
+                        <div className="flex flex-col-reverse md:flex-row items-center md:items-start justify-between gap-10 md:gap-12 w-full">
+                            <div className="flex-1 w-full text-center lg:text-left ">
+                                <h3 className={subheading}>The College of New Jersey</h3>
+                                <p className="text-xl lg:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-sky-400">
+                                    B.S. Computer Science
+                                </p>
+                                <div
+                                    className={`text-base lg:text-lg font-medium mt-2 mb-5 block ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
                                 >
-                                    <div
-                                        className={`w-2 h-2 rounded-full ${activeCategory === i ? 'bg-white' : cat.color}`}
-                                    />
-                                    {cat.label}
-                                </button>
-                            ))}
+                                    <p>Class of 2026 • Senior</p>
+                                    <p>
+                                        GPA: <span className="font-light">3.43/4.0</span>
+                                    </p>
+                                </div>
+                                <p
+                                    className={`text-base lg:text-sm leading-relaxed mb-6 ${theme === 'light' ? 'text-slate-500' : 'text-slate-500'}`}
+                                >
+                                    TCNJ's CS program has equipped me with the technical proficiency
+                                    and intellectual depth to make a strong impact in building
+                                    end-to-end systems that solve real problems. Its rigorous
+                                    academic foundations, hands-on learning experiences, innovative
+                                    research, and collaborative culture have prepared me to make an
+                                    innovative difference in the technology industry.
+                                </p>
+                            </div>
+
+                            <div className="flex-shrink-0 w-32 h-32 md:w-56 md:h-56 lg:w-64 lg:h-64 flex justify-center items-center">
+                                <img
+                                    src="/images/education.png"
+                                    alt="TCNJ"
+                                    className="w-full h-full object-contain"
+                                />
+                            </div>
                         </div>
 
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, margin: '-30px' }}
-                            variants={skillGridVariants}
-                            className="grid grid-cols-6 sm:grid-cols-8 lg:grid-cols-12 gap-[2px]"
-                        >
-                            <AnimatePresence>
-                                {filteredSkills.map((item) => (
-                                    <motion.div
-                                        key={item.name}
-                                        variants={skillVariants}
-                                        layout
-                                        whileHover={{
-                                            scale: 1.2,
-                                            zIndex: 50,
-                                        }}
-                                        className={`relative flex flex-col items-center justify-center border-2 cursor-pointer transition-colors duration-200 aspect-square
-                                            ${categoryColors[item.type]}
+                        <div className="w-full">
+                            <h4
+                                className={`text-base lg:text-lg font-semibold mb-3 text-center lg:text-left ${theme === 'light' ? 'text-slate-800' : 'text-slate-200'}`}
+                            >
+                                Relevant Coursework:
+                            </h4>
+                            <div className="grid grid-cols-3 gap-1.5 md:gap-3">
+                                {courses.map((course, i) => (
+                                    <div
+                                        key={i}
+                                        className={`leading-tight p-1.5 sm:p-2 md:px-4 md:py-3 rounded-lg border flex items-center justify-center lg:justify-start gap-1 sm:gap-1.5 md:gap-3 text-center lg:text-left transition-transform hover:scale-105 cursor-default
                                             ${
                                                 theme === 'light'
-                                                    ? 'bg-white/60 hover:bg-white'
-                                                    : categoryBgColors[item.type] +
-                                                      ' bg-opacity-50 hover:bg-opacity-80'
+                                                    ? 'bg-slate-50 border-slate-200 text-slate-700'
+                                                    : 'bg-slate-800/40 border-slate-700/50 text-slate-300'
                                             }`}
-                                        onMouseEnter={() => setActiveSkill(item as SkillItem)}
-                                        onMouseLeave={() => setActiveSkill(null)}
-                                    >
-                                        <div className="w-7 h-7 lg:w-12 lg:h-12 flex items-center justify-center">
-                                            <img
-                                                src={getSkillIconPath(item.name, theme)}
-                                                alt={item.name}
-                                                className="max-w-full max-h-full object-contain"
-                                                onError={(e) => {
-                                                    const img = e.target as HTMLImageElement;
-                                                    const fallback = getSkillIconFallback(
-                                                        item.name,
-                                                    );
-                                                    if (img.src.endsWith(fallback)) {
-                                                        img.src = '/skills/default.png';
-                                                    } else {
-                                                        img.src = fallback;
-                                                    }
-                                                }}
-                                            />
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </AnimatePresence>
-                        </motion.div>
-
-                        <div className="h-16 flex justify-center">
-                            <AnimatePresence>
-                                {activeSkill && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 8 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: 8 }}
-                                        className="self-center text-center"
                                     >
                                         <span
-                                            className={`font-bold text-lg lg:text-xl
-                                            ${activeSkill.type === 0 ? 'text-blue-500' : ''}
-                                            ${activeSkill.type === 1 ? 'text-green-500' : ''}
-                                            ${activeSkill.type === 2 ? 'text-yellow-500' : ''}
-                                            ${activeSkill.type === 3 ? 'text-fuchsia-500' : ''}`}
+                                            className={`text-[10px] sm:text-xs md:text-lg flex-shrink-0 ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
                                         >
-                                            {activeSkill.name}
+                                            {course.icon}
                                         </span>
-                                        {activeSkill.yoe && (
-                                            <span
-                                                className={`ml-2 text-sm ${theme === 'light' ? 'text-slate-400' : 'text-slate-500'}`}
-                                            >
-                                                {activeSkill.yoe}+ yrs
-                                            </span>
-                                        )}
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                                        <span className="text-[5px] sm:text-[10px] md:text-xs lg:text-sm font-medium">
+                                            {course.name}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </motion.div>
 
                     <div className={divider} />
 
-                    <motion.div variants={itemVariants} className="space-y-5">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                        className="space-y-6"
+                    >
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                            <h2
+                                className={`text-4xl lg:text-6xl font-bold mb-4 text-center 
+                                ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                            >
+                                Skills
+                            </h2>
+
+                            {/* Filter toggle & View toggles */}
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                                {/* Sort buttons */}
+                                <div className="flex bg-slate-100 dark:bg-slate-800 rounded-md p-1 items-center">
+                                    <button
+                                        onClick={() => {
+                                            if (sortBy === 'featured') setSortAsc(!sortAsc);
+                                            else setSortBy('featured');
+                                        }}
+                                        className={`px-2 py-1 text-xs rounded-sm flex items-center gap-1 ${sortBy === 'featured' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                    >
+                                        {sortBy === 'featured' ? (
+                                            sortAsc ? (
+                                                <FaSortAmountDown />
+                                            ) : (
+                                                <FaSortAmountUp />
+                                            )
+                                        ) : (
+                                            <FaSortAmountDown />
+                                        )}
+                                        Featured
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (sortBy === 'proficiency') setSortAsc(!sortAsc);
+                                            else setSortBy('proficiency');
+                                        }}
+                                        className={`px-2 py-1 text-xs rounded-sm flex items-center gap-1 ${sortBy === 'proficiency' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                    >
+                                        {sortBy === 'proficiency' ? (
+                                            sortAsc ? (
+                                                <FaSortAmountUp />
+                                            ) : (
+                                                <FaSortAmountDown />
+                                            )
+                                        ) : (
+                                            <FaSortAmountDown />
+                                        )}
+                                        Proficiency
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (sortBy === 'used') setSortAsc(!sortAsc);
+                                            else setSortBy('used');
+                                        }}
+                                        className={`px-2 py-1 text-xs rounded-sm flex items-center gap-1 ${sortBy === 'used' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                    >
+                                        {sortBy === 'used' ? (
+                                            sortAsc ? (
+                                                <FaSortAmountUp />
+                                            ) : (
+                                                <FaSortAmountDown />
+                                            )
+                                        ) : (
+                                            <FaSortAmountDown />
+                                        )}
+                                        Most Used
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (sortBy === 'alphabetical') setSortAsc(!sortAsc);
+                                            else setSortBy('alphabetical');
+                                        }}
+                                        className={`px-2 py-1 text-xs rounded-sm flex items-center gap-1 ${sortBy === 'alphabetical' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                    >
+                                        {sortBy === 'alphabetical' ? (
+                                            sortAsc ? (
+                                                <FaSortAlphaUp />
+                                            ) : (
+                                                <FaSortAlphaDown />
+                                            )
+                                        ) : (
+                                            <FaSortAlphaDown />
+                                        )}
+                                        A-Z
+                                    </button>
+                                </div>
+
+                                <div
+                                    className={`hidden sm:block w-px h-5 mx-1 ${theme === 'light' ? 'bg-slate-300' : 'bg-slate-600'}`}
+                                />
+
+                                <div className="flex bg-slate-100 dark:bg-slate-800 rounded-md p-1">
+                                    <button
+                                        onClick={() => setViewMode('compact')}
+                                        className={`p-1.5 rounded-sm ${viewMode === 'compact' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500'}`}
+                                    >
+                                        <FaTable size={12} />
+                                    </button>
+                                    <button
+                                        onClick={() => setViewMode('expanded')}
+                                        className={`p-1.5 rounded-sm ${viewMode === 'expanded' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500'}`}
+                                    >
+                                        <FaThList size={12} />
+                                    </button>
+                                </div>
+
+                                <div
+                                    className={`w-px h-5 mx-1 ${theme === 'light' ? 'bg-slate-300' : 'bg-slate-600'}`}
+                                />
+
+                                <button
+                                    onClick={() => setShowFilters(!showFilters)}
+                                    className={`sort-btn ${showFilters || hasActiveFilters ? 'active' : ''}`}
+                                >
+                                    <FaFilter size={10} />
+                                    Filters
+                                    {hasActiveFilters ? (
+                                        <span className="ml-1 w-4 h-4 rounded-full bg-blue-500 text-white text-[10px] flex items-center justify-center">
+                                            {[
+                                                debouncedQuery ? 1 : 0,
+                                                selectedCategories.length ? 1 : 0,
+                                                selectedProficiency.length ? 1 : 0,
+                                                selectedUsedIn.length ? 1 : 0,
+                                            ].reduce((a, b) => a + b, 0)}
+                                        </span>
+                                    ) : null}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Filter Panel */}
+                        <AnimatePresence>
+                            {showFilters && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="relative z-10"
+                                >
+                                    <div className="filter-panel">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <span
+                                                className={`text-xl lg:text-2xl font-semibold ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
+                                            >
+                                                Filters
+                                            </span>
+                                            {hasActiveFilters && (
+                                                <button
+                                                    onClick={clearFilters}
+                                                    className={`text-xs flex items-center gap-1 ${theme === 'light' ? 'text-slate-400 hover:text-red-500' : 'text-slate-500 hover:text-red-400'} transition-colors`}
+                                                >
+                                                    <FaTimes size={10} />
+                                                    Clear all
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3">
+                                            {/* Row 1 */}
+                                            <div>
+                                                <p className="filter-label">Search</p>
+                                                <div className="relative">
+                                                    <FaSearch
+                                                        size={12}
+                                                        className={`absolute left-3 top-1/2 -translate-y-1/2 ${theme === 'light' ? 'text-slate-400' : 'text-slate-500'}`}
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        value={searchQuery}
+                                                        onChange={(e) =>
+                                                            setSearchQuery(e.target.value)
+                                                        }
+                                                        placeholder="Search skills..."
+                                                        className="filter-input"
+                                                        style={{ paddingLeft: '2rem' }}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <p className="filter-label">Proficiency Level</p>
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {allProficiencies.map((prof) => (
+                                                        <button
+                                                            key={prof}
+                                                            onClick={() =>
+                                                                toggleChip(
+                                                                    selectedProficiency,
+                                                                    prof,
+                                                                    setSelectedProficiency,
+                                                                )
+                                                            }
+                                                            className={`filter-chip ${selectedProficiency.includes(prof) ? 'active' : ''}`}
+                                                        >
+                                                            {prof}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div className="lg:row-span-3">
+                                                <p className="filter-label">Used In</p>
+                                                <div className="relative" ref={usedInDropdownRef}>
+                                                    <button
+                                                        onClick={() =>
+                                                            setShowUsedInDropdown(
+                                                                !showUsedInDropdown,
+                                                            )
+                                                        }
+                                                        className="filter-input text-left flex items-center justify-between"
+                                                    >
+                                                        <span
+                                                            className={
+                                                                selectedUsedIn.length
+                                                                    ? ''
+                                                                    : theme === 'light'
+                                                                      ? 'text-slate-400'
+                                                                      : 'text-slate-500'
+                                                            }
+                                                        >
+                                                            {selectedUsedIn.length
+                                                                ? `${selectedUsedIn.length} selected`
+                                                                : 'Select projects...'}
+                                                        </span>
+                                                        <FaChevronDown
+                                                            size={10}
+                                                            className={`transition-transform ${showUsedInDropdown ? 'rotate-180' : ''}`}
+                                                        />
+                                                    </button>
+                                                    {showUsedInDropdown && (
+                                                        <div
+                                                            className={`absolute z-50 mt-1 w-full rounded-lg border max-h-52 overflow-y-auto ${theme === 'light' ? 'bg-white border-slate-200 shadow-lg' : 'bg-slate-800 border-slate-600 shadow-2xl'}`}
+                                                        >
+                                                            {allUsedInOptions.map((opt) => (
+                                                                <button
+                                                                    key={opt}
+                                                                    onClick={() =>
+                                                                        toggleChip(
+                                                                            selectedUsedIn,
+                                                                            opt,
+                                                                            setSelectedUsedIn,
+                                                                        )
+                                                                    }
+                                                                    className={`w-full text-left px-3 py-1.5 text-xs transition-colors flex items-center gap-2 ${
+                                                                        selectedUsedIn.includes(opt)
+                                                                            ? theme === 'light'
+                                                                                ? 'bg-blue-50 text-blue-600'
+                                                                                : 'bg-blue-900/30 text-blue-400'
+                                                                            : theme === 'light'
+                                                                              ? 'text-slate-600 hover:bg-slate-50'
+                                                                              : 'text-slate-300 hover:bg-slate-700/50'
+                                                                    }`}
+                                                                >
+                                                                    <div
+                                                                        className={`w-3 h-3 rounded flex items-center justify-center border ${selectedUsedIn.includes(opt) ? 'bg-blue-500 border-blue-500 text-white' : 'border-slate-300 dark:border-slate-600'}`}
+                                                                    >
+                                                                        {selectedUsedIn.includes(
+                                                                            opt,
+                                                                        ) && <FaCheck size={8} />}
+                                                                    </div>
+                                                                    {opt}
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                {selectedUsedIn.length > 0 && (
+                                                    <div className="mt-2 flex flex-wrap gap-1.5">
+                                                        {selectedUsedIn.map((opt) => (
+                                                            <span
+                                                                key={opt}
+                                                                onClick={() =>
+                                                                    toggleChip(
+                                                                        selectedUsedIn,
+                                                                        opt,
+                                                                        setSelectedUsedIn,
+                                                                    )
+                                                                }
+                                                                className={`px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 cursor-pointer transition-all duration-200 ${
+                                                                    theme === 'light'
+                                                                        ? 'bg-slate-100 text-slate-600 border-slate-200 hover:border-slate-300'
+                                                                        : 'bg-slate-800/50 text-slate-300 border-slate-600/50 hover:border-slate-500'
+                                                                }`}
+                                                            >
+                                                                {opt}{' '}
+                                                                <FaTimes
+                                                                    size={10}
+                                                                    className="ml-1"
+                                                                />
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Row 2 */}
+                                            <div className="col-span-1 md:col-span-2">
+                                                <p className="filter-label">Category</p>
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {allCategories.map((cat) => (
+                                                        <button
+                                                            key={cat}
+                                                            onClick={() =>
+                                                                toggleChip(
+                                                                    selectedCategories,
+                                                                    cat,
+                                                                    setSelectedCategories,
+                                                                )
+                                                            }
+                                                            className={`filter-chip ${selectedCategories.includes(cat) ? 'active' : ''}`}
+                                                        >
+                                                            {cat}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {/* Rendering Skills */}
+                        {filteredSkillsList.length === 0 ? (
+                            <div
+                                className={`py-12 text-center ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
+                            >
+                                No skills match your filters.
+                            </div>
+                        ) : viewMode === 'compact' ? (
+                            <motion.div
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: '-50px' }}
+                                variants={skillGridVariants}
+                                className={`w-full rounded-xl border ${theme === 'light' ? 'bg-white border-slate-200' : 'bg-[#0f1117] border-slate-800'}`}
+                            >
+                                {allCategories.map((cat) => {
+                                    const catSkills = filteredSkillsList.filter(
+                                        (s) => s.category === cat,
+                                    );
+                                    if (catSkills.length === 0) return null;
+                                    return (
+                                        <div
+                                            key={cat}
+                                            className={`flex flex-col md:flex-row border-b last:border-b-0 ${theme === 'light' ? 'border-slate-200' : 'border-slate-800'}`}
+                                        >
+                                            <div
+                                                className={`md:w-32 lg:w-40 p-4 shrink-0 flex items-center md:border-r ${theme === 'light' ? 'bg-slate-50/50 text-slate-500 border-slate-200' : 'bg-[#151821] text-slate-400 border-slate-800'}`}
+                                            >
+                                                <h3 className="text-xs uppercase tracking-widest font-bold">
+                                                    {cat}
+                                                </h3>
+                                            </div>
+                                            <div className="flex-1 p-4 flex flex-wrap gap-2 md:gap-3 items-center">
+                                                <AnimatePresence mode="popLayout">
+                                                    {catSkills.map((skill) => (
+                                                        <motion.div
+                                                            variants={skillVariants}
+                                                            initial="hidden"
+                                                            animate="visible"
+                                                            exit="hidden"
+                                                            layout
+                                                            key={skill.name}
+                                                            className="group relative"
+                                                        >
+                                                            <div
+                                                                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border cursor-default transition-colors ${theme === 'light' ? 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-sm' : 'bg-slate-800/60 border-slate-700/60 hover:border-blue-500/50 hover:bg-slate-800'}`}
+                                                            >
+                                                                <div className="w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center flex-shrink-0">
+                                                                    <img
+                                                                        src={getSkillIconPath(
+                                                                            skill.name,
+                                                                            theme,
+                                                                        )}
+                                                                        alt={skill.name}
+                                                                        className="max-w-full max-h-full object-contain"
+                                                                        onError={(e) => {
+                                                                            const img =
+                                                                                e.target as HTMLImageElement;
+                                                                            const fallback =
+                                                                                getSkillIconFallback(
+                                                                                    skill.name,
+                                                                                );
+                                                                            img.src =
+                                                                                img.src.endsWith(
+                                                                                    fallback,
+                                                                                )
+                                                                                    ? '/skills/default.png'
+                                                                                    : fallback;
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                                <span
+                                                                    className={`text-[13px] sm:text-sm font-medium ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
+                                                                >
+                                                                    {skill.name}
+                                                                </span>
+                                                            </div>
+
+                                                            {/* Hover Tooltip/Popover */}
+                                                            <div className="absolute z-10 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 bottom-full left-1/2 -translate-x-1/2 mb-2 w-[280px] p-4 rounded-xl shadow-[0_4px_30px_rgba(0,0,0,0.15)] border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 pointer-events-none">
+                                                                <div className="flex items-start justify-between mb-2">
+                                                                    <h4
+                                                                        className={`font-bold text-base ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
+                                                                    >
+                                                                        {skill.name}
+                                                                    </h4>
+                                                                    <span
+                                                                        className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${
+                                                                            skill.proficiency ===
+                                                                            'Advanced'
+                                                                                ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400'
+                                                                                : skill.proficiency ===
+                                                                                    'Proficient'
+                                                                                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400'
+                                                                                  : 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300'
+                                                                        }`}
+                                                                    >
+                                                                        {skill.proficiency}
+                                                                    </span>
+                                                                </div>
+                                                                <p
+                                                                    className={`text-xs mb-3 leading-relaxed whitespace-normal ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
+                                                                >
+                                                                    {skill.description}
+                                                                </p>
+
+                                                                {(skill.usedInProjects.length > 0 ||
+                                                                    skill.usedInExperience.length >
+                                                                        0) && (
+                                                                    <div>
+                                                                        <p
+                                                                            className={`text-[10px] font-semibold uppercase tracking-wider mb-1.5 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
+                                                                        >
+                                                                            Used In:
+                                                                        </p>
+                                                                        <div className="flex flex-wrap gap-1">
+                                                                            {skill.usedInProjects.map(
+                                                                                (p) => (
+                                                                                    <span
+                                                                                        key={p.name}
+                                                                                        className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-700/50 border-slate-600 text-slate-300'}`}
+                                                                                    >
+                                                                                        {p.name}
+                                                                                    </span>
+                                                                                ),
+                                                                            )}
+                                                                            {skill.usedInExperience.map(
+                                                                                (e) => (
+                                                                                    <span
+                                                                                        key={e.role}
+                                                                                        className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-700/50 border-slate-600 text-slate-300'}`}
+                                                                                    >
+                                                                                        {e.role}
+                                                                                    </span>
+                                                                                ),
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </motion.div>
+                                                    ))}
+                                                </AnimatePresence>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </motion.div>
+                        ) : (
+                            <div className="flex flex-col gap-12 lg:gap-16">
+                                {allCategories.map((cat) => {
+                                    const catSkills = filteredSkillsList.filter(
+                                        (s) => s.category === cat,
+                                    );
+                                    if (catSkills.length === 0) return null;
+
+                                    return (
+                                        <div key={cat} className="space-y-4 lg:space-y-6">
+                                            <div className="flex items-center gap-4 border-b border-slate-200 dark:border-slate-800 pb-2">
+                                                <h3
+                                                    className={`text-sm lg:text-base font-bold uppercase tracking-widest ${theme === 'light' ? 'text-slate-800' : 'text-slate-200'}`}
+                                                >
+                                                    {cat}
+                                                </h3>
+                                                <span
+                                                    className={`text-xs px-2 py-0.5 rounded-full ${theme === 'light' ? 'bg-slate-100 text-slate-500' : 'bg-slate-800 text-slate-400'}`}
+                                                >
+                                                    {catSkills.length}
+                                                </span>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+                                                {catSkills.map((skill) => (
+                                                    <div
+                                                        key={skill.name}
+                                                        className={`flex flex-col gap-4 p-5 md:p-6 rounded-xl border transition-colors hover:shadow-sm ${theme === 'light' ? 'bg-white border-slate-200 hover:border-blue-200' : 'bg-[#151821] border-slate-800 hover:border-blue-500/30'}`}
+                                                    >
+                                                        <div className="flex gap-4 items-center">
+                                                            <div
+                                                                className={`w-12 h-12 flex-shrink-0 rounded-lg flex items-center justify-center border shadow-sm ${theme === 'light' ? 'bg-slate-50 border-slate-100' : 'bg-slate-800/50 border-slate-700/50'}`}
+                                                            >
+                                                                <img
+                                                                    src={getSkillIconPath(
+                                                                        skill.name,
+                                                                        theme,
+                                                                    )}
+                                                                    alt={skill.name}
+                                                                    className="w-8 h-8 object-contain"
+                                                                    onError={(e) => {
+                                                                        const img =
+                                                                            e.target as HTMLImageElement;
+                                                                        const fallback =
+                                                                            getSkillIconFallback(
+                                                                                skill.name,
+                                                                            );
+                                                                        img.src = img.src.endsWith(
+                                                                            fallback,
+                                                                        )
+                                                                            ? '/skills/default.png'
+                                                                            : fallback;
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <h3
+                                                                    className={`text-lg font-bold ${theme === 'light' ? 'text-slate-800' : 'text-slate-200'}`}
+                                                                >
+                                                                    {skill.name}
+                                                                </h3>
+                                                                <span
+                                                                    className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full mt-1 inline-block ${
+                                                                        skill.proficiency ===
+                                                                        'Advanced'
+                                                                            ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400'
+                                                                            : skill.proficiency ===
+                                                                                'Proficient'
+                                                                              ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400'
+                                                                              : 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300'
+                                                                    }`}
+                                                                >
+                                                                    {skill.proficiency}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex-1 space-y-3">
+                                                            <p
+                                                                className={`text-sm leading-relaxed ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
+                                                            >
+                                                                {skill.description}
+                                                            </p>
+
+                                                            {(skill.usedInProjects.length > 0 ||
+                                                                skill.usedInExperience.length >
+                                                                    0) && (
+                                                                <div className="pt-2">
+                                                                    <p
+                                                                        className={`text-[10px] font-semibold uppercase tracking-wider mb-2 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
+                                                                    >
+                                                                        Used In:
+                                                                    </p>
+                                                                    <div className="flex flex-wrap gap-1.5">
+                                                                        {skill.usedInProjects.map(
+                                                                            (p) => (
+                                                                                <span
+                                                                                    key={p.name}
+                                                                                    className={`text-xs px-2.5 py-1 rounded-md border ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-800/80 border-slate-700 text-slate-300'}`}
+                                                                                >
+                                                                                    {p.name}
+                                                                                </span>
+                                                                            ),
+                                                                        )}
+                                                                        {skill.usedInExperience.map(
+                                                                            (e) => (
+                                                                                <span
+                                                                                    key={e.role}
+                                                                                    className={`text-xs px-2.5 py-1 rounded-md border ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-800/80 border-slate-700 text-slate-300'}`}
+                                                                                >
+                                                                                    {e.role}
+                                                                                </span>
+                                                                            ),
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </motion.div>
+
+                    <div className={divider} />
+
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                        className="space-y-5"
+                    >
                         <h2 className={heading}>Beyond the Code</h2>
                         <p className={p}>
                             I'm not just a terminal. Outside of coding, I'm usually in the gym,
@@ -501,7 +1066,13 @@ const About: React.FC = () => {
 
                     <div className={divider} />
 
-                    <motion.div variants={itemVariants} className="text-center space-y-3">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                        className="text-center space-y-3"
+                    >
                         <FaRocket className="mx-auto text-3xl icon-accent" />
                         <h2 className={subheading}>Let's Build Something</h2>
                         <p className="text-body max-w-xl mx-auto">
@@ -509,7 +1080,7 @@ const About: React.FC = () => {
                             I'd love to talk. I bring velocity, ownership, and no ego.
                         </p>
                     </motion.div>
-                </motion.div>
+                </div>
             </div>
 
             <br />
