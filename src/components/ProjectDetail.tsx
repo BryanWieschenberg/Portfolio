@@ -491,7 +491,7 @@ const ProjectDetail: React.FC = () => {
                                                         ([skill, desc], i) => (
                                                             <div
                                                                 key={i}
-                                                                className={`group relative px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 ${
+                                                                className={`group relative px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 hover:cursor-pointer ${
                                                                     theme === 'light'
                                                                         ? 'bg-slate-100 text-slate-600 border-slate-200 hover:border-slate-300'
                                                                         : 'bg-slate-800/50 text-slate-300 border-slate-600/50 hover:border-slate-500'

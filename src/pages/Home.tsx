@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { projects } from '../constants';
 import { FaLocationDot, FaFileLines, FaGithub, FaLinkedin } from 'react-icons/fa6';
@@ -7,6 +7,7 @@ import SwipeReveal from '../components/SwipeReveal';
 import { useTheme } from '../context/ThemeContext';
 import { PiArrowFatLinesRightFill } from 'react-icons/pi';
 import ProjectCard from '../components/ProjectCard';
+import { getAge } from '../lib/utils';
 
 function useLgUp() {
     const [isLgUp, setIsLgUp] = useState(false);
@@ -92,17 +93,7 @@ const Home: React.FC = () => {
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const navigate = useNavigate();
     const [isIntroComplete, setIsIntroComplete] = useState(false);
-
-    const age = useMemo(() => {
-        const birthDate = new Date('2003-08-11');
-        const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    }, []);
+    const age = getAge();
 
     const featuredProjects = projects.filter(
         (item) => item.name === 'Stellar Papers' || item.name === 'GoalGetter',

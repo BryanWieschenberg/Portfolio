@@ -10,6 +10,18 @@ export type ProjectScale = 'S' | 'M' | 'L' | 'XL';
 export type ProjectType = 'Web App' | 'CLI Tool' | 'Automation';
 export type ProjectStatus = 'Completed' | 'Maintained' | 'In Progress';
 
+export type Concepts =
+    | 'Auth/Security'
+    | 'API Design'
+    | 'DB Design'
+    | 'AI/ML'
+    | 'Full-Stack'
+    | 'Frontend'
+    | 'Backend'
+    | 'Infra/DevOps'
+    | 'Data Processing'
+    | 'Real-Time';
+
 export interface Project {
     name: string;
     date: string;
@@ -23,6 +35,7 @@ export interface Project {
     status: ProjectStatus;
     hook: string;
     top_skills: string[];
+    concepts?: Concepts[];
     artifacts?: string[];
     intro: string;
     desc: string;
@@ -38,6 +51,7 @@ export interface Experience {
     span?: string;
     hook: string;
     top_skills: string[];
+    concepts?: Concepts[];
     artifacts?: string[];
     intro: string;
     desc: string;
@@ -60,6 +74,7 @@ export type ProficiencyLevel = 'Familiar' | 'Proficient' | 'Advanced';
 
 export interface Skill {
     name: string;
+    concepts?: Concepts[];
     proficiency: ProficiencyLevel;
     description: string;
 }
@@ -89,6 +104,17 @@ export const projects: Project[] = [
         status: 'Maintained',
         hook: 'Discover how research actually connects with this visualizer that turns 200k+ academic papers into an explorable, dynamic citation graph. Sub-50ms API latency and 200+ requests/sec throughput.',
         top_skills: ['Next.js', 'TypeScript', 'MongoDB', 'Neo4j', 'Google Gemini', 'Python'],
+        concepts: [
+            'Full-Stack',
+            'Frontend',
+            'Backend',
+            'DB Design',
+            'API Design',
+            'Auth/Security',
+            'AI/ML',
+            'Data Processing',
+            'Infra/DevOps',
+        ],
         artifacts: [
             'Academic Paper Graph Visualization',
             'Inspecting Papers',
@@ -147,6 +173,15 @@ export const projects: Project[] = [
         status: 'Completed',
         hook: 'Unify tasks and calendars into a single high-performance workspace designed for security, speed, and productivity, achieving sub-30ms API latency and defense-in-depth authentication across 10+ security measures.',
         top_skills: ['Next.js', 'TypeScript', 'PostgreSQL', 'Redis', 'AWS'],
+        concepts: [
+            'Full-Stack',
+            'Frontend',
+            'Backend',
+            'DB Design',
+            'API Design',
+            'Auth/Security',
+            'Infra/DevOps',
+        ],
         artifacts: [
             'Split-Screen Workspace',
             'Creating an Event',
@@ -204,6 +239,7 @@ export const projects: Project[] = [
         type: 'CLI Tool',
         status: 'Completed',
         hook: 'Rust-powered LAN chat system combining a state-driven TUI, RBAC command infrastructure, and end-to-end encrypted messaging, achieving 3ms round-trip latency and 3.8k operations/sec throughput.',
+        concepts: ['Backend', 'Auth/Security', 'Real-Time'],
         top_skills: ['Rust', 'ratatui', 'RSA', 'Argon2'],
         artifacts: [
             'Registering an Account',
@@ -224,7 +260,7 @@ export const projects: Project[] = [
             },
             Security: {
                 Argon2: 'Industry-standard password hashing algorithm used for secure credential storage',
-                'RSA-OAEP': 'Asymmetric encryption scheme enabling end-to-end encrypted messaging',
+                RSA: 'Asymmetric encryption scheme enabling end-to-end encrypted messaging',
             },
             Data: {
                 JSON: 'Serde-based serialization for human-readable persistent state without requiring an external database',
@@ -240,6 +276,7 @@ export const projects: Project[] = [
         type: 'Automation',
         status: 'Completed',
         hook: 'Automated scheduling engine that converts When2Meet availability data into optimized, constraint-aware staff schedules, achieving a 100% fill rate with sub-second schedule generation.',
+        concepts: ['Backend', 'Data Processing'],
         top_skills: ['Python', 'Pandas', 'RegEx'],
         artifacts: ['Generated Schedule Report'],
         intro: 'I had to manually schedule staff across 40+ day periods, dealing with conflicting availability, constraints, and fairness concerns. The process was slow, error-prone, and biased. So I built When2Meet Analyzer.',
@@ -326,36 +363,42 @@ export const skills: Record<SkillCategory, Skill[]> = {
     Languages: [
         {
             name: 'TypeScript',
+            concepts: ['Full-Stack', 'Frontend', 'Backend'],
             proficiency: 'Advanced',
             description:
                 'Primary language for all frontend and most backend work, used across every web project.',
         },
         {
             name: 'JavaScript',
+            concepts: ['Full-Stack', 'Frontend', 'Backend'],
             proficiency: 'Advanced',
             description:
                 'Foundation of my web development experience before adopting TypeScript full-time.',
         },
         {
             name: 'Python',
+            concepts: ['Backend', 'AI/ML', 'Data Processing'],
             proficiency: 'Advanced',
             description:
                 'Go-to language for ML pipelines, data processing, scripting, and automation tools.',
         },
         {
             name: 'SQL',
+            concepts: ['DB Design', 'Backend'],
             proficiency: 'Proficient',
             description:
                 'Used for relational data modeling, complex queries, and schema design across multiple projects.',
         },
         {
             name: 'Rust',
+            concepts: ['Backend', 'Auth/Security'],
             proficiency: 'Familiar',
             description:
                 'Explored for its performance and memory safety guarantees in systems-level contexts.',
         },
         {
             name: 'Bash',
+            concepts: ['Infra/DevOps'],
             proficiency: 'Proficient',
             description:
                 'Used for scripting, automation, and managing Linux-based development environments.',
@@ -364,41 +407,48 @@ export const skills: Record<SkillCategory, Skill[]> = {
     Frontend: [
         {
             name: 'React',
+            concepts: ['Frontend'],
             proficiency: 'Advanced',
             description:
                 'Core framework for building dynamic, component-driven UIs across my web projects.',
         },
         {
             name: 'Next.js',
+            concepts: ['Full-Stack', 'Frontend', 'Backend'],
             proficiency: 'Advanced',
             description:
                 'Used for full-stack web applications, leveraging server-side rendering and API routes.',
         },
         {
             name: 'Tailwind CSS',
+            concepts: ['Frontend'],
             proficiency: 'Advanced',
             description:
                 'Primary styling approach for building clean, responsive interfaces quickly.',
         },
         {
             name: 'Motion',
+            concepts: ['Frontend'],
             proficiency: 'Proficient',
             description:
                 'Used to add fluid animations and transitions that elevate the feel of web interfaces.',
         },
         {
             name: 'HTML',
+            concepts: ['Frontend'],
             proficiency: 'Advanced',
             description: 'Foundational markup language underlying all of my frontend work.',
         },
         {
             name: 'CSS',
+            concepts: ['Frontend'],
             proficiency: 'Advanced',
             description:
                 'Used for custom styling and layout beyond what utility frameworks provide.',
         },
         {
             name: 'TanStack Start',
+            concepts: ['Full-Stack', 'Frontend', 'Backend'],
             proficiency: 'Familiar',
             description:
                 'Explored as a modern full-stack React framework for type-safe routing and data fetching.',
@@ -407,36 +457,42 @@ export const skills: Record<SkillCategory, Skill[]> = {
     Backend: [
         {
             name: 'Node.js',
+            concepts: ['Backend'],
             proficiency: 'Advanced',
             description:
                 'Runtime powering most of my backend services, APIs, and server-side logic.',
         },
         {
             name: 'Express.js',
+            concepts: ['Backend', 'API Design'],
             proficiency: 'Advanced',
             description:
                 'Used to build RESTful APIs with custom middleware, routing, and request handling.',
         },
         {
             name: 'Fastify',
+            concepts: ['Backend', 'API Design'],
             proficiency: 'Proficient',
             description:
                 'Adopted for performance-critical backend services where throughput and low latency matter.',
         },
         {
             name: 'Auth.js',
+            concepts: ['Backend', 'Auth/Security'],
             proficiency: 'Proficient',
             description:
                 'Implemented for session-based authentication with social sign-in support in web projects.',
         },
         {
             name: 'Better Auth',
+            concepts: ['Backend', 'Auth/Security'],
             proficiency: 'Proficient',
             description:
                 'Used as a modern, flexible auth solution with fine-grained control over security policies.',
         },
         {
             name: 'OAuth 2.0',
+            concepts: ['Backend', 'Auth/Security'],
             proficiency: 'Proficient',
             description:
                 'Implemented social authentication flows and token-based authorization across multiple projects.',
@@ -445,30 +501,35 @@ export const skills: Record<SkillCategory, Skill[]> = {
     Data: [
         {
             name: 'PostgreSQL',
+            concepts: ['DB Design'],
             proficiency: 'Proficient',
             description:
                 'Primary relational database used for structured data storage across web applications.',
         },
         {
             name: 'Drizzle',
+            concepts: ['DB Design'],
             proficiency: 'Proficient',
             description:
                 'Type-safe ORM used for schema definition, migrations, and database queries in TypeScript projects.',
         },
         {
             name: 'MongoDB',
+            concepts: ['DB Design'],
             proficiency: 'Proficient',
             description:
                 'Used for flexible, document-based storage in projects requiring dynamic or unstructured data.',
         },
         {
             name: 'Neo4j',
+            concepts: ['DB Design'],
             proficiency: 'Proficient',
             description:
                 'Graph database used to store and query citation-based relationships across 200,000+ academic papers.',
         },
         {
             name: 'Redis',
+            concepts: ['Backend', 'DB Design'],
             proficiency: 'Proficient',
             description:
                 'Used for caching, session storage, and performance optimization in high-throughput applications.',
@@ -477,36 +538,42 @@ export const skills: Record<SkillCategory, Skill[]> = {
     'Infrastructure & DevOps': [
         {
             name: 'Git',
+            concepts: ['Infra/DevOps'],
             proficiency: 'Advanced',
             description:
                 'Used for version control across every project, including branching, merging, and code review workflows.',
         },
         {
             name: 'GitHub',
+            concepts: ['Infra/DevOps'],
             proficiency: 'Advanced',
             description:
                 'Primary platform for source control, project management, and open source collaboration.',
         },
         {
             name: 'Docker',
+            concepts: ['Infra/DevOps'],
             proficiency: 'Proficient',
             description:
                 'Used for containerizing applications and ensuring consistent environments across development and production.',
         },
         {
             name: 'AWS',
+            concepts: ['Infra/DevOps'],
             proficiency: 'Familiar',
             description:
                 'Used for cloud infrastructure, storage, and deploying scalable backend services.',
         },
         {
             name: 'Vercel',
+            concepts: ['Infra/DevOps'],
             proficiency: 'Proficient',
             description:
                 'Primary deployment platform for Next.js and frontend projects, with CI/CD out of the box.',
         },
         {
             name: 'Linux',
+            concepts: ['Infra/DevOps'],
             proficiency: 'Proficient',
             description:
                 'Daily development environment, particularly for ML workloads, ROS, and server management.',
@@ -515,36 +582,42 @@ export const skills: Record<SkillCategory, Skill[]> = {
     'Python Libraries': [
         {
             name: 'NumPy',
+            concepts: ['Data Processing'],
             proficiency: 'Proficient',
             description:
                 'Used for high-performance matrix operations and numerical computing in ML and vision pipelines.',
         },
         {
             name: 'Pandas',
+            concepts: ['Data Processing'],
             proficiency: 'Proficient',
             description:
                 'Used for organizing, analyzing, and manipulating structured datasets across data and ML projects.',
         },
         {
             name: 'Matplotlib',
+            concepts: ['Data Processing'],
             proficiency: 'Proficient',
             description:
                 'Used to visualize training performance, accuracy curves, and spatial data outputs.',
         },
         {
             name: 'PyTorch',
+            concepts: ['AI/ML'],
             proficiency: 'Proficient',
             description:
                 'Deep learning framework used for CNN architecture, training, and optimization in robotics research.',
         },
         {
             name: 'Scikit-learn',
+            concepts: ['AI/ML'],
             proficiency: 'Familiar',
             description:
                 'Used for classical ML techniques, model evaluation, and preprocessing workflows.',
         },
         {
             name: 'OpenCV',
+            concepts: ['Data Processing'],
             proficiency: 'Proficient',
             description:
                 'Used to build preprocessing and data collection pipelines for autonomous robotic navigation.',
@@ -553,18 +626,21 @@ export const skills: Record<SkillCategory, Skill[]> = {
     'AI Tooling': [
         {
             name: 'Claude Code',
+            concepts: ['AI/ML'],
             proficiency: 'Familiar',
             description:
                 'Primary AI coding assistant for accelerating development, debugging, and architectural decisions.',
         },
         {
             name: 'Cursor',
+            concepts: ['AI/ML'],
             proficiency: 'Familiar',
             description:
                 'AI-powered editor used to streamline development workflows and code generation.',
         },
         {
             name: 'Google Antigravity',
+            concepts: ['AI/ML'],
             proficiency: 'Proficient',
             description:
                 "Google's agent-first IDE for delegating complex tasks to autonomous AI agents that can plan, code, and verify across editor, terminal, and browser.",
