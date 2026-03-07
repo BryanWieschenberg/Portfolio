@@ -385,6 +385,26 @@ body {
     @apply px-4 py-2 bg-blue-600 text-white rounded-xl font-semibold text-sm flex items-center gap-2 hover:bg-blue-500 transition-all duration-300 transform hover:scale-105;
 }
 
+.btn-nav-compact {
+    @apply flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-semibold transition-all duration-300 backdrop-blur-sm;
+}
+.light .btn-nav-compact {
+    @apply bg-white/50 border-slate-200 text-slate-600 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600;
+}
+.dark .btn-nav-compact {
+    @apply bg-white/5 border-slate-700/50 text-slate-400 hover:bg-blue-900/40 hover:border-blue-600/50 hover:text-blue-400;
+}
+
+.btn-nav-full {
+    @apply flex flex-col transition-all duration-300;
+}
+.light .btn-nav-full {
+    @apply text-slate-800 hover:text-blue-600;
+}
+.dark .btn-nav-full {
+    @apply text-white hover:text-blue-400;
+}
+
 /* Toggle pill container */
 .toggle-pill {
     @apply inline-flex rounded-xl p-1 transition-colors duration-300;

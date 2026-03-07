@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { projects } from '../constants';
 import { normalizeTitle, getSkillIconPath, getSkillIconFallback } from '../lib/utils';
@@ -28,7 +28,23 @@ const ProjectDetail: React.FC = () => {
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const [zoomLevel, setZoomLevel] = useState(1);
 
-    const project = projects.find((p) => normalizeTitle(p.name) === slug);
+    const projectIndex = projects.findIndex((p) => normalizeTitle(p.name) === slug);
+    const project = projects[projectIndex];
+
+    const prevProject = projects[(projectIndex - 1 + projects.length) % projects.length];
+    const nextProject = projects[(projectIndex + 1) % projects.length];
+
+    const handleNavigate = (targetSlug: string) => {
+        navigate(`/work/projects/${normalizeTitle(targetSlug)}`);
+        window.scrollTo(0, 0);
+    };
+
+    // Reset gallery state when project changes
+    useEffect(() => {
+        setCurrentImageIndex(0);
+        setIsLightboxOpen(false);
+        setZoomLevel(1);
+    }, [slug]);
 
     if (!project) {
         return (
@@ -42,14 +58,13 @@ const ProjectDetail: React.FC = () => {
                     onClick={() => navigate('/work')}
                     className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-500 transition-all"
                 >
-                    ← Back to Work
+                    ← Back to All Works
                 </button>
             </div>
         );
     }
 
-    const expectedImageCount = project.artifacts || 0;
-    const projectImages = Array.from({ length: expectedImageCount }).map(
+    const projectImages = (project.artifacts ?? []).map(
         (_, i) => `/artifacts/projects/${slug}/image${i + 1}.png`,
     );
     // Helper to parse bullets and bold the prefix before the first colon
@@ -118,17 +133,46 @@ const ProjectDetail: React.FC = () => {
     const iconPath = `/artifacts/projects/${normalizeTitle(project.name)}/icon.png`;
 
     return (
-        <div className="container mx-auto px-4 lg:px-20 pt-8 lg:pt-12 pb-16 max-w-[1200px]">
-            <motion.button
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3 }}
-                onClick={() => navigate('/work')}
-                className="btn-back group mb-10"
-            >
-                <FaArrowLeft className="transform transition-transform duration-300 group-hover:-translate-x-1" />
-                <span>Back to Work</span>
-            </motion.button>
+        <div
+            key={slug}
+            className="container mx-auto px-4 lg:px-20 pt-8 lg:pt-12 pb-16 max-w-[1200px]"
+        >
+            <div className="flex items-center justify-between mb-10">
+                <motion.button
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3 }}
+                    onClick={() => navigate('/work')}
+                    className="btn-back group"
+                >
+                    <FaArrowLeft className="transform transition-transform duration-300 group-hover:-translate-x-1" />
+                    <span>Back to Work</span>
+                </motion.button>
+
+                <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex items-center gap-3"
+                >
+                    <button
+                        onClick={() => handleNavigate(prevProject.name)}
+                        className="btn-nav-compact group"
+                        title={`Previous: ${prevProject.name}`}
+                    >
+                        <FaChevronLeft className="text-sm transform transition-transform duration-300 group-hover:-translate-x-0.5" />
+                        <span className="hidden sm:inline">Prev</span>
+                    </button>
+                    <button
+                        onClick={() => handleNavigate(nextProject.name)}
+                        className="btn-nav-compact group"
+                        title={`Next: ${nextProject.name}`}
+                    >
+                        <span className="hidden sm:inline">Next</span>
+                        <FaChevronRight className="text-sm transform transition-transform duration-300 group-hover:translate-x-0.5" />
+                    </button>
+                </motion.div>
+            </div>
 
             <motion.div initial="hidden" animate="visible" variants={containerVariants}>
                 {/* Header */}
@@ -198,10 +242,22 @@ const ProjectDetail: React.FC = () => {
                             >
                                 <img
                                     src={projectImages[currentImageIndex]}
-                                    alt={`${project?.name} Artifact ${currentImageIndex + 1}`}
+                                    alt={
+                                        project.artifacts?.[currentImageIndex] ||
+                                        `${project?.name} Artifact ${currentImageIndex + 1}`
+                                    }
                                     className="w-full h-full object-contain transition-opacity duration-300"
                                 />
                             </div>
+
+                            {/* Artifact Description Overlay (Main Gallery) */}
+                            {project.artifacts && project.artifacts[currentImageIndex] && (
+                                <div className="absolute bottom-0 left-0 right-0 pb-8 pt-4 px-4 bg-gradient-to-t from-black/80 to-transparent pointer-events-none">
+                                    <p className="text-white text-sm font-medium text-center drop-shadow-md">
+                                        {project.artifacts[currentImageIndex]}
+                                    </p>
+                                </div>
+                            )}
 
                             {projectImages.length > 1 && (
                                 <>
@@ -544,6 +600,18 @@ const ProjectDetail: React.FC = () => {
                             </>
                         )}
 
+                        {/* Lightbox Info Bar (Position & Description) */}
+                        <div className="absolute top-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-50 w-full px-4 max-w-2xl text-center">
+                            <div className="bg-black/50 backdrop-blur-md border border-white/10 shadow-lg rounded-full px-4 py-1 text-white/90 text-sm font-medium">
+                                {currentImageIndex + 1} / {projectImages.length}
+                            </div>
+                            {project.artifacts && project.artifacts[currentImageIndex] && (
+                                <h3 className="text-white text-lg font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                                    {project.artifacts[currentImageIndex]}
+                                </h3>
+                            )}
+                        </div>
+
                         {/* Zoom Controls */}
                         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/50 backdrop-blur-md border border-white/10 shadow-lg rounded-full px-6 py-3 z-50">
                             <button
@@ -603,6 +671,57 @@ const ProjectDetail: React.FC = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Bottom Navigation */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className={`mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-6 ${theme === 'light' ? 'border-slate-200' : 'border-slate-800'}`}
+            >
+                <div className="flex flex-col items-center sm:items-start order-2 sm:order-1">
+                    <button onClick={() => navigate('/work')} className="btn-back group !mb-0">
+                        <FaArrowLeft className="transform transition-transform duration-300 group-hover:-translate-x-1" />
+                        <span>Back to All Works</span>
+                    </button>
+                </div>
+
+                <div className="flex items-center gap-4 order-1 sm:order-2">
+                    <button
+                        onClick={() => handleNavigate(prevProject.name)}
+                        className="btn-nav-full group pr-6"
+                    >
+                        <div className="flex flex-col items-end">
+                            <span className="text-[10px] uppercase tracking-widest opacity-50 font-bold mb-0.5">
+                                Previous
+                            </span>
+                            <div className="flex items-center gap-2">
+                                <FaChevronLeft className="text-xs transition-transform group-hover:-translate-x-1" />
+                                <span className="font-bold text-sm sm:text-base">
+                                    {prevProject.name}
+                                </span>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button
+                        onClick={() => handleNavigate(nextProject.name)}
+                        className="btn-nav-full group pl-6"
+                    >
+                        <div className="flex flex-col items-start text-right">
+                            <span className="text-[10px] uppercase tracking-widest opacity-50 font-bold mb-0.5">
+                                Next Project
+                            </span>
+                            <div className="flex items-center gap-2">
+                                <span className="font-bold text-sm sm:text-base">
+                                    {nextProject.name}
+                                </span>
+                                <FaChevronRight className="text-xs transition-transform group-hover:translate-x-1" />
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </motion.div>
         </div>
     );
 };

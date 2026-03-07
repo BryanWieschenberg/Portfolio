@@ -23,11 +23,11 @@ export interface Project {
     status: ProjectStatus;
     hook: string;
     top_skills: string[];
+    artifacts?: string[];
     intro: string;
     desc: string;
     feats: string;
     res: string;
-    artifacts?: number;
     skills: SkillCategories;
 }
 
@@ -38,6 +38,7 @@ export interface Experience {
     span?: string;
     hook: string;
     top_skills: string[];
+    artifacts?: string[];
     intro: string;
     desc: string;
     feats: string;
@@ -88,11 +89,18 @@ export const projects: Project[] = [
         status: 'Maintained',
         hook: 'Discover how research actually connects with this visualizer that turns 200k+ academic papers into an explorable, dynamic citation graph. Sub-50ms API latency and 200+ requests/sec throughput.',
         top_skills: ['Next.js', 'TypeScript', 'MongoDB', 'Neo4j', 'Google Gemini', 'Python'],
-        intro: 'I was researching quantum computing, which is a niche field where finding relevant academic findings meant digging through noisy, flat search results with no way to see how they connected. So I built Stellar Papers!',
+        artifacts: [
+            'Academic Paper Graph Visualization',
+            'Inspecting Papers',
+            'Filtering and Bookmarks',
+            'AI Analysis',
+            'System Architecture',
+            'Hackathon Photo (Won \"Best Use of MongoDB Atlas\")',
+        ],
+        intro: 'I was researching quantum computing, which is a niche field where finding relevant academic findings meant digging through noisy, flat search results with no way to see how they connected. Additionally, I had a hackathon coming up, so I used it to build Stellar Papers!',
         desc: 'An interactive citation graph of academic papers. Instead of lists, you explore relationships, and see which papers are foundational, how topics actually connect, and where cross-disciplinary links exist.',
         feats: '• Interactive Paper Graph: Physics-based graph capable of rendering thousands of paper nodes at once\n• Dynamic Filtering: Filter by topic, year, citations, author, and field to narrow results instantly\n• Secure Accounts: Secure account authentication and personal bookmarking\n• AI-Powered Analysis: Intelligent insights surfaced directly from graph results\n• Highly Optimized Performance: Caching, indexing, and optimized graph queries throughout',
         res: '• Massive Dataset: 200,000+ academic papers preprocessed and into a graph database, with connections based of citations\n• Blazing Fast API: Sub-50ms average API latency under concurrent load\n• High Throughput: 200+ requests/second under concurrent load, an 8x improvement over initial implementation',
-        artifacts: 5,
         skills: {
             Frontend: {
                 'Next.js App Router':
@@ -139,11 +147,16 @@ export const projects: Project[] = [
         status: 'Completed',
         hook: 'Unify tasks and calendars into a single high-performance workspace designed for security, speed, and productivity, achieving sub-30ms API latency and defense-in-depth authentication across 10+ security measures.',
         top_skills: ['Next.js', 'TypeScript', 'PostgreSQL', 'Redis', 'AWS'],
+        artifacts: [
+            'Split-Screen Workspace',
+            'Creating an Event',
+            'Smart Deadline Indicators',
+            'System Architecture',
+        ],
         intro: 'I was tired of context-switching between task managers and calendar apps, losing time managing which tool I needed instead of actually getting things done. So I built GoalGetter.',
         desc: 'A unified productivity workspace combining tasks and calendar in a single split-screen interface. It removes tab-switching friction and mirrors how people naturally manage workloads by letting tasks and schedules coexist in the same workspace.',
         feats: '• Split-Screen Workspace: Dynamic resizable split-screen UI allowing tasks and calendar to be viewed and interacted with simultaneously\n• Fully-Featured Organization: Unlimited tasks, categories, tags, and calendars with due dates, priority levels, colors, sorting, filtering, and search\n• Smart Scheduling: Calendar events with recurrence support and automated deadline alerts\n• Enterprise-Grade Security: Social sign-in, bot protection, rate limiting, and email verification built into authentication\n• Highly Optimized Performance: Caching, indexing, pagination, prefetching, debouncing, and query optimization across the stack',
         res: '• Lightning Fast API: Sub-30ms API latency with 50,000+ entities stress-tested, a 70% improvement over the initial implementation\n• Near-Instant Load Times: ~110ms initial load time via optimized payloads, a 65% improvement\n• Airtight Security: Defense-in-depth authentication with 10+ layered protections securing user accounts',
-        artifacts: 4,
         skills: {
             Frontend: {
                 'Next.js App Router':
@@ -192,11 +205,17 @@ export const projects: Project[] = [
         status: 'Completed',
         hook: 'Rust-powered LAN chat system combining a state-driven TUI, RBAC command infrastructure, and end-to-end encrypted messaging, achieving 3ms round-trip latency and 3.8k operations/sec throughput.',
         top_skills: ['Rust', 'ratatui', 'RSA', 'Argon2'],
+        artifacts: [
+            'Registering an Account',
+            'A Lively Chatroom',
+            'Commands and Moderation',
+            'End-to-End Encryption (Server-Side View of Messages as Ciphertext)',
+            'System Architecture',
+        ],
         intro: 'I challenged myself to learn Rust, end-to-end encryption, and terminal UI creation by building a LAN chat platform that would be extremely fast while putting full control in the user’s hands. So I built StreamLine.',
         desc: 'A production-grade terminal chat platform written entirely in Rust. It provides high-performance LAN messaging with zero external dependencies, end-to-end encryption, role-based access control, and a powerful command system, all wrapped in a responsive terminal interface.',
         feats: '• Terminal UI Engine: State-driven terminal interface with smart command completions and multi-panel rendering for rooms and user rosters\n• RBAC Command Dispatcher: Role-based command system supporting 50+ commands for account, moderation, and administration operations\n• End-to-End Encryption: Messages encrypted client-side so the server only handles ciphertext\n• Persistent State Storage: Local JSON-based persistence enabling seamless cross-session usage without external databases',
         res: '• Lightweight Concurrency: Handles 1,000+ simultaneous TCP connections while using only ~25MB RAM at peak\n• Near-Instant Latency: 3ms average round-trip time under 1,000 parallel clients\n• High Throughput: 3,800 operations/sec sustained on a single-threaded dispatcher\n• Rock-Solid Reliability: Zero dropped packets or connection failures during stress testing',
-        artifacts: 5,
         skills: {
             Core: {
                 Rust: 'Systems programming language providing compile-time memory safety and reliable high-concurrency performance',
@@ -222,11 +241,11 @@ export const projects: Project[] = [
         status: 'Completed',
         hook: 'Automated scheduling engine that converts When2Meet availability data into optimized, constraint-aware staff schedules, achieving a 100% fill rate with sub-second schedule generation.',
         top_skills: ['Python', 'Pandas', 'RegEx'],
+        artifacts: ['Generated Schedule Report'],
         intro: 'I had to manually schedule staff across 40+ day periods, dealing with conflicting availability, constraints, and fairness concerns. The process was slow, error-prone, and biased. So I built When2Meet Analyzer.',
         desc: 'An automated scheduling engine that scrapes availability data from When2Meet and applies a weighted heuristic algorithm to generate optimized staff schedules. It handles complex constraints, shift capacities, preferences, and fairness requirements with fully deterministic results.',
         feats: '• Dynamic State Extraction: Uses advanced RegEx to parse embedded JavaScript and extract raw When2Meet availability data without relying on DOM scraping\n• Weighted Heuristic Engine: Multi-factor scoring algorithm balancing hour caps, fairness/diversity, and employee preferences\n• Fully Configurable: Constraints, scoring weights, and shift capacities adjustable through a simple configuration file\n• Schedule Report Generation: Outputs structured CSV reports showing assignments and full coverage visibility',
         res: '• 100% Coverage: Achieves perfect coverage across complex month-long schedules with consistent 100% fill rates\n• Sub-Second Execution: Processes 2,000+ availability slots and generates full schedule reports in ~650ms\n• Error-Free Scheduling: Zero assignment errors or bias detected compared to manual scheduling',
-        artifacts: 1,
         skills: {
             Core: {
                 Python: 'Primary language used to build the scheduling engine and heuristic assignment system',
@@ -248,6 +267,7 @@ export const experience: Experience[] = [
         date: 'Aug. 2025 - Present',
         hook: 'Leading operations for a residential housing office serving 3,000+ residents, managing a team of 15 staff while building automation tools that reduced scheduling time by 70% and cut operational errors by 40%.',
         top_skills: ['Python', 'Pandas', 'RegEx'],
+        artifacts: ["It's me!", 'Group photo!'],
         intro: 'As Operations Manager, I oversee key distribution, access control, and office workflow for a branch of the Residential Education & Housing department serving 3,000+ on-campus residents. I lead a team of 15 staff while managing shift scheduling, performance evaluations, and daily operations.',
         desc: 'Beyond day-to-day responsibilities, I focus on identifying operational bottlenecks and building systems that improve efficiency and accuracy. Many processes, including key distribution tracking and staff scheduling, were previously manual and error-prone, so I implemented structured logging systems and automation tools to streamline operations.',
         feats: '• Key Distribution & Tracking: Implemented a logging system capturing every key transaction, staff member involved, and relevant details while training staff on tools previously limited to management\n• Scheduling Automation: Built a Python-based scheduling engine that scrapes availability data and applies weighted heuristics to generate optimized schedules\n• Configurable System Design: Enabled non-technical staff to adjust constraints such as shift caps, preferences, and fairness weights through a JSON configuration file\n• Conflict Resolution: Serve on a rotating duty schedule, handling on-call situations and resolving resident and operational conflicts',
@@ -276,6 +296,7 @@ export const experience: Experience[] = [
         span: '2.5 months',
         hook: 'Built a vision-driven pipeline enabling autonomous robotic navigation by training a CNN that improved perception accuracy by 50% and reduced manual operator intervention by 25%.',
         top_skills: ['Python', 'PyTorch', 'OpenCV'],
+        artifacts: ['Group photo!'],
         intro: 'As a Machine Learning Researcher, I designed and implemented a computer vision system enabling autonomous navigation across multiple robots, spanning the full pipeline from raw camera input and dataset creation to model training and real-time closed-loop actuation.',
         desc: 'I improved existing implementations by developing higher-quality models, expanding and refining the training dataset, and building a modular preprocessing pipeline that made data collection easier to scale and iterate on. The system handled the full workflow from spatial data extraction and camera calibration to ROS integration and multi-robot coordination.',
         feats: '• Computer Vision Pipeline: Built an OpenCV-based preprocessing and data collection system preparing high-quality inputs for model training\n• CNN Training & Optimization: Designed and trained a convolutional neural network in PyTorch using augmented real-world datasets for robust perception\n• Closed-Loop ROS Integration: Implemented a ROS pipeline translating CNN predictions into real-time robot actuation and coordinated multi-robot navigation',

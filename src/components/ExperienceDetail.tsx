@@ -1,15 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { experience, Experience } from '../constants';
 import { normalizeTitle, getSkillIconPath, getSkillIconFallback } from '../lib/utils';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
-import { FaArrowLeft, FaCogs, FaClipboardList, FaBuilding } from 'react-icons/fa';
+import {
+    FaArrowLeft,
+    FaCogs,
+    FaClipboardList,
+    FaBuilding,
+    FaChevronLeft,
+    FaChevronRight,
+    FaSearchPlus,
+    FaSearchMinus,
+    FaTimes,
+} from 'react-icons/fa';
 
 const ExperienceDetail: React.FC = () => {
     const { theme } = useTheme();
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    // Lightbox State
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(1);
 
     const exp = experience.find(
         (w: Experience) => normalizeTitle(`${w.role} ${w.company}`) === slug,
@@ -34,6 +49,10 @@ const ExperienceDetail: React.FC = () => {
     }
 
     const imagePath = `/images/${normalizeTitle(exp.company)}.png`;
+    const expSlug = normalizeTitle(exp.role);
+    const projectImages = (exp.artifacts ?? []).map(
+        (_, i) => `/artifacts/experience/${expSlug}/image${i + 1}.png`,
+    );
     const bullets = exp.desc
         .split('\n')
         .map((b: string) => b.replace(/^•\s*/, '').trim())
@@ -103,6 +122,81 @@ const ExperienceDetail: React.FC = () => {
                             </div>
                         </div>
                     </motion.div>
+
+                    {/* Artifact Gallery Carousel */}
+                    {projectImages.length > 0 && (
+                        <motion.div variants={itemVariants} className="mb-12 max-w-4xl mx-auto">
+                            <div
+                                className={`relative rounded-2xl overflow-hidden shadow-lg border group aspect-video flex items-center justify-center bg-black/95 ${theme === 'light' ? 'border-slate-200' : 'border-slate-800'}`}
+                            >
+                                <div
+                                    className="w-full h-full flex items-center justify-center cursor-zoom-in"
+                                    onClick={() => {
+                                        setZoomLevel(1);
+                                        setIsLightboxOpen(true);
+                                    }}
+                                >
+                                    <img
+                                        src={projectImages[currentImageIndex]}
+                                        alt={
+                                            exp.artifacts?.[currentImageIndex] ||
+                                            `${exp.role} Artifact ${currentImageIndex + 1}`
+                                        }
+                                        className="w-full h-full object-contain transition-opacity duration-300"
+                                    />
+                                </div>
+
+                                {/* Artifact Description Overlay (Main Gallery) */}
+                                {exp.artifacts && exp.artifacts[currentImageIndex] && (
+                                    <div className="absolute bottom-0 left-0 right-0 pb-10 pt-4 px-4 bg-gradient-to-t from-black/80 to-transparent pointer-events-none">
+                                        <p className="text-white text-sm font-medium text-center drop-shadow-md">
+                                            {exp.artifacts[currentImageIndex]}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {projectImages.length > 1 && (
+                                    <>
+                                        <button
+                                            onClick={() =>
+                                                setCurrentImageIndex((prev) =>
+                                                    prev === 0
+                                                        ? projectImages.length - 1
+                                                        : prev - 1,
+                                                )
+                                            }
+                                            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+                                        >
+                                            <FaChevronLeft />
+                                        </button>
+                                        <button
+                                            onClick={() =>
+                                                setCurrentImageIndex((prev) =>
+                                                    prev === projectImages.length - 1
+                                                        ? 0
+                                                        : prev + 1,
+                                                )
+                                            }
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+                                        >
+                                            <FaChevronRight />
+                                        </button>
+
+                                        {/* Dots */}
+                                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                                            {projectImages.map((_, i) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => setCurrentImageIndex(i)}
+                                                    className={`w-2 h-2 rounded-full transition-all ${i === currentImageIndex ? 'bg-white w-4' : 'bg-white/50 hover:bg-white/80'}`}
+                                                />
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </motion.div>
+                    )}
                 </motion.div>
 
                 <motion.div
@@ -206,6 +300,129 @@ const ExperienceDetail: React.FC = () => {
                     </motion.div>
                 )}
             </div>
+
+            {/* Lightbox Modal */}
+            <AnimatePresence>
+                {isLightboxOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm"
+                        onClick={() => setIsLightboxOpen(false)}
+                    >
+                        {/* Close Button */}
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsLightboxOpen(false);
+                            }}
+                            className="absolute top-6 right-6 p-3 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white hover:bg-black/70 transition-colors z-50 shadow-lg"
+                        >
+                            <FaTimes className="text-xl" />
+                        </button>
+
+                        {/* Lightbox Navigation */}
+                        {projectImages.length > 1 && (
+                            <>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setZoomLevel(1);
+                                        setCurrentImageIndex((prev) =>
+                                            prev === 0 ? projectImages.length - 1 : prev - 1,
+                                        );
+                                    }}
+                                    className="absolute left-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white hover:bg-black/70 transition-colors z-50 shadow-lg"
+                                >
+                                    <FaChevronLeft className="text-xl" />
+                                </button>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setZoomLevel(1);
+                                        setCurrentImageIndex((prev) =>
+                                            prev === projectImages.length - 1 ? 0 : prev + 1,
+                                        );
+                                    }}
+                                    className="absolute right-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white hover:bg-black/70 transition-colors z-50 shadow-lg"
+                                >
+                                    <FaChevronRight className="text-xl" />
+                                </button>
+                            </>
+                        )}
+
+                        {/* Lightbox Info Bar (Position & Description) */}
+                        <div className="absolute top-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-50 w-full px-4 max-w-2xl text-center">
+                            <div className="bg-black/50 backdrop-blur-md border border-white/10 shadow-lg rounded-full px-4 py-1 text-white/90 text-sm font-medium">
+                                {currentImageIndex + 1} / {projectImages.length}
+                            </div>
+                            {exp.artifacts && exp.artifacts[currentImageIndex] && (
+                                <h3 className="text-white text-lg font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                                    {exp.artifacts[currentImageIndex]}
+                                </h3>
+                            )}
+                        </div>
+
+                        {/* Zoom Controls */}
+                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/50 backdrop-blur-md border border-white/10 shadow-lg rounded-full px-6 py-3 z-50">
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setZoomLevel((prev) => Math.max(0.5, prev - 0.25));
+                                }}
+                                className="p-2 text-white hover:text-blue-400 transition-colors disabled:opacity-50"
+                                disabled={zoomLevel <= 0.5}
+                            >
+                                <FaSearchMinus className="text-xl" />
+                            </button>
+                            <span className="text-white font-medium min-w-[3rem] text-center">
+                                {Math.round(zoomLevel * 100)}%
+                            </span>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setZoomLevel((prev) => Math.min(4, prev + 0.25));
+                                }}
+                                className="p-2 text-white hover:text-blue-400 transition-colors disabled:opacity-50"
+                                disabled={zoomLevel >= 4}
+                            >
+                                <FaSearchPlus className="text-xl" />
+                            </button>
+                        </div>
+
+                        {/* Draggable & Zoomable Image */}
+                        <div
+                            className="w-full h-full flex items-center justify-center overflow-hidden"
+                            onWheel={(e) => {
+                                e.stopPropagation();
+                                if (e.deltaY < 0) {
+                                    setZoomLevel((prev) => Math.min(4, prev + 0.1));
+                                } else {
+                                    setZoomLevel((prev) => Math.max(0.5, prev - 0.1));
+                                }
+                            }}
+                        >
+                            <motion.img
+                                src={projectImages[currentImageIndex]}
+                                alt={`${exp.role} Zoomed Artifact`}
+                                drag
+                                dragConstraints={{
+                                    left: -1000,
+                                    right: 1000,
+                                    top: -1000,
+                                    bottom: 1000,
+                                }}
+                                dragElastic={0.1}
+                                animate={{ scale: zoomLevel }}
+                                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                                className="max-w-[90vw] max-h-[90vh] object-contain cursor-grab active:cursor-grabbing"
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <br />
             <br />
