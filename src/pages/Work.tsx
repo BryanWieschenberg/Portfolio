@@ -374,7 +374,7 @@ const Work: React.FC = () => {
                     transition={{ duration: 0.5, delay: 0.4 }}
                     className="page-subtitle"
                 >
-                    Case studies of projects I've built and professional experience I've gained.
+                    Things I've built that solve real problems:
                 </motion.p>
             </div>
 

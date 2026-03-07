@@ -257,7 +257,7 @@ const Home: React.FC = () => {
                             variants={itemVariants}
                             className="page-subtitle mb-12 text-center"
                         >
-                            A selection of my strongest engineering projects.
+                            A selection of my strongest engineering projects:
                         </motion.p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">

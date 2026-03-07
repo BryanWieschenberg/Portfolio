@@ -1,19 +1,3 @@
-// PROJECT FORMAT:
-// name
-// date
-// optional(span), if its ongoing, the span is inferred by calculating today - init month
-// optional(github)
-// optional(website url)
-// optional: role (if group)
-// optional: role desc (if group)
-// intro
-// desc
-// feats
-// res
-// skills (with categories as keys)
-
-// imgs aren't included in constants.tsx. they're deterministically taken from their respective /public/artifacts/projects/<name_normalized_from_/lib/utils.ts>. the icon lives in icon.png, and in individual project pages, the images section shows every image that isn't icon.png
-
 type SkillMap = {
     [skill: string]: string;
 };
@@ -43,6 +27,7 @@ export interface Project {
     desc: string;
     feats: string;
     res: string;
+    artifacts?: number;
     skills: SkillCategories;
 }
 
@@ -102,11 +87,12 @@ export const projects: Project[] = [
         type: 'Web App',
         status: 'Maintained',
         hook: 'Discover how research actually connects with this visualizer that turns 200k+ academic papers into an explorable, dynamic citation graph. Sub-50ms API latency and 200+ requests/sec throughput.',
-        top_skills: ['Next.js', 'TypeScript', 'MongoDB', 'Neo4j', 'Gemini', 'Python'],
+        top_skills: ['Next.js', 'TypeScript', 'MongoDB', 'Neo4j', 'Google Gemini', 'Python'],
         intro: 'I was researching quantum computing, which is a niche field where finding relevant academic findings meant digging through noisy, flat search results with no way to see how they connected. So I built Stellar Papers!',
         desc: 'An interactive citation graph of academic papers. Instead of lists, you explore relationships, and see which papers are foundational, how topics actually connect, and where cross-disciplinary links exist.',
         feats: '• Interactive Paper Graph: Physics-based graph capable of rendering thousands of paper nodes at once\n• Dynamic Filtering: Filter by topic, year, citations, author, and field to narrow results instantly\n• Secure Accounts: Secure account authentication and personal bookmarking\n• AI-Powered Analysis: Intelligent insights surfaced directly from graph results\n• Highly Optimized Performance: Caching, indexing, and optimized graph queries throughout',
         res: '• Massive Dataset: 200,000+ academic papers preprocessed and into a graph database, with connections based of citations\n• Blazing Fast API: Sub-50ms average API latency under concurrent load\n• High Throughput: 200+ requests/second under concurrent load, an 8x improvement over initial implementation',
+        artifacts: 5,
         skills: {
             Frontend: {
                 'Next.js App Router':
@@ -157,6 +143,7 @@ export const projects: Project[] = [
         desc: 'A unified productivity workspace combining tasks and calendar in a single split-screen interface. It removes tab-switching friction and mirrors how people naturally manage workloads by letting tasks and schedules coexist in the same workspace.',
         feats: '• Split-Screen Workspace: Dynamic resizable split-screen UI allowing tasks and calendar to be viewed and interacted with simultaneously\n• Fully-Featured Organization: Unlimited tasks, categories, tags, and calendars with due dates, priority levels, colors, sorting, filtering, and search\n• Smart Scheduling: Calendar events with recurrence support and automated deadline alerts\n• Enterprise-Grade Security: Social sign-in, bot protection, rate limiting, and email verification built into authentication\n• Highly Optimized Performance: Caching, indexing, pagination, prefetching, debouncing, and query optimization across the stack',
         res: '• Lightning Fast API: Sub-30ms API latency with 50,000+ entities stress-tested, a 70% improvement over the initial implementation\n• Near-Instant Load Times: ~110ms initial load time via optimized payloads, a 65% improvement\n• Airtight Security: Defense-in-depth authentication with 10+ layered protections securing user accounts',
+        artifacts: 4,
         skills: {
             Frontend: {
                 'Next.js App Router':
@@ -209,6 +196,7 @@ export const projects: Project[] = [
         desc: 'A production-grade terminal chat platform written entirely in Rust. It provides high-performance LAN messaging with zero external dependencies, end-to-end encryption, role-based access control, and a powerful command system, all wrapped in a responsive terminal interface.',
         feats: '• Terminal UI Engine: State-driven terminal interface with smart command completions and multi-panel rendering for rooms and user rosters\n• RBAC Command Dispatcher: Role-based command system supporting 50+ commands for account, moderation, and administration operations\n• End-to-End Encryption: Messages encrypted client-side so the server only handles ciphertext\n• Persistent State Storage: Local JSON-based persistence enabling seamless cross-session usage without external databases',
         res: '• Lightweight Concurrency: Handles 1,000+ simultaneous TCP connections while using only ~25MB RAM at peak\n• Near-Instant Latency: 3ms average round-trip time under 1,000 parallel clients\n• High Throughput: 3,800 operations/sec sustained on a single-threaded dispatcher\n• Rock-Solid Reliability: Zero dropped packets or connection failures during stress testing',
+        artifacts: 5,
         skills: {
             Core: {
                 Rust: 'Systems programming language providing compile-time memory safety and reliable high-concurrency performance',
@@ -238,6 +226,7 @@ export const projects: Project[] = [
         desc: 'An automated scheduling engine that scrapes availability data from When2Meet and applies a weighted heuristic algorithm to generate optimized staff schedules. It handles complex constraints, shift capacities, preferences, and fairness requirements with fully deterministic results.',
         feats: '• Dynamic State Extraction: Uses advanced RegEx to parse embedded JavaScript and extract raw When2Meet availability data without relying on DOM scraping\n• Weighted Heuristic Engine: Multi-factor scoring algorithm balancing hour caps, fairness/diversity, and employee preferences\n• Fully Configurable: Constraints, scoring weights, and shift capacities adjustable through a simple configuration file\n• Schedule Report Generation: Outputs structured CSV reports showing assignments and full coverage visibility',
         res: '• 100% Coverage: Achieves perfect coverage across complex month-long schedules with consistent 100% fill rates\n• Sub-Second Execution: Processes 2,000+ availability slots and generates full schedule reports in ~650ms\n• Error-Free Scheduling: Zero assignment errors or bias detected compared to manual scheduling',
+        artifacts: 1,
         skills: {
             Core: {
                 Python: 'Primary language used to build the scheduling engine and heuristic assignment system',
