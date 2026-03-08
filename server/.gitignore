@@ -1,4 +1,4 @@
 node_modules
 dist
-routeTree.gen.ts
+.env*
 pnpm-lock.yaml

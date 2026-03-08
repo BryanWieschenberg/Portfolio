@@ -60,7 +60,9 @@ const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme 
     }, [src, initMesh]);
 
     const update = useCallback(() => {
-        if (!meshRef.current.length) return;
+        if (!meshRef.current.length) {
+            return;
+        }
 
         const { x: mx, y: my, down } = mouseRef.current;
 
@@ -106,7 +108,9 @@ const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme 
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         const img = imgRef.current;
-        if (!ctx || !img || !meshRef.current.length) return;
+        if (!ctx || !img || !meshRef.current.length) {
+            return;
+        }
 
         // Clear and set background color to hide sub-pixel gaps
         ctx.fillStyle = theme === 'light' ? '#f8fafc' : '#0f172a';
@@ -141,7 +145,9 @@ const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme 
                 const dx = px - cx;
                 const dy = py - cy;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist === 0) return { x: px, y: py };
+                if (dist === 0) {
+                    return { x: px, y: py };
+                }
                 return {
                     x: px + (dx / dist) * 1.0,
                     y: py + (dy / dist) * 1.0,

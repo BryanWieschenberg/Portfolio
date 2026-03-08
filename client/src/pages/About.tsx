@@ -188,22 +188,27 @@ const About: React.FC = () => {
                 if (
                     debouncedQuery &&
                     !skill.name.toLowerCase().includes(debouncedQuery.toLowerCase())
-                )
+                ) {
                     return false;
-                if (selectedCategories.length > 0 && !selectedCategories.includes(skill.category))
+                }
+                if (selectedCategories.length > 0 && !selectedCategories.includes(skill.category)) {
                     return false;
+                }
                 if (
                     selectedProficiency.length > 0 &&
                     !selectedProficiency.includes(skill.proficiency)
-                )
+                ) {
                     return false;
+                }
 
                 if (selectedUsedIn.length > 0) {
                     const usedInNames = [
                         ...skill.usedInProjects.map((p) => p.name),
                         ...skill.usedInExperience.map((e) => e.role), // Using company or role
                     ];
-                    if (!selectedUsedIn.some((u) => usedInNames.includes(u))) return false;
+                    if (!selectedUsedIn.some((u) => usedInNames.includes(u))) {
+                        return false;
+                    }
                 }
 
                 return true;
@@ -447,8 +452,11 @@ const About: React.FC = () => {
                                 <div className="flex flex-wrap items-center gap-2">
                                     <button
                                         onClick={() => {
-                                            if (sortBy === 'featured') setSortAsc(!sortAsc);
-                                            else setSortBy('featured');
+                                            if (sortBy === 'featured') {
+                                                setSortAsc(!sortAsc);
+                                            } else {
+                                                setSortBy('featured');
+                                            }
                                         }}
                                         className={`sort-btn ${sortBy === 'featured' ? 'active' : ''}`}
                                     >
@@ -462,8 +470,9 @@ const About: React.FC = () => {
                                     </button>
                                     <button
                                         onClick={() => {
-                                            if (sortBy === 'proficiency') setSortAsc(!sortAsc);
-                                            else {
+                                            if (sortBy === 'proficiency') {
+                                                setSortAsc(!sortAsc);
+                                            } else {
                                                 setSortBy('proficiency');
                                                 setSortAsc(false);
                                             }
@@ -480,8 +489,9 @@ const About: React.FC = () => {
                                     </button>
                                     <button
                                         onClick={() => {
-                                            if (sortBy === 'used') setSortAsc(!sortAsc);
-                                            else {
+                                            if (sortBy === 'used') {
+                                                setSortAsc(!sortAsc);
+                                            } else {
                                                 setSortBy('used');
                                                 setSortAsc(false);
                                             }
@@ -498,8 +508,9 @@ const About: React.FC = () => {
                                     </button>
                                     <button
                                         onClick={() => {
-                                            if (sortBy === 'alphabetical') setSortAsc(!sortAsc);
-                                            else {
+                                            if (sortBy === 'alphabetical') {
+                                                setSortAsc(!sortAsc);
+                                            } else {
                                                 setSortBy('alphabetical');
                                                 setSortAsc(true);
                                             }
@@ -795,7 +806,9 @@ const About: React.FC = () => {
                                     const catSkills = filteredSkillsList.filter(
                                         (s) => s.category === cat,
                                     );
-                                    if (catSkills.length === 0) return null;
+                                    if (catSkills.length === 0) {
+                                        return null;
+                                    }
                                     return (
                                         <div
                                             key={cat}
@@ -967,7 +980,9 @@ const About: React.FC = () => {
                                     const catSkills = filteredSkillsList.filter(
                                         (s) => s.category === cat,
                                     );
-                                    if (catSkills.length === 0) return null;
+                                    if (catSkills.length === 0) {
+                                        return null;
+                                    }
 
                                     return (
                                         <div key={cat} className="space-y-4 lg:space-y-6">

@@ -54,10 +54,14 @@ export default function SkillTooltipWrapper({
         <div
             ref={ref}
             onPointerEnter={(e) => {
-                if (e.pointerType === 'mouse') setHover(true);
+                if (e.pointerType === 'mouse') {
+                    setHover(true);
+                }
             }}
             onPointerLeave={(e) => {
-                if (e.pointerType === 'mouse') setHover(false);
+                if (e.pointerType === 'mouse') {
+                    setHover(false);
+                }
             }}
             onClick={() => setHover(!hover)}
             className="inline-block"
