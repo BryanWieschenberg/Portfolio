@@ -464,11 +464,11 @@ const ExperienceDetail: React.FC = () => {
                                                 className={`flex flex-col md:flex-row border-b last:border-b-0 first:rounded-t-xl last:rounded-b-xl ${theme === 'light' ? 'border-slate-200' : 'border-slate-700/50'}`}
                                             >
                                                 <div
-                                                    className={`w-full md:w-36 shrink-0 p-4 font-semibold text-sm uppercase tracking-wider flex items-center md:first:rounded-tl-xl md:last:rounded-bl-xl ${theme === 'light' ? 'bg-slate-50 text-slate-500' : 'bg-slate-800/30 text-slate-400'}`}
+                                                    className={`w-full md:w-36 shrink-0 p-2 pl-4 font-semibold text-sm uppercase tracking-wider flex items-center md:first:rounded-tl-xl md:last:rounded-bl-xl ${theme === 'light' ? 'bg-slate-50 text-slate-500' : 'bg-slate-800/30 text-slate-400'}`}
                                                 >
                                                     {category}
                                                 </div>
-                                                <div className="flex-1 p-4 flex flex-wrap gap-2">
+                                                <div className="flex-1 p-2 flex flex-wrap gap-2">
                                                     {Object.entries(skillMap).map(
                                                         ([skill, desc], i) => (
                                                             <div

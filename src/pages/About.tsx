@@ -27,10 +27,7 @@ import {
     FaTimes,
     FaChevronDown,
     FaCheck,
-    FaSortAmountDown,
-    FaSortAmountUp,
-    FaSortAlphaDown,
-    FaSortAlphaUp,
+    FaChevronUp,
     FaRocket,
     FaTable,
     FaThList,
@@ -375,8 +372,8 @@ const About: React.FC = () => {
                                     and intellectual depth to make a strong impact in building
                                     end-to-end systems that solve real problems. Its rigorous
                                     academic foundations, hands-on learning experiences, innovative
-                                    research, and collaborative culture have prepared me to make an
-                                    innovative difference in the technology industry.
+                                    research, and collaborative culture have prepared me to make a
+                                    strong difference in the technology industry.
                                 </p>
                             </div>
 
@@ -440,78 +437,66 @@ const About: React.FC = () => {
                             {/* Filter toggle & View toggles */}
                             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                                 {/* Sort buttons */}
-                                <div className="flex bg-slate-100 dark:bg-slate-800 rounded-md p-1 items-center">
+                                <div className="flex flex-wrap items-center gap-2">
                                     <button
                                         onClick={() => {
                                             if (sortBy === 'featured') setSortAsc(!sortAsc);
                                             else setSortBy('featured');
                                         }}
-                                        className={`px-2 py-1 text-xs rounded-sm flex items-center gap-1 ${sortBy === 'featured' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                        className={`sort-btn ${sortBy === 'featured' ? 'active' : ''}`}
                                     >
-                                        {sortBy === 'featured' ? (
-                                            sortAsc ? (
-                                                <FaSortAmountDown />
+                                        Featured{' '}
+                                        {sortBy === 'featured' &&
+                                            (sortAsc ? (
+                                                <FaChevronUp size={9} />
                                             ) : (
-                                                <FaSortAmountUp />
-                                            )
-                                        ) : (
-                                            <FaSortAmountDown />
-                                        )}
-                                        Featured
+                                                <FaChevronDown size={9} />
+                                            ))}
                                     </button>
                                     <button
                                         onClick={() => {
                                             if (sortBy === 'proficiency') setSortAsc(!sortAsc);
                                             else setSortBy('proficiency');
                                         }}
-                                        className={`px-2 py-1 text-xs rounded-sm flex items-center gap-1 ${sortBy === 'proficiency' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                        className={`sort-btn ${sortBy === 'proficiency' ? 'active' : ''}`}
                                     >
-                                        {sortBy === 'proficiency' ? (
-                                            sortAsc ? (
-                                                <FaSortAmountUp />
+                                        Proficiency{' '}
+                                        {sortBy === 'proficiency' &&
+                                            (sortAsc ? (
+                                                <FaChevronUp size={9} />
                                             ) : (
-                                                <FaSortAmountDown />
-                                            )
-                                        ) : (
-                                            <FaSortAmountDown />
-                                        )}
-                                        Proficiency
+                                                <FaChevronDown size={9} />
+                                            ))}
                                     </button>
                                     <button
                                         onClick={() => {
                                             if (sortBy === 'used') setSortAsc(!sortAsc);
                                             else setSortBy('used');
                                         }}
-                                        className={`px-2 py-1 text-xs rounded-sm flex items-center gap-1 ${sortBy === 'used' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                        className={`sort-btn ${sortBy === 'used' ? 'active' : ''}`}
                                     >
-                                        {sortBy === 'used' ? (
-                                            sortAsc ? (
-                                                <FaSortAmountUp />
+                                        Most Used{' '}
+                                        {sortBy === 'used' &&
+                                            (sortAsc ? (
+                                                <FaChevronUp size={9} />
                                             ) : (
-                                                <FaSortAmountDown />
-                                            )
-                                        ) : (
-                                            <FaSortAmountDown />
-                                        )}
-                                        Most Used
+                                                <FaChevronDown size={9} />
+                                            ))}
                                     </button>
                                     <button
                                         onClick={() => {
                                             if (sortBy === 'alphabetical') setSortAsc(!sortAsc);
                                             else setSortBy('alphabetical');
                                         }}
-                                        className={`px-2 py-1 text-xs rounded-sm flex items-center gap-1 ${sortBy === 'alphabetical' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                        className={`sort-btn ${sortBy === 'alphabetical' ? 'active' : ''}`}
                                     >
-                                        {sortBy === 'alphabetical' ? (
-                                            sortAsc ? (
-                                                <FaSortAlphaUp />
+                                        A-Z{' '}
+                                        {sortBy === 'alphabetical' &&
+                                            (sortAsc ? (
+                                                <FaChevronUp size={9} />
                                             ) : (
-                                                <FaSortAlphaDown />
-                                            )
-                                        ) : (
-                                            <FaSortAlphaDown />
-                                        )}
-                                        A-Z
+                                                <FaChevronDown size={9} />
+                                            ))}
                                     </button>
                                 </div>
 
@@ -519,16 +504,16 @@ const About: React.FC = () => {
                                     className={`hidden sm:block w-px h-5 mx-1 ${theme === 'light' ? 'bg-slate-300' : 'bg-slate-600'}`}
                                 />
 
-                                <div className="flex bg-slate-100 dark:bg-slate-800 rounded-md p-1">
+                                <div className="toggle-pill bg-slate-100 dark:bg-slate-800/50">
                                     <button
                                         onClick={() => setViewMode('compact')}
-                                        className={`p-1.5 rounded-sm ${viewMode === 'compact' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500'}`}
+                                        className={`px-3 py-1.5 rounded transition-colors ${viewMode === 'compact' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500 hover:text-blue-600' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                                     >
                                         <FaTable size={12} />
                                     </button>
                                     <button
                                         onClick={() => setViewMode('expanded')}
-                                        className={`p-1.5 rounded-sm ${viewMode === 'expanded' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500' : 'text-slate-500'}`}
+                                        className={`px-3 py-1.5 rounded transition-colors ${viewMode === 'expanded' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500 hover:text-blue-600' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                                     >
                                         <FaThList size={12} />
                                     </button>
@@ -783,7 +768,7 @@ const About: React.FC = () => {
                                                     {cat}
                                                 </h3>
                                             </div>
-                                            <div className="flex-1 p-4 flex flex-wrap gap-2 md:gap-3 items-center">
+                                            <div className="flex-1 p-2 flex flex-wrap gap-1 md:gap-1.5 items-center">
                                                 <AnimatePresence mode="popLayout">
                                                     {catSkills.map((skill) => (
                                                         <motion.div
@@ -796,41 +781,44 @@ const About: React.FC = () => {
                                                             className="group relative"
                                                         >
                                                             <div
-                                                                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border cursor-default transition-colors ${theme === 'light' ? 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-sm' : 'bg-slate-800/60 border-slate-700/60 hover:border-blue-500/50 hover:bg-slate-800'}`}
+                                                                className={`px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 hover:cursor-default ${
+                                                                    theme === 'light'
+                                                                        ? 'bg-slate-100 text-slate-600 border-slate-200 hover:border-slate-300'
+                                                                        : 'bg-slate-800/50 text-slate-300 border-slate-600/50 hover:border-slate-500'
+                                                                }`}
                                                             >
-                                                                <div className="w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center flex-shrink-0">
-                                                                    <img
-                                                                        src={getSkillIconPath(
-                                                                            skill.name,
-                                                                            theme,
-                                                                        )}
-                                                                        alt={skill.name}
-                                                                        className="max-w-full max-h-full object-contain"
-                                                                        onError={(e) => {
-                                                                            const img =
-                                                                                e.target as HTMLImageElement;
-                                                                            const fallback =
-                                                                                getSkillIconFallback(
-                                                                                    skill.name,
-                                                                                );
-                                                                            img.src =
-                                                                                img.src.endsWith(
-                                                                                    fallback,
-                                                                                )
-                                                                                    ? '/skills/default.png'
-                                                                                    : fallback;
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                                <span
-                                                                    className={`text-[13px] sm:text-sm font-medium ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
-                                                                >
-                                                                    {skill.name}
-                                                                </span>
+                                                                <img
+                                                                    src={getSkillIconPath(
+                                                                        skill.name,
+                                                                        theme,
+                                                                    )}
+                                                                    alt={skill.name}
+                                                                    className="w-[18px] h-[18px] object-contain flex-shrink-0"
+                                                                    onError={(e) => {
+                                                                        const img =
+                                                                            e.target as HTMLImageElement;
+                                                                        const fallback =
+                                                                            getSkillIconFallback(
+                                                                                skill.name,
+                                                                            );
+                                                                        img.src = img.src.endsWith(
+                                                                            fallback,
+                                                                        )
+                                                                            ? '/skills/default.png'
+                                                                            : fallback;
+                                                                    }}
+                                                                />
+                                                                {skill.name}
                                                             </div>
 
                                                             {/* Hover Tooltip/Popover */}
-                                                            <div className="absolute z-10 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 bottom-full left-1/2 -translate-x-1/2 mb-2 w-[280px] p-4 rounded-xl shadow-[0_4px_30px_rgba(0,0,0,0.15)] border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 pointer-events-none">
+                                                            <div
+                                                                className={`absolute bottom-[calc(100%+10px)] left-1/2 -translate-x-1/2 min-w-[200px] w-max max-w-[280px] p-3 text-sm font-normal rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-[100] whitespace-normal pointer-events-none text-left border ${
+                                                                    theme === 'light'
+                                                                        ? 'bg-white text-slate-700 border-slate-200/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)]'
+                                                                        : 'bg-[#111318] text-slate-300 border-slate-700/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]'
+                                                                }`}
+                                                            >
                                                                 <div className="flex items-start justify-between mb-2">
                                                                     <h4
                                                                         className={`font-bold text-base ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}

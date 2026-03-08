@@ -354,16 +354,12 @@ export const experience: Experience[] = [
             Core: {
                 Python: 'Built automation tools and scheduling engine to optimize staff coverage and reduce manual work',
                 RegEx: 'Pattern matching used to parse availability data and extract scheduling information',
+                'Microsoft Excel': 'Used for storing transaction logs and departmental records',
             },
             Data: {
                 Pandas: 'Data analysis library used to structure availability data and compute schedule assignments',
                 CSV: 'Portable format used for exporting schedule reports and operational data',
                 JSON: 'Configuration format enabling non-technical staff to modify scheduling constraints and weights',
-            },
-            Tools: {
-                'Google Sheets':
-                    'Collaborative spreadsheet tool used for operational tracking and team coordination',
-                'Microsoft Excel': 'Used for storing transaction logs and departmental records',
             },
         },
     },
