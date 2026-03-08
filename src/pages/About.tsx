@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
     skills,
     SkillCategory,
@@ -9,30 +10,28 @@ import {
     Project,
     Experience,
     ProficiencyLevel,
+    interests,
 } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from '../components/SwipeReveal';
 import SkillTooltipWrapper from '../components/SkillTooltipWrapper';
-import { getSkillIconPath, getSkillIconFallback } from '../lib/utils';
+import { getSkillIconPath, getSkillIconFallback, normalizeTitle } from '../lib/utils';
 import InteractiveFace from '../components/InteractiveFace';
 import {
-    FaGamepad,
-    FaMusic,
-    FaHiking,
-    FaDumbbell,
-    FaChess,
-    FaBrain,
     FaFilter,
     FaSearch,
     FaTimes,
     FaChevronDown,
     FaCheck,
     FaChevronUp,
-    FaRocket,
     FaTable,
     FaThList,
+    FaEnvelope,
+    FaLinkedin,
+    FaFileAlt,
 } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa6';
 
 interface SkillWithUsage extends Skill {
     category: SkillCategory;
@@ -245,19 +244,8 @@ const About: React.FC = () => {
         return [...projects.map((p) => p.name), ...experience.map((e) => e.role)];
     }, [projects, experience]);
 
-    const p = 'text-body';
-    const heading = 'section-heading-lg';
     const subheading = 'section-subheading-lg';
     const divider = 'divider-lg';
-
-    const interests = [
-        { icon: <FaDumbbell />, label: 'Fitness & lifting' },
-        { icon: <FaMusic />, label: 'Music production' },
-        { icon: <FaGamepad />, label: 'Competitive gaming' },
-        { icon: <FaChess />, label: 'Strategy games' },
-        { icon: <FaHiking />, label: 'Hiking & outdoors' },
-        { icon: <FaBrain />, label: 'Psychology' },
-    ];
 
     return (
         <>
@@ -376,7 +364,7 @@ const About: React.FC = () => {
                                     </p>
                                 </div>
                                 <p
-                                    className={`text-base lg:text-sm leading-relaxed mb-6 ${theme === 'light' ? 'text-slate-500' : 'text-slate-500'}`}
+                                    className={`text-base lg:text-sm leading-relaxed mb-6 ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
                                 >
                                     TCNJ's transformative CS program has equipped me with the
                                     technical proficiency and intellectual depth to make a strong
@@ -415,7 +403,7 @@ const About: React.FC = () => {
                                         variants={skillVariants}
                                         key={i}
                                         whileHover={{ scale: 1.05 }}
-                                        className={`leading-tight p-1.5 sm:p-2 md:px-4 md:py-3 rounded-lg border flex items-center justify-center lg:justify-start gap-1 sm:gap-1.5 md:gap-3 text-center lg:text-left cursor-default
+                                        className={`leading-tight p-1.5 sm:p-2 md:px-4 md:py-3 rounded-lg border flex items-center justify-start gap-1 sm:gap-1.5 md:gap-3 text-center lg:text-left cursor-default
                                             ${
                                                 theme === 'light'
                                                     ? 'bg-slate-50 border-slate-200 text-slate-700 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:border-blue-300'
@@ -802,19 +790,29 @@ const About: React.FC = () => {
                                                     {cat}
                                                 </h3>
                                             </div>
-                                            <div className="flex-1 p-2 flex flex-wrap gap-1 md:gap-1.5 items-center">
+                                            <motion.div
+                                                initial="hidden"
+                                                whileInView="visible"
+                                                viewport={{ once: true, margin: '-50px' }}
+                                                variants={{
+                                                    visible: {
+                                                        transition: { staggerChildren: 0.02 },
+                                                    },
+                                                }}
+                                                className="flex-1 p-2 flex flex-wrap gap-1 md:gap-1.5 items-center"
+                                            >
                                                 <AnimatePresence mode="popLayout">
-                                                    {catSkills.map((skill, i) => (
+                                                    {catSkills.map((skill, _) => (
                                                         <motion.div
-                                                            initial={{ opacity: 0, y: 15 }}
-                                                            whileInView={{ opacity: 1, y: 0 }}
-                                                            viewport={{ once: true }}
-                                                            exit={{ opacity: 0, scale: 0.9 }}
+                                                            variants={{
+                                                                hidden: { opacity: 0, y: 15 },
+                                                                visible: { opacity: 1, y: 0 },
+                                                            }}
                                                             transition={{
                                                                 duration: 0.25,
                                                                 ease: 'easeOut',
-                                                                delay: i * 0.02,
                                                             }}
+                                                            exit={{ opacity: 0, scale: 0.9 }}
                                                             layout
                                                             key={skill.name}
                                                             className="h-fit"
@@ -871,30 +869,32 @@ const About: React.FC = () => {
                                                                                 <div className="flex flex-wrap gap-1">
                                                                                     {skill.usedInProjects.map(
                                                                                         (p) => (
-                                                                                            <span
+                                                                                            <Link
                                                                                                 key={
                                                                                                     p.name
                                                                                                 }
-                                                                                                className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-700/50 border-slate-600 text-slate-300'}`}
+                                                                                                to={`/work/projects/${normalizeTitle(p.name)}`}
+                                                                                                className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-700/50 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
                                                                                             >
                                                                                                 {
                                                                                                     p.name
                                                                                                 }
-                                                                                            </span>
+                                                                                            </Link>
                                                                                         ),
                                                                                     )}
                                                                                     {skill.usedInExperience.map(
                                                                                         (e) => (
-                                                                                            <span
+                                                                                            <Link
                                                                                                 key={
                                                                                                     e.role
                                                                                                 }
-                                                                                                className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-700/50 border-slate-600 text-slate-300'}`}
+                                                                                                to={`/work/experience/${normalizeTitle(e.role)}`}
+                                                                                                className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-700/50 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
                                                                                             >
                                                                                                 {
                                                                                                     e.role
                                                                                                 }
-                                                                                            </span>
+                                                                                            </Link>
                                                                                         ),
                                                                                     )}
                                                                                 </div>
@@ -938,20 +938,13 @@ const About: React.FC = () => {
                                                         </motion.div>
                                                     ))}
                                                 </AnimatePresence>
-                                            </div>
+                                            </motion.div>
                                         </div>
                                     );
                                 })}
                             </motion.div>
                         ) : (
-                            <motion.div
-                                key="expanded-view"
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: '-50px' }}
-                                transition={{ duration: 0.5, ease: 'easeOut' }}
-                                className="flex flex-col gap-12 lg:gap-16"
-                            >
+                            <div key="expanded-view" className="flex flex-col gap-12 lg:gap-16">
                                 {allCategories.map((cat) => {
                                     const catSkills = filteredSkillsList.filter(
                                         (s) => s.category === cat,
@@ -973,19 +966,29 @@ const About: React.FC = () => {
                                                 </span>
                                             </div>
 
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+                                            <motion.div
+                                                initial="hidden"
+                                                whileInView="visible"
+                                                viewport={{ once: true, margin: '-50px' }}
+                                                variants={{
+                                                    visible: {
+                                                        transition: { staggerChildren: 0.03 },
+                                                    },
+                                                }}
+                                                className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6"
+                                            >
                                                 <AnimatePresence mode="popLayout">
-                                                    {catSkills.map((skill, i) => (
+                                                    {catSkills.map((skill, _) => (
                                                         <motion.div
-                                                            initial={{ opacity: 0, y: 15 }}
-                                                            whileInView={{ opacity: 1, y: 0 }}
-                                                            viewport={{ once: true }}
-                                                            exit={{ opacity: 0, scale: 0.9 }}
+                                                            variants={{
+                                                                hidden: { opacity: 0, y: 15 },
+                                                                visible: { opacity: 1, y: 0 },
+                                                            }}
                                                             transition={{
                                                                 duration: 0.3,
                                                                 ease: 'easeOut',
-                                                                delay: i * 0.03,
                                                             }}
+                                                            exit={{ opacity: 0, scale: 0.9 }}
                                                             layout
                                                             key={skill.name}
                                                             className={`flex flex-col gap-4 p-5 md:p-6 rounded-xl border transition-all hover:shadow-md hover:-translate-y-1 ${theme === 'light' ? 'bg-white border-slate-200 hover:border-blue-300' : 'bg-[#151821] border-slate-800 hover:border-blue-500/30 hover:shadow-blue-500/5'}`}
@@ -1065,22 +1068,24 @@ const About: React.FC = () => {
                                                                         <div className="flex flex-wrap gap-1.5">
                                                                             {skill.usedInProjects.map(
                                                                                 (p) => (
-                                                                                    <span
+                                                                                    <Link
                                                                                         key={p.name}
-                                                                                        className={`text-xs px-2.5 py-1 rounded-md border ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-800/80 border-slate-700 text-slate-300'}`}
+                                                                                        to={`/work/projects/${normalizeTitle(p.name)}`}
+                                                                                        className={`text-xs px-2.5 py-1 rounded-md border transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
                                                                                     >
                                                                                         {p.name}
-                                                                                    </span>
+                                                                                    </Link>
                                                                                 ),
                                                                             )}
                                                                             {skill.usedInExperience.map(
                                                                                 (e) => (
-                                                                                    <span
+                                                                                    <Link
                                                                                         key={e.role}
-                                                                                        className={`text-xs px-2.5 py-1 rounded-md border ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-800/80 border-slate-700 text-slate-300'}`}
+                                                                                        to={`/work/experience/${normalizeTitle(e.role)}`}
+                                                                                        className={`text-xs px-2.5 py-1 rounded-md border transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
                                                                                     >
                                                                                         {e.role}
-                                                                                    </span>
+                                                                                    </Link>
                                                                                 ),
                                                                             )}
                                                                         </div>
@@ -1090,11 +1095,11 @@ const About: React.FC = () => {
                                                         </motion.div>
                                                     ))}
                                                 </AnimatePresence>
-                                            </div>
+                                            </motion.div>
                                         </div>
                                     );
                                 })}
-                            </motion.div>
+                            </div>
                         )}
                     </motion.div>
 
@@ -1104,53 +1109,121 @@ const About: React.FC = () => {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: '-50px' }}
-                        variants={itemVariants}
-                        className="space-y-5"
+                        variants={sectionVariants}
+                        className="space-y-6"
                     >
-                        <h2 className={heading}>Beyond the Code</h2>
-                        <p className={p}>
-                            I'm not just a terminal. Outside of coding, I'm usually in the gym,
-                            producing music, gaming competitively, or going down some rabbit hole
-                            about psychology or decision-making. I believe the best engineers are
-                            curious about everything — not just tech.
-                        </p>
-                        <p className={p}>
-                            I also manage a team of 15 in campus housing operations, which has
-                            taught me more about communication, accountability, and crisis
-                            management than any CS course could. Leading people and building
-                            software exercise the same muscle: figure out what matters, cut the
-                            noise, and execute.
-                        </p>
-
-                        <div className="flex flex-wrap gap-3 mt-4">
-                            {interests.map((item, i) => (
-                                <motion.span
-                                    key={i}
-                                    whileHover={{ scale: 1.06 }}
-                                    className="interest-pill"
+                        <h2
+                            className={`text-4xl lg:text-6xl font-bold mb-4 text-center ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                        >
+                            More About Me
+                        </h2>
+                        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+                            <div className="lg:w-1/3 w-full">
+                                <p
+                                    className={`text-base leading-relaxed ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
                                 >
-                                    <span className="text-base">{item.icon}</span>
-                                    {item.label}
-                                </motion.span>
-                            ))}
+                                    Outside of computer science, I'm usually in the gym, cooking,
+                                    gaming, or planning some cool stuff! I also love having deep
+                                    conversations at 3am, and believe the best engineers are curious
+                                    about everything, not just tech.
+                                </p>
+                            </div>
+
+                            <div className="lg:w-2/3 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {interests.map((interest, i) => (
+                                    <motion.div
+                                        variants={skillVariants}
+                                        key={i}
+                                        className={`group relative p-5 md:p-6 rounded-xl border flex flex-col justify-center overflow-hidden transition-all duration-300
+                                            ${theme === 'light' ? 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]' : 'bg-[#151821] border-slate-800 hover:border-blue-500/30 hover:shadow-[0_0_20px_rgba(59,130,246,0.1)]'}`}
+                                    >
+                                        <div className="flex items-center gap-4 relative z-10 transition-transform duration-300 group-hover:-translate-y-4">
+                                            <span
+                                                className={`text-2xl sm:text-3xl flex-shrink-0 transition-transform duration-300 group-hover:scale-110 ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
+                                            >
+                                                {interest.icon}
+                                            </span>
+                                            <span className="text-lg font-bold">
+                                                {interest.name}
+                                            </span>
+                                            <span
+                                                className={`ml-auto opacity-0 transform translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
+                                            >
+                                                →
+                                            </span>
+                                        </div>
+                                        <div className="absolute left-0 right-0 bottom-0 p-5 md:p-6 translate-y-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 z-0">
+                                            <p
+                                                className={`text-sm md:text-base leading-snug mt-4 ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
+                                            >
+                                                {interest.description}
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
                         </div>
                     </motion.div>
-
                     <div className={divider} />
 
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: '-50px' }}
-                        variants={itemVariants}
-                        className="text-center space-y-3"
+                        variants={sectionVariants}
+                        className="space-y-6 text-center"
                     >
-                        <FaRocket className="mx-auto text-3xl icon-accent" />
-                        <h2 className={subheading}>Let's Build Something</h2>
-                        <p className="text-body max-w-xl mx-auto">
-                            If you're working on hard problems with a team that cares about craft,
-                            I'd love to talk. I bring velocity, ownership, and no ego.
+                        <h2
+                            className={`text-4xl lg:text-6xl font-bold mb-4 ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                        >
+                            Let's Talk
+                        </h2>
+                        <p
+                            className={`text-base lg:text-lg max-w-2xl mx-auto ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
+                        >
+                            If you're working on hard problems and care about craft, I'd love to
+                            talk!
                         </p>
+
+                        <div className="flex flex-wrap justify-center items-center gap-4 mt-8">
+                            <a
+                                href="mailto:bryan.wieschenberg@gmail.com"
+                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 ${theme === 'light' ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-md hover:shadow-lg' : 'bg-blue-600 text-white hover:bg-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)]'}`}
+                            >
+                                <FaEnvelope />
+                                bryan.wieschenberg@gmail.com
+                            </a>
+
+                            <a
+                                href="https://github.com/BryanWieschenberg"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
+                            >
+                                <FaGithub />
+                                GitHub
+                            </a>
+
+                            <a
+                                href="https://linkedin.com/in/BryanWieschenberg"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
+                            >
+                                <FaLinkedin />
+                                LinkedIn
+                            </a>
+
+                            <a
+                                href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
+                            >
+                                <FaFileAlt />
+                                Resume
+                            </a>
+                        </div>
                     </motion.div>
                 </div>
             </div>

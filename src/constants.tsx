@@ -8,6 +8,9 @@ import {
     FaProjectDiagram,
     FaPuzzlePiece,
     FaLightbulb,
+    FaDumbbell,
+    FaUtensils,
+    FaGamepad,
 } from 'react-icons/fa';
 
 type SkillMap = {
@@ -109,6 +112,31 @@ export const courses = [
     {
         name: 'Computational Problem Solving',
         icon: <FaLightbulb />,
+    },
+];
+
+export const interests = [
+    {
+        name: 'Fitness',
+        icon: <FaDumbbell />,
+        description:
+            'I love weightlifting, going on walks, and hiking, they just make me feel alive! I hate running, but I still make myself do it.',
+    },
+    {
+        name: 'Cooking',
+        icon: <FaUtensils />,
+        description: 'I’ve always been a food lover, and really enjoy creating different cuisines!',
+    },
+    {
+        name: 'Gaming',
+        icon: <FaGamepad />,
+        description: 'I love old-school platformers and RPGs.',
+    },
+    {
+        name: 'Creating',
+        icon: <FaLightbulb />,
+        description:
+            'I’m currently planning a YouTube channel around tech, coding, and project creation. The goal is to make CS feel accessible and fun, where I learn new things, build cool stuff, and try to tell an engaging story alongside it!',
     },
 ];
 
