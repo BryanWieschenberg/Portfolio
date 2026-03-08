@@ -800,3 +800,28 @@ body {
 .dark .meta-label {
     @apply text-slate-500;
 }
+
+/* ═══════════════════════════════════════════════════════
+   PORTAL TOOLTIP  
+   ═══════════════════════════════════════════════════════ */
+
+.portal-tooltip {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    height: fit-content;
+    width: fit-content;
+    pointer-events: none;
+    display: flex;
+}
+@media (min-width: 1024px) {
+    .portal-tooltip {
+        inset: auto;
+        margin: 0;
+        bottom: calc(100vh - var(--rect-top) + 8px);
+        left: calc(var(--rect-left) + (var(--rect-width) / 2));
+    }
+    .portal-tooltip-inner {
+        transform: translateX(-50%);
+    }
+}

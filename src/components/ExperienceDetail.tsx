@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { experience } from '../constants';
 import { normalizeTitle, getSkillIconPath, getSkillIconFallback } from '../lib/utils';
+import SkillTooltipWrapper from './SkillTooltipWrapper';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import {
@@ -471,54 +472,52 @@ const ExperienceDetail: React.FC = () => {
                                                 <div className="flex-1 p-2 flex flex-wrap gap-2">
                                                     {Object.entries(skillMap).map(
                                                         ([skill, desc], i) => (
-                                                            <div
-                                                                key={i}
-                                                                className={`group relative px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 hover:cursor-default ${
-                                                                    theme === 'light'
-                                                                        ? 'bg-slate-100 text-slate-600 border-slate-200 hover:border-slate-300'
-                                                                        : 'bg-slate-800/50 text-slate-300 border-slate-600/50 hover:border-slate-500'
-                                                                }`}
-                                                            >
-                                                                <img
-                                                                    src={getSkillIconPath(
-                                                                        skill,
-                                                                        theme,
-                                                                    )}
-                                                                    alt={skill}
-                                                                    className="w-[18px] h-[18px] object-contain"
-                                                                    onError={(e) => {
-                                                                        const img =
-                                                                            e.target as HTMLImageElement;
-                                                                        const fallback =
-                                                                            getSkillIconFallback(
-                                                                                skill,
-                                                                            );
-                                                                        if (
-                                                                            img.src.endsWith(
-                                                                                fallback,
-                                                                            )
-                                                                        ) {
-                                                                            img.style.display =
-                                                                                'none';
-                                                                        } else {
-                                                                            img.src = fallback;
-                                                                        }
-                                                                    }}
-                                                                />
-                                                                {skill}
-
-                                                                {/* Custom Floating Panel */}
-                                                                <div
-                                                                    className={`absolute bottom-[calc(100%+10px)] left-0 min-w-[200px] w-max max-w-[280px] p-3 text-sm font-normal rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-[100] whitespace-normal pointer-events-none text-left border ${
-                                                                        theme === 'light'
-                                                                            ? 'bg-white text-slate-700 border-slate-200/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)]'
-                                                                            : 'bg-[#111318] text-slate-300 border-slate-700/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]'
-                                                                    }`}
+                                                            <div key={i}>
+                                                                <SkillTooltipWrapper
+                                                                    theme={theme}
+                                                                    content={
+                                                                        <div className="leading-relaxed opacity-90">
+                                                                            {desc}
+                                                                        </div>
+                                                                    }
                                                                 >
-                                                                    <div className="leading-relaxed opacity-90">
-                                                                        {desc}
+                                                                    <div
+                                                                        className={`px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 hover:cursor-default ${
+                                                                            theme === 'light'
+                                                                                ? 'bg-slate-100 text-slate-600 border-slate-200 hover:border-slate-300'
+                                                                                : 'bg-slate-800/50 text-slate-300 border-slate-600/50 hover:border-slate-500'
+                                                                        }`}
+                                                                    >
+                                                                        <img
+                                                                            src={getSkillIconPath(
+                                                                                skill,
+                                                                                theme,
+                                                                            )}
+                                                                            alt={skill}
+                                                                            className="w-[18px] h-[18px] object-contain"
+                                                                            onError={(e) => {
+                                                                                const img =
+                                                                                    e.target as HTMLImageElement;
+                                                                                const fallback =
+                                                                                    getSkillIconFallback(
+                                                                                        skill,
+                                                                                    );
+                                                                                if (
+                                                                                    img.src.endsWith(
+                                                                                        fallback,
+                                                                                    )
+                                                                                ) {
+                                                                                    img.style.display =
+                                                                                        'none';
+                                                                                } else {
+                                                                                    img.src =
+                                                                                        fallback;
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                        {skill}
                                                                     </div>
-                                                                </div>
+                                                                </SkillTooltipWrapper>
                                                             </div>
                                                         ),
                                                     )}

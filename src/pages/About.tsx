@@ -13,6 +13,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from '../components/SwipeReveal';
+import SkillTooltipWrapper from '../components/SkillTooltipWrapper';
 import { getSkillIconPath, getSkillIconFallback } from '../lib/utils';
 import InteractiveFace from '../components/InteractiveFace';
 import {
@@ -156,20 +157,29 @@ const About: React.FC = () => {
         },
     };
 
-    const skillGridVariants = {
+    const courseGridVariants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
-            transition: { staggerChildren: 0.02 },
+            transition: { staggerChildren: 0.05 },
         },
     };
 
     const skillVariants = {
-        hidden: { opacity: 0, scale: 0.8, transition: { duration: 0.2 } },
+        hidden: { opacity: 0, y: 15 },
         visible: {
             opacity: 1,
-            scale: 1,
-            transition: { duration: 0.25, ease: 'easeOut' },
+            y: 0,
+            transition: { duration: 0.3, ease: 'easeOut' },
+        },
+    };
+
+    const sectionVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.6, ease: 'easeOut' },
         },
     };
 
@@ -342,7 +352,7 @@ const About: React.FC = () => {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: '-50px' }}
-                        variants={itemVariants}
+                        variants={sectionVariants}
                     >
                         <h2
                             className={`text-4xl lg:text-6xl font-bold mb-4 text-center 
@@ -368,12 +378,13 @@ const About: React.FC = () => {
                                 <p
                                     className={`text-base lg:text-sm leading-relaxed mb-6 ${theme === 'light' ? 'text-slate-500' : 'text-slate-500'}`}
                                 >
-                                    TCNJ's CS program has equipped me with the technical proficiency
-                                    and intellectual depth to make a strong impact in building
-                                    end-to-end systems that solve real problems. Its rigorous
-                                    academic foundations, hands-on learning experiences, innovative
-                                    research, and collaborative culture have prepared me to make a
-                                    strong difference in the technology industry.
+                                    TCNJ's transformative CS program has equipped me with the
+                                    technical proficiency and intellectual depth to make a strong
+                                    impact in building end-to-end systems that solve real problems.
+                                    Its rigorous academic foundations, hands-on learning
+                                    experiences, innovative research, and collaborative culture have
+                                    prepared me to make a strong difference in the technology
+                                    industry.
                                 </p>
                             </div>
 
@@ -392,15 +403,23 @@ const About: React.FC = () => {
                             >
                                 Relevant Coursework:
                             </h4>
-                            <div className="grid grid-cols-3 gap-1.5 md:gap-3">
+                            <motion.div
+                                variants={courseGridVariants}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: '-50px' }}
+                                className="grid grid-cols-3 gap-1.5 md:gap-3"
+                            >
                                 {courses.map((course, i) => (
-                                    <div
+                                    <motion.div
+                                        variants={skillVariants}
                                         key={i}
-                                        className={`leading-tight p-1.5 sm:p-2 md:px-4 md:py-3 rounded-lg border flex items-center justify-center lg:justify-start gap-1 sm:gap-1.5 md:gap-3 text-center lg:text-left transition-transform hover:scale-105 cursor-default
+                                        whileHover={{ scale: 1.05 }}
+                                        className={`leading-tight p-1.5 sm:p-2 md:px-4 md:py-3 rounded-lg border flex items-center justify-center lg:justify-start gap-1 sm:gap-1.5 md:gap-3 text-center lg:text-left cursor-default
                                             ${
                                                 theme === 'light'
-                                                    ? 'bg-slate-50 border-slate-200 text-slate-700'
-                                                    : 'bg-slate-800/40 border-slate-700/50 text-slate-300'
+                                                    ? 'bg-slate-50 border-slate-200 text-slate-700 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:border-blue-300'
+                                                    : 'bg-slate-800/40 border-slate-700/50 text-slate-300 hover:shadow-[0_0_15px_rgba(96,165,250,0.2)] hover:border-blue-500/50'
                                             }`}
                                     >
                                         <span
@@ -411,9 +430,9 @@ const About: React.FC = () => {
                                         <span className="text-[5px] sm:text-[10px] md:text-xs lg:text-sm font-medium">
                                             {course.name}
                                         </span>
-                                    </div>
+                                    </motion.div>
                                 ))}
-                            </div>
+                            </motion.div>
                         </div>
                     </motion.div>
 
@@ -423,19 +442,19 @@ const About: React.FC = () => {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: '-50px' }}
-                        variants={itemVariants}
+                        variants={sectionVariants}
                         className="space-y-6"
                     >
-                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                            <h2
-                                className={`text-4xl lg:text-6xl font-bold mb-4 text-center 
-                                ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
-                            >
-                                Skills
-                            </h2>
+                        <h2
+                            className={`text-4xl lg:text-6xl font-bold mb-4 text-center 
+                            ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                        >
+                            Skills
+                        </h2>
 
+                        <div className="flex flex-col items-center gap-4">
                             {/* Filter toggle & View toggles */}
-                            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                            <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3">
                                 {/* Sort buttons */}
                                 <div className="flex flex-wrap items-center gap-2">
                                     <button
@@ -448,15 +467,18 @@ const About: React.FC = () => {
                                         Featured{' '}
                                         {sortBy === 'featured' &&
                                             (sortAsc ? (
-                                                <FaChevronUp size={9} />
-                                            ) : (
                                                 <FaChevronDown size={9} />
+                                            ) : (
+                                                <FaChevronUp size={9} />
                                             ))}
                                     </button>
                                     <button
                                         onClick={() => {
                                             if (sortBy === 'proficiency') setSortAsc(!sortAsc);
-                                            else setSortBy('proficiency');
+                                            else {
+                                                setSortBy('proficiency');
+                                                setSortAsc(false);
+                                            }
                                         }}
                                         className={`sort-btn ${sortBy === 'proficiency' ? 'active' : ''}`}
                                     >
@@ -471,7 +493,10 @@ const About: React.FC = () => {
                                     <button
                                         onClick={() => {
                                             if (sortBy === 'used') setSortAsc(!sortAsc);
-                                            else setSortBy('used');
+                                            else {
+                                                setSortBy('used');
+                                                setSortAsc(false);
+                                            }
                                         }}
                                         className={`sort-btn ${sortBy === 'used' ? 'active' : ''}`}
                                     >
@@ -486,7 +511,10 @@ const About: React.FC = () => {
                                     <button
                                         onClick={() => {
                                             if (sortBy === 'alphabetical') setSortAsc(!sortAsc);
-                                            else setSortBy('alphabetical');
+                                            else {
+                                                setSortBy('alphabetical');
+                                                setSortAsc(true);
+                                            }
                                         }}
                                         className={`sort-btn ${sortBy === 'alphabetical' ? 'active' : ''}`}
                                     >
@@ -680,8 +708,13 @@ const About: React.FC = () => {
                                                         </div>
                                                     )}
                                                 </div>
+                                            </div>
+
+                                            {/* Selected Projects/Experience */}
+                                            <div className="lg:row-span-3">
+                                                <p className="filter-label">Selected</p>
                                                 {selectedUsedIn.length > 0 && (
-                                                    <div className="mt-2 flex flex-wrap gap-1.5">
+                                                    <div className="flex flex-wrap gap-1.5">
                                                         {selectedUsedIn.map((opt) => (
                                                             <span
                                                                 key={opt}
@@ -745,11 +778,12 @@ const About: React.FC = () => {
                             </div>
                         ) : viewMode === 'compact' ? (
                             <motion.div
-                                initial="hidden"
-                                whileInView="visible"
+                                key="compact-view"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: '-50px' }}
-                                variants={skillGridVariants}
-                                className={`w-full rounded-xl border ${theme === 'light' ? 'bg-white border-slate-200' : 'bg-[#0f1117] border-slate-800'}`}
+                                transition={{ duration: 0.5, ease: 'easeOut' }}
+                                className={`w-full rounded-xl border flex flex-col ${theme === 'light' ? 'bg-white border-slate-200' : 'bg-[#0f1117] border-slate-800'}`}
                             >
                                 {allCategories.map((cat) => {
                                     const catSkills = filteredSkillsList.filter(
@@ -770,115 +804,137 @@ const About: React.FC = () => {
                                             </div>
                                             <div className="flex-1 p-2 flex flex-wrap gap-1 md:gap-1.5 items-center">
                                                 <AnimatePresence mode="popLayout">
-                                                    {catSkills.map((skill) => (
+                                                    {catSkills.map((skill, i) => (
                                                         <motion.div
-                                                            variants={skillVariants}
-                                                            initial="hidden"
-                                                            animate="visible"
-                                                            exit="hidden"
+                                                            initial={{ opacity: 0, y: 15 }}
+                                                            whileInView={{ opacity: 1, y: 0 }}
+                                                            viewport={{ once: true }}
+                                                            exit={{ opacity: 0, scale: 0.9 }}
+                                                            transition={{
+                                                                duration: 0.25,
+                                                                ease: 'easeOut',
+                                                                delay: i * 0.02,
+                                                            }}
                                                             layout
                                                             key={skill.name}
-                                                            className="group relative"
+                                                            className="h-fit"
                                                         >
-                                                            <div
-                                                                className={`px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 hover:cursor-default ${
-                                                                    theme === 'light'
-                                                                        ? 'bg-slate-100 text-slate-600 border-slate-200 hover:border-slate-300'
-                                                                        : 'bg-slate-800/50 text-slate-300 border-slate-600/50 hover:border-slate-500'
-                                                                }`}
-                                                            >
-                                                                <img
-                                                                    src={getSkillIconPath(
-                                                                        skill.name,
-                                                                        theme,
-                                                                    )}
-                                                                    alt={skill.name}
-                                                                    className="w-[18px] h-[18px] object-contain flex-shrink-0"
-                                                                    onError={(e) => {
-                                                                        const img =
-                                                                            e.target as HTMLImageElement;
-                                                                        const fallback =
-                                                                            getSkillIconFallback(
-                                                                                skill.name,
-                                                                            );
-                                                                        img.src = img.src.endsWith(
-                                                                            fallback,
-                                                                        )
-                                                                            ? '/skills/default.png'
-                                                                            : fallback;
-                                                                    }}
-                                                                />
-                                                                {skill.name}
-                                                            </div>
-
-                                                            {/* Hover Tooltip/Popover */}
-                                                            <div
-                                                                className={`absolute bottom-[calc(100%+10px)] left-1/2 -translate-x-1/2 min-w-[200px] w-max max-w-[280px] p-3 text-sm font-normal rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-[100] whitespace-normal pointer-events-none text-left border ${
-                                                                    theme === 'light'
-                                                                        ? 'bg-white text-slate-700 border-slate-200/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)]'
-                                                                        : 'bg-[#111318] text-slate-300 border-slate-700/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]'
-                                                                }`}
-                                                            >
-                                                                <div className="flex items-start justify-between mb-2">
-                                                                    <h4
-                                                                        className={`font-bold text-base ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
-                                                                    >
-                                                                        {skill.name}
-                                                                    </h4>
-                                                                    <span
-                                                                        className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${
-                                                                            skill.proficiency ===
-                                                                            'Advanced'
-                                                                                ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400'
-                                                                                : skill.proficiency ===
-                                                                                    'Proficient'
-                                                                                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400'
-                                                                                  : 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300'
-                                                                        }`}
-                                                                    >
-                                                                        {skill.proficiency}
-                                                                    </span>
-                                                                </div>
-                                                                <p
-                                                                    className={`text-xs mb-3 leading-relaxed whitespace-normal ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
-                                                                >
-                                                                    {skill.description}
-                                                                </p>
-
-                                                                {(skill.usedInProjects.length > 0 ||
-                                                                    skill.usedInExperience.length >
-                                                                        0) && (
-                                                                    <div>
-                                                                        <p
-                                                                            className={`text-[10px] font-semibold uppercase tracking-wider mb-1.5 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
-                                                                        >
-                                                                            Used In:
-                                                                        </p>
-                                                                        <div className="flex flex-wrap gap-1">
-                                                                            {skill.usedInProjects.map(
-                                                                                (p) => (
-                                                                                    <span
-                                                                                        key={p.name}
-                                                                                        className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-700/50 border-slate-600 text-slate-300'}`}
-                                                                                    >
-                                                                                        {p.name}
-                                                                                    </span>
-                                                                                ),
-                                                                            )}
-                                                                            {skill.usedInExperience.map(
-                                                                                (e) => (
-                                                                                    <span
-                                                                                        key={e.role}
-                                                                                        className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-700/50 border-slate-600 text-slate-300'}`}
-                                                                                    >
-                                                                                        {e.role}
-                                                                                    </span>
-                                                                                ),
-                                                                            )}
+                                                            <SkillTooltipWrapper
+                                                                theme={theme}
+                                                                content={
+                                                                    <>
+                                                                        <div className="flex items-start justify-between mb-2">
+                                                                            <h4
+                                                                                className={`font-bold text-base ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
+                                                                            >
+                                                                                {skill.name}
+                                                                            </h4>
+                                                                            <span
+                                                                                className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${
+                                                                                    skill.proficiency ===
+                                                                                    'Advanced'
+                                                                                        ? theme ===
+                                                                                          'light'
+                                                                                            ? 'bg-green-100 text-green-700'
+                                                                                            : 'bg-green-900/50 text-green-400'
+                                                                                        : skill.proficiency ===
+                                                                                            'Proficient'
+                                                                                          ? theme ===
+                                                                                            'light'
+                                                                                              ? 'bg-blue-100 text-blue-700'
+                                                                                              : 'bg-blue-900/50 text-blue-400'
+                                                                                          : theme ===
+                                                                                              'light'
+                                                                                            ? 'bg-slate-100 text-slate-700'
+                                                                                            : 'bg-slate-700/50 text-slate-300'
+                                                                                }`}
+                                                                            >
+                                                                                {skill.proficiency}
+                                                                            </span>
                                                                         </div>
-                                                                    </div>
-                                                                )}
-                                                            </div>
+                                                                        <p
+                                                                            className={`text-xs leading-relaxed whitespace-normal ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'} ${skill.usedInProjects.length > 0 || skill.usedInExperience.length > 0 ? 'mb-3' : ''}`}
+                                                                        >
+                                                                            {skill.description}
+                                                                        </p>
+
+                                                                        {(skill.usedInProjects
+                                                                            .length > 0 ||
+                                                                            skill.usedInExperience
+                                                                                .length > 0) && (
+                                                                            <div>
+                                                                                <p
+                                                                                    className={`text-[10px] font-semibold uppercase tracking-wider mb-1.5 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
+                                                                                >
+                                                                                    Used In:
+                                                                                </p>
+                                                                                <div className="flex flex-wrap gap-1">
+                                                                                    {skill.usedInProjects.map(
+                                                                                        (p) => (
+                                                                                            <span
+                                                                                                key={
+                                                                                                    p.name
+                                                                                                }
+                                                                                                className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-700/50 border-slate-600 text-slate-300'}`}
+                                                                                            >
+                                                                                                {
+                                                                                                    p.name
+                                                                                                }
+                                                                                            </span>
+                                                                                        ),
+                                                                                    )}
+                                                                                    {skill.usedInExperience.map(
+                                                                                        (e) => (
+                                                                                            <span
+                                                                                                key={
+                                                                                                    e.role
+                                                                                                }
+                                                                                                className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-700/50 border-slate-600 text-slate-300'}`}
+                                                                                            >
+                                                                                                {
+                                                                                                    e.role
+                                                                                                }
+                                                                                            </span>
+                                                                                        ),
+                                                                                    )}
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+                                                                    </>
+                                                                }
+                                                            >
+                                                                <div
+                                                                    className={`px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 hover:cursor-default ${
+                                                                        theme === 'light'
+                                                                            ? 'bg-slate-100 text-slate-600 border-slate-200 hover:border-slate-300'
+                                                                            : 'bg-slate-800/50 text-slate-300 border-slate-600/50 hover:border-slate-500'
+                                                                    }`}
+                                                                >
+                                                                    <img
+                                                                        src={getSkillIconPath(
+                                                                            skill.name,
+                                                                            theme,
+                                                                        )}
+                                                                        alt={skill.name}
+                                                                        className="w-[18px] h-[18px] object-contain flex-shrink-0"
+                                                                        onError={(e) => {
+                                                                            const img =
+                                                                                e.target as HTMLImageElement;
+                                                                            const fallback =
+                                                                                getSkillIconFallback(
+                                                                                    skill.name,
+                                                                                );
+                                                                            img.src =
+                                                                                img.src.endsWith(
+                                                                                    fallback,
+                                                                                )
+                                                                                    ? '/skills/default.png'
+                                                                                    : fallback;
+                                                                        }}
+                                                                    />
+                                                                    {skill.name}
+                                                                </div>
+                                                            </SkillTooltipWrapper>
                                                         </motion.div>
                                                     ))}
                                                 </AnimatePresence>
@@ -888,7 +944,14 @@ const About: React.FC = () => {
                                 })}
                             </motion.div>
                         ) : (
-                            <div className="flex flex-col gap-12 lg:gap-16">
+                            <motion.div
+                                key="expanded-view"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: '-50px' }}
+                                transition={{ duration: 0.5, ease: 'easeOut' }}
+                                className="flex flex-col gap-12 lg:gap-16"
+                            >
                                 {allCategories.map((cat) => {
                                     const catSkills = filteredSkillsList.filter(
                                         (s) => s.category === cat,
@@ -911,106 +974,127 @@ const About: React.FC = () => {
                                             </div>
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-                                                {catSkills.map((skill) => (
-                                                    <div
-                                                        key={skill.name}
-                                                        className={`flex flex-col gap-4 p-5 md:p-6 rounded-xl border transition-colors hover:shadow-sm ${theme === 'light' ? 'bg-white border-slate-200 hover:border-blue-200' : 'bg-[#151821] border-slate-800 hover:border-blue-500/30'}`}
-                                                    >
-                                                        <div className="flex gap-4 items-center">
-                                                            <div
-                                                                className={`w-12 h-12 flex-shrink-0 rounded-lg flex items-center justify-center border shadow-sm ${theme === 'light' ? 'bg-slate-50 border-slate-100' : 'bg-slate-800/50 border-slate-700/50'}`}
-                                                            >
-                                                                <img
-                                                                    src={getSkillIconPath(
-                                                                        skill.name,
-                                                                        theme,
-                                                                    )}
-                                                                    alt={skill.name}
-                                                                    className="w-8 h-8 object-contain"
-                                                                    onError={(e) => {
-                                                                        const img =
-                                                                            e.target as HTMLImageElement;
-                                                                        const fallback =
-                                                                            getSkillIconFallback(
-                                                                                skill.name,
-                                                                            );
-                                                                        img.src = img.src.endsWith(
-                                                                            fallback,
-                                                                        )
-                                                                            ? '/skills/default.png'
-                                                                            : fallback;
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                            <div>
-                                                                <h3
-                                                                    className={`text-lg font-bold ${theme === 'light' ? 'text-slate-800' : 'text-slate-200'}`}
+                                                <AnimatePresence mode="popLayout">
+                                                    {catSkills.map((skill, i) => (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, y: 15 }}
+                                                            whileInView={{ opacity: 1, y: 0 }}
+                                                            viewport={{ once: true }}
+                                                            exit={{ opacity: 0, scale: 0.9 }}
+                                                            transition={{
+                                                                duration: 0.3,
+                                                                ease: 'easeOut',
+                                                                delay: i * 0.03,
+                                                            }}
+                                                            layout
+                                                            key={skill.name}
+                                                            className={`flex flex-col gap-4 p-5 md:p-6 rounded-xl border transition-all hover:shadow-md hover:-translate-y-1 ${theme === 'light' ? 'bg-white border-slate-200 hover:border-blue-300' : 'bg-[#151821] border-slate-800 hover:border-blue-500/30 hover:shadow-blue-500/5'}`}
+                                                        >
+                                                            <div className="flex gap-4 items-center">
+                                                                <div
+                                                                    className={`w-12 h-12 flex-shrink-0 rounded-lg flex items-center justify-center border shadow-sm ${theme === 'light' ? 'bg-slate-50 border-slate-100' : 'bg-slate-800/50 border-slate-700/50'}`}
                                                                 >
-                                                                    {skill.name}
-                                                                </h3>
-                                                                <span
-                                                                    className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full mt-1 inline-block ${
-                                                                        skill.proficiency ===
-                                                                        'Advanced'
-                                                                            ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400'
-                                                                            : skill.proficiency ===
-                                                                                'Proficient'
-                                                                              ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400'
-                                                                              : 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300'
-                                                                    }`}
-                                                                >
-                                                                    {skill.proficiency}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex-1 space-y-3">
-                                                            <p
-                                                                className={`text-sm leading-relaxed ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
-                                                            >
-                                                                {skill.description}
-                                                            </p>
-
-                                                            {(skill.usedInProjects.length > 0 ||
-                                                                skill.usedInExperience.length >
-                                                                    0) && (
-                                                                <div className="pt-2">
-                                                                    <p
-                                                                        className={`text-[10px] font-semibold uppercase tracking-wider mb-2 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
-                                                                    >
-                                                                        Used In:
-                                                                    </p>
-                                                                    <div className="flex flex-wrap gap-1.5">
-                                                                        {skill.usedInProjects.map(
-                                                                            (p) => (
-                                                                                <span
-                                                                                    key={p.name}
-                                                                                    className={`text-xs px-2.5 py-1 rounded-md border ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-800/80 border-slate-700 text-slate-300'}`}
-                                                                                >
-                                                                                    {p.name}
-                                                                                </span>
-                                                                            ),
+                                                                    <img
+                                                                        src={getSkillIconPath(
+                                                                            skill.name,
+                                                                            theme,
                                                                         )}
-                                                                        {skill.usedInExperience.map(
-                                                                            (e) => (
-                                                                                <span
-                                                                                    key={e.role}
-                                                                                    className={`text-xs px-2.5 py-1 rounded-md border ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-800/80 border-slate-700 text-slate-300'}`}
-                                                                                >
-                                                                                    {e.role}
-                                                                                </span>
-                                                                            ),
-                                                                        )}
-                                                                    </div>
+                                                                        alt={skill.name}
+                                                                        className="w-8 h-8 object-contain"
+                                                                        onError={(e) => {
+                                                                            const img =
+                                                                                e.target as HTMLImageElement;
+                                                                            const fallback =
+                                                                                getSkillIconFallback(
+                                                                                    skill.name,
+                                                                                );
+                                                                            img.src =
+                                                                                img.src.endsWith(
+                                                                                    fallback,
+                                                                                )
+                                                                                    ? '/skills/default.png'
+                                                                                    : fallback;
+                                                                        }}
+                                                                    />
                                                                 </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                ))}
+                                                                <div>
+                                                                    <h3
+                                                                        className={`text-lg font-bold ${theme === 'light' ? 'text-slate-800' : 'text-slate-200'}`}
+                                                                    >
+                                                                        {skill.name}
+                                                                    </h3>
+                                                                    <span
+                                                                        className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full mt-1 inline-block ${
+                                                                            skill.proficiency ===
+                                                                            'Advanced'
+                                                                                ? theme === 'light'
+                                                                                    ? 'bg-green-100 text-green-700'
+                                                                                    : 'bg-green-900/50 text-green-400'
+                                                                                : skill.proficiency ===
+                                                                                    'Proficient'
+                                                                                  ? theme ===
+                                                                                    'light'
+                                                                                      ? 'bg-blue-100 text-blue-700'
+                                                                                      : 'bg-blue-900/50 text-blue-400'
+                                                                                  : theme ===
+                                                                                      'light'
+                                                                                    ? 'bg-slate-100 text-slate-700'
+                                                                                    : 'bg-slate-700/50 text-slate-300'
+                                                                        }`}
+                                                                    >
+                                                                        {skill.proficiency}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="flex-1 space-y-3">
+                                                                <p
+                                                                    className={`text-sm leading-relaxed ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
+                                                                >
+                                                                    {skill.description}
+                                                                </p>
+
+                                                                {(skill.usedInProjects.length > 0 ||
+                                                                    skill.usedInExperience.length >
+                                                                        0) && (
+                                                                    <div className="pt-2">
+                                                                        <p
+                                                                            className={`text-[10px] font-semibold uppercase tracking-wider mb-2 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
+                                                                        >
+                                                                            Used In:
+                                                                        </p>
+                                                                        <div className="flex flex-wrap gap-1.5">
+                                                                            {skill.usedInProjects.map(
+                                                                                (p) => (
+                                                                                    <span
+                                                                                        key={p.name}
+                                                                                        className={`text-xs px-2.5 py-1 rounded-md border ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-800/80 border-slate-700 text-slate-300'}`}
+                                                                                    >
+                                                                                        {p.name}
+                                                                                    </span>
+                                                                                ),
+                                                                            )}
+                                                                            {skill.usedInExperience.map(
+                                                                                (e) => (
+                                                                                    <span
+                                                                                        key={e.role}
+                                                                                        className={`text-xs px-2.5 py-1 rounded-md border ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600' : 'bg-slate-800/80 border-slate-700 text-slate-300'}`}
+                                                                                    >
+                                                                                        {e.role}
+                                                                                    </span>
+                                                                                ),
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </motion.div>
+                                                    ))}
+                                                </AnimatePresence>
                                             </div>
                                         </div>
                                     );
                                 })}
-                            </div>
+                            </motion.div>
                         )}
                     </motion.div>
 
