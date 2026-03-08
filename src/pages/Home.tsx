@@ -60,7 +60,7 @@ const GooglyEyes: React.FC<{
         <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
             {/* Left Eye */}
             <div
-                className="absolute w-4 h-4 lg:w-6 lg:h-6 bg-white rounded-full border-[1px] border-black flex items-center justify-center overflow-hidden shadow-inner"
+                className="absolute w-4 h-4 lg:w-6 lg:h-6 rounded-full border-black flex items-center justify-center overflow-hidden shadow-inner"
                 style={{ left: '41%', top: '42%', transform: 'translate(-50%, -50%)' }}
             >
                 <div
@@ -72,7 +72,7 @@ const GooglyEyes: React.FC<{
             </div>
             {/* Right Eye */}
             <div
-                className="absolute w-4 h-4 lg:w-6 lg:h-6 bg-white rounded-full border-[1px] border-black flex items-center justify-center overflow-hidden shadow-inner"
+                className="absolute w-4 h-4 lg:w-6 lg:h-6 rounded-full flex items-center justify-center overflow-hidden shadow-inner"
                 style={{ left: '59%', top: '42%', transform: 'translate(-50%, -50%)' }}
             >
                 <div

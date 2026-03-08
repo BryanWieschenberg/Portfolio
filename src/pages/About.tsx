@@ -323,7 +323,7 @@ const About: React.FC = () => {
                         {/* Bottom Text Row */}
                         <div className="w-full">
                             <p
-                                className={`text-lg lg:text-xl leading-relaxed lg:leading-relaxed text-center lg:text-justify ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
+                                className={`text-lg lg:text-xl leading-relaxed lg:leading-relaxed text-center ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                             >
                                 I'm currently focused on full-stack product work. I build things
                                 that solve real friction, including better productivity workflows,
@@ -520,16 +520,34 @@ const About: React.FC = () => {
                                     className={`hidden sm:block w-px h-5 mx-1 ${theme === 'light' ? 'bg-slate-300' : 'bg-slate-600'}`}
                                 />
 
-                                <div className="toggle-pill bg-slate-100 dark:bg-slate-800/50">
+                                <div
+                                    className={`flex rounded-lg overflow-hidden border p-0.5 ${theme === 'light' ? 'bg-slate-100 border-slate-200' : 'bg-slate-800/50 border-slate-700/50'}`}
+                                >
                                     <button
                                         onClick={() => setViewMode('compact')}
-                                        className={`px-3 py-1.5 rounded transition-colors ${viewMode === 'compact' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500 hover:text-blue-600' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                        className={`px-3 py-1.5 rounded-md transition-all ${
+                                            viewMode === 'compact'
+                                                ? theme === 'light'
+                                                    ? 'bg-white shadow-sm text-blue-600 font-bold'
+                                                    : 'bg-slate-700 shadow-sm text-blue-400'
+                                                : theme === 'light'
+                                                  ? 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                                                  : 'text-slate-400 hover:text-slate-300 hover:bg-slate-700/50'
+                                        }`}
                                     >
                                         <FaTable size={12} />
                                     </button>
                                     <button
                                         onClick={() => setViewMode('expanded')}
-                                        className={`px-3 py-1.5 rounded transition-colors ${viewMode === 'expanded' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-500 hover:text-blue-600' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                        className={`px-3 py-1.5 rounded-md transition-all ${
+                                            viewMode === 'expanded'
+                                                ? theme === 'light'
+                                                    ? 'bg-white shadow-sm text-blue-600 font-bold'
+                                                    : 'bg-slate-700 shadow-sm text-blue-400'
+                                                : theme === 'light'
+                                                  ? 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                                                  : 'text-slate-400 hover:text-slate-300 hover:bg-slate-700/50'
+                                        }`}
                                     >
                                         <FaThList size={12} />
                                     </button>
@@ -1117,10 +1135,10 @@ const About: React.FC = () => {
                         >
                             More About Me
                         </h2>
-                        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
-                            <div className="lg:w-1/3 w-full">
+                        <div className="flex flex-col gap-8 lg:gap-10 items-center">
+                            <div className="w-full">
                                 <p
-                                    className={`text-base leading-relaxed ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
+                                    className={`text-lg lg:text-xl leading-relaxed lg:leading-relaxed text-center ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                                 >
                                     Outside of computer science, I'm usually in the gym, cooking,
                                     gaming, or planning some cool stuff! I also love having deep
@@ -1129,41 +1147,42 @@ const About: React.FC = () => {
                                 </p>
                             </div>
 
-                            <div className="lg:w-2/3 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <motion.div
+                                variants={{
+                                    visible: { transition: { staggerChildren: 0.1 } },
+                                }}
+                                className="w-full grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4"
+                            >
                                 {interests.map((interest, i) => (
                                     <motion.div
                                         variants={skillVariants}
                                         key={i}
-                                        className={`group relative p-5 md:p-6 rounded-xl border flex flex-col justify-center overflow-hidden transition-all duration-300
-                                            ${theme === 'light' ? 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]' : 'bg-[#151821] border-slate-800 hover:border-blue-500/30 hover:shadow-[0_0_20px_rgba(59,130,246,0.1)]'}`}
+                                        className={`group relative py-6 px-4 rounded-xl border flex flex-col items-center justify-center overflow-hidden transition-all duration-300 h-36 sm:h-44
+                                            ${theme === 'light' ? 'bg-slate-50 border-slate-200 hover:border-blue-300 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]' : 'bg-slate-800/40 border-slate-700/50 hover:border-blue-500/50 hover:shadow-[0_0_15px_rgba(96,165,250,0.2)]'}`}
                                     >
-                                        <div className="flex items-center gap-4 relative z-10 transition-transform duration-300 group-hover:-translate-y-4">
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 lg:gap-3 transition-all duration-300 group-hover:-translate-y-8 group-hover:opacity-0 group-hover:pointer-events-none">
                                             <span
-                                                className={`text-2xl sm:text-3xl flex-shrink-0 transition-transform duration-300 group-hover:scale-110 ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
+                                                className={`text-3xl lg:text-4xl flex-shrink-0 transition-transform duration-300 group-hover:scale-110 ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
                                             >
                                                 {interest.icon}
                                             </span>
-                                            <span className="text-lg font-bold">
+                                            <span className="text-sm sm:text-base lg:text-lg xl:text-xl font-bold text-center">
                                                 {interest.name}
                                             </span>
-                                            <span
-                                                className={`ml-auto opacity-0 transform translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
-                                            >
-                                                →
-                                            </span>
                                         </div>
-                                        <div className="absolute left-0 right-0 bottom-0 p-5 md:p-6 translate-y-full opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 z-0">
+                                        <div className="absolute inset-0 p-3 sm:p-5 translate-y-8 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 flex items-center justify-center text-center">
                                             <p
-                                                className={`text-sm md:text-base leading-snug mt-4 ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
+                                                className={`text-[11px] sm:text-xs font-medium leading-snug xl:leading-snug ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
                                             >
                                                 {interest.description}
                                             </p>
                                         </div>
                                     </motion.div>
                                 ))}
-                            </div>
+                            </motion.div>
                         </div>
                     </motion.div>
+
                     <div className={divider} />
 
                     <motion.div
@@ -1179,26 +1198,29 @@ const About: React.FC = () => {
                             Let's Talk
                         </h2>
                         <p
-                            className={`text-base lg:text-lg max-w-2xl mx-auto ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
+                            className={`text-lg lg:text-xl leading-relaxed lg:leading-relaxed text-center pb-4 ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                         >
-                            If you're working on hard problems and care about craft, I'd love to
-                            talk!
+                            If you're working on hard problems and care about making a positive
+                            difference, I'd love to chat! Our excellence as a species is all thanks
+                            to collaboration.
                         </p>
 
                         <div className="flex flex-wrap justify-center items-center gap-4 mt-8">
                             <a
-                                href="mailto:bryan.wieschenberg@gmail.com"
-                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 ${theme === 'light' ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-md hover:shadow-lg' : 'bg-blue-600 text-white hover:bg-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)]'}`}
+                                href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-110 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
                             >
-                                <FaEnvelope />
-                                bryan.wieschenberg@gmail.com
+                                <FaFileAlt />
+                                Resume
                             </a>
 
                             <a
                                 href="https://github.com/BryanWieschenberg"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
+                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-110 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
                             >
                                 <FaGithub />
                                 GitHub
@@ -1208,20 +1230,18 @@ const About: React.FC = () => {
                                 href="https://linkedin.com/in/BryanWieschenberg"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
+                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-110 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
                             >
                                 <FaLinkedin />
                                 LinkedIn
                             </a>
 
                             <a
-                                href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
+                                href="mailto:bryan.wieschenberg@gmail.com"
+                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-110 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
                             >
-                                <FaFileAlt />
-                                Resume
+                                <FaEnvelope />
+                                Email
                             </a>
                         </div>
                     </motion.div>
