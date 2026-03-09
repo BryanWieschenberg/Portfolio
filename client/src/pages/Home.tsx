@@ -276,14 +276,6 @@ const Home: React.FC = () => {
                                         className={`mt-6 flex flex-wrap justify-center lg:justify-start gap-6 font-medium ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
                                     >
                                         <a
-                                            href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
-                                            target="_blank"
-                                            className={`transition-colors flex items-center gap-2 ${theme === 'light' ? 'hover:text-blue-600' : 'hover:text-white'}`}
-                                        >
-                                            <FaFileLines />
-                                            <span>Resume</span>
-                                        </a>
-                                        <a
                                             href="https://github.com/BryanWieschenberg/"
                                             target="_blank"
                                             className={`transition-colors flex items-center gap-2 ${theme === 'light' ? 'hover:text-blue-600' : 'hover:text-white'}`}
@@ -298,6 +290,14 @@ const Home: React.FC = () => {
                                         >
                                             <FaLinkedin />
                                             <span>LinkedIn</span>
+                                        </a>
+                                        <a
+                                            href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
+                                            target="_blank"
+                                            className={`transition-colors flex items-center gap-2 ${theme === 'light' ? 'hover:text-blue-600' : 'hover:text-white'}`}
+                                        >
+                                            <FaFileLines />
+                                            <span>Resume</span>
                                         </a>
                                     </motion.div>
                                 </motion.div>
@@ -416,7 +416,7 @@ const Home: React.FC = () => {
                                             className={`mb-4 text-sm font-medium ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
                                         >
                                             {githubData.totalContributions} contributions in the
-                                            last 90 days
+                                            last year
                                         </p>
                                         <div className="flex gap-1 overflow-x-auto pb-2 scrollbar-hide">
                                             {githubData.weeks.map((week, i) => (
