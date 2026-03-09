@@ -8,9 +8,11 @@ import Work from './pages/Work';
 import ProjectDetail from './components/ProjectDetail';
 import ExperienceDetail from './components/ExperienceDetail';
 import Blog from './pages/Blog';
-import StellarPapersBlog from './pages/blog/StellarPapers';
 import GoalGetterBlog from './pages/blog/GoalGetter';
-import StreamLineBlog from './pages/blog/StreamLine';
+import GraduationBlog from './pages/blog/Graduation';
+import HackTCNJBlog from './pages/blog/HackTCNJ';
+import AIBlog from './pages/blog/AI';
+import InvalidBlog from './components/InvalidBlog';
 import Contact from './pages/Contact';
 import ScrollToTop from './components/ScrollToTop';
 import { ThemeProvider } from './context/ThemeContext';
@@ -82,9 +84,11 @@ const App: React.FC = () => (
                         <Route path="/work/projects/:slug" element={<ProjectDetail />} />
                         <Route path="/work/experience/:slug" element={<ExperienceDetail />} />
                         <Route path="/blog" element={<Blog />} />
-                        <Route path="/blog/stellar-papers" element={<StellarPapersBlog />} />
                         <Route path="/blog/goalgetter" element={<GoalGetterBlog />} />
-                        <Route path="/blog/streamline" element={<StreamLineBlog />} />
+                        <Route path="/blog/graduation" element={<GraduationBlog />} />
+                        <Route path="/blog/hacktcnj" element={<HackTCNJBlog />} />
+                        <Route path="/blog/ai" element={<AIBlog />} />
+                        <Route path="/blog/*" element={<InvalidBlog />} />
                         <Route path="/contact" element={<Contact />} />
                     </Routes>
                 </div>

@@ -1,1 +1,1 @@
-export const validSlugs = ['my-first-post', 'building-my-portfolio'];
+export const validSlugs = ['graduation', 'hacktcnj', 'ai', 'goalgetter'];

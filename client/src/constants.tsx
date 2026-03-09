@@ -148,14 +148,15 @@ export interface Skill {
     description: string;
 }
 
+export type BlogTopic = 'Project' | 'Career' | 'Opinion';
+
 export interface BlogPost {
-    slug: string;
     title: string;
-    subtitle: string;
+    slug: string;
     date: string;
-    readTime: string;
-    tags: string[];
-    preview: string;
+    readMins: string;
+    topic: BlogTopic;
+    hook: string;
 }
 
 export const projects: Project[] = [
@@ -708,43 +709,35 @@ export const skills: Record<SkillCategory, Skill[]> = {
 
 export const blogPosts: BlogPost[] = [
     {
-        slug: 'dsa_journey',
-        title: 'My DSA Journey',
-        subtitle: 'Blind 75 → NeetCode 150 → NeetCode 250',
-        date: 'Feb 2026',
-        readTime: '10 min read',
-        tags: ['DSA', 'Learning', 'Problem Solving'],
-        preview:
-            'What I actually learned grinding through 250+ data structures & algorithms problems — and why the grind itself is only half the point.',
+        title: "I'm About to Graduate...",
+        slug: 'graduation',
+        date: '3/12/2026',
+        readMins: '10',
+        topic: 'Career',
+        hook: '...',
     },
     {
-        slug: 'streamline',
-        title: 'Building an End-to-End Encrypted Chat App in Rust',
-        subtitle: 'An Encrypted, Multithreaded Chat Server in Rust',
-        date: 'Jul 2025',
-        readTime: '12 min read',
-        tags: ['Rust', 'Systems', 'Cryptography'],
-        preview:
-            'Why I chose the hardest possible way to build a chat app — and what it taught me about ownership, encryption, and protocol design.',
+        title: 'My HackTCNJ Experience',
+        slug: 'hacktcnj',
+        date: '3/2/2026',
+        readMins: '10',
+        topic: 'Project',
+        hook: '...',
     },
     {
+        title: 'My Honest Thoughts on AI and the Future of Software Engineering',
+        slug: 'ai',
+        date: '2/27/2026',
+        readMins: '10',
+        topic: 'Opinion',
+        hook: '...',
+    },
+    {
+        title: 'The Making of GoalGetter: My First Production App',
         slug: 'goalgetter',
-        title: 'Building a Production-Grade Productivity App',
-        subtitle: 'A Productivity App with 30+ Users and Zero Excuses',
-        date: 'Aug 2025',
-        readTime: '11 min read',
-        tags: ['Full-Stack', 'Auth', 'Product'],
-        preview:
-            'What I learned shipping a real product — from auth nightmares to scheduling math to the moment someone said "I use this every day."',
-    },
-    {
-        slug: 'ml_research',
-        title: 'Teaching Robots to See',
-        subtitle: 'My Summer in ML Research at TCNJ',
-        date: 'Jun 2025',
-        readTime: '8 min read',
-        tags: ['Machine Learning', 'Computer Vision', 'Robotics'],
-        preview:
-            "What happens when a software engineer who's never touched a neural network gets thrown into a robotics lab with a deadline and a camera.",
+        date: '2/23/2026',
+        readMins: '10',
+        topic: 'Project',
+        hook: '...',
     },
 ];

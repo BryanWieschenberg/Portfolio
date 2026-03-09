@@ -469,7 +469,7 @@ const Work: React.FC = () => {
                             onClick={() => handleSort('newest')}
                             className={`sort-btn ${sortKey === 'newest' ? 'active' : ''}`}
                         >
-                            Newest {sortKey === 'newest' && <SortArrow direction={sortDir} />}
+                            Recent {sortKey === 'newest' && <SortArrow direction={sortDir} />}
                         </button>
                         <button
                             onClick={() => handleSort('alphabetical')}
