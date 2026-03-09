@@ -1,6 +1,5 @@
 import { Router, type Router as RouterType } from 'express';
 import { getCache, setCache } from '../cache.js';
-import { GitHubPushEvent } from '../types/github.js';
 
 const router: RouterType = Router();
 const GITHUB_API = 'https://api.github.com/graphql';
@@ -47,10 +46,14 @@ router.get('/contributions', async (_req, res) => {
             return res.json(cached);
         }
 
+        const to = new Date();
+        const from = new Date();
+        from.setDate(to.getDate() - 90);
+
         const data = await githubGraphQL(`
       query {
         user(login: "${USERNAME}") {
-          contributionsCollection {
+          contributionsCollection(from: "${from.toISOString()}", to: "${to.toISOString()}") {
             contributionCalendar {
               totalContributions
               weeks {
@@ -67,6 +70,63 @@ router.get('/contributions', async (_req, res) => {
     `);
 
         const calendar = data.data.user.contributionsCollection.contributionCalendar;
+
+        // Fetch recent events to capture activity on non-default branches
+        try {
+            const events = await githubREST(`/users/${USERNAME}/events?per_page=100`);
+            const eventsMap: Record<string, number> = {};
+
+            if (Array.isArray(events)) {
+                for (const e of events) {
+                    if (
+                        [
+                            'PushEvent',
+                            'PullRequestEvent',
+                            'IssuesEvent',
+                            'PullRequestReviewEvent',
+                        ].includes(e.type)
+                    ) {
+                        const date = e.created_at.split('T')[0];
+                        let count = 1;
+                        if (e.type === 'PushEvent') {
+                            count = e.payload?.size || 1;
+                        }
+                        eventsMap[date] = (eventsMap[date] || 0) + count;
+                    }
+                }
+            }
+
+            let newTotal = 0;
+            for (const week of calendar.weeks) {
+                for (const day of week.contributionDays) {
+                    const eventCount = eventsMap[day.date] || 0;
+
+                    // Take the max to avoid double-counting default-branch commits
+                    // that the GraphQL API already caught vs the raw Event stream
+                    day.contributionCount = Math.max(day.contributionCount, eventCount);
+
+                    // Recalculate the GitHub color scale based on the new count
+                    if (day.contributionCount === 0) {
+                        day.color = '#ebedf0';
+                    } else if (day.contributionCount <= 3) {
+                        day.color = '#9be9a8';
+                    } else if (day.contributionCount <= 6) {
+                        day.color = '#40c463';
+                    } else if (day.contributionCount <= 9) {
+                        day.color = '#30a14e';
+                    } else {
+                        day.color = '#216e39';
+                    }
+
+                    newTotal += day.contributionCount;
+                }
+            }
+
+            calendar.totalContributions = newTotal;
+        } catch (err) {
+            console.error('Failed to overlay events onto heatmap:', err);
+        }
+
         setCache('github:contributions', calendar, CACHE_TTL);
         res.json(calendar);
     } catch (err) {
@@ -82,37 +142,50 @@ router.get('/commits', async (_req, res) => {
             return res.json(cached);
         }
 
-        const repos = await githubREST(`/users/${USERNAME}/repos?sort=pushed&per_page=10`);
+        const events = await githubREST(`/users/${USERNAME}/events`);
 
-        const commitPromises = (repos as { name: string; full_name: string }[]).map(
-            async (repo) => {
+        if (!Array.isArray(events)) {
+            throw new Error(`Expected array of events, got ${typeof events}`);
+        }
+
+        const pushEvents = events.filter((e: any) => e.type === 'PushEvent').slice(0, 15);
+
+        const commitPromises = pushEvents.map(async (e: any) => {
+            // First try reading commits array out of payload (classic PAT or full-scope)
+            if (e.payload?.commits && e.payload.commits.length > 0) {
+                return e.payload.commits.map((c: any) => ({
+                    sha: c.sha,
+                    message: c.message,
+                    repo: e.repo.name,
+                    date: e.created_at,
+                    url: `https://github.com/${e.repo.name}/commit/${c.sha}`,
+                }));
+            }
+
+            // If commits are stripped due to scoped PATs, fallback to fetching the head SHA
+            if (e.payload?.head) {
                 try {
-                    const commits = await githubREST(
-                        `/repos/${repo.full_name}/commits?author=${USERNAME}&per_page=5`,
+                    const commitData = await githubREST(
+                        `/repos/${e.repo.name}/commits/${e.payload.head}`,
                     );
-                    return (
-                        commits as {
-                            sha: string;
-                            commit: { message: string; author: { date: string } };
-                            html_url: string;
-                        }[]
-                    ).map((c) => ({
-                        sha: c.sha,
-                        message: c.commit.message,
-                        repo: repo.full_name,
-                        date: c.commit.author.date,
-                        url: c.html_url,
-                    }));
+                    return [
+                        {
+                            sha: commitData.sha,
+                            message: commitData.commit.message,
+                            repo: e.repo.name,
+                            date: commitData.commit.author.date, // Real commit date
+                            url: commitData.html_url,
+                        },
+                    ];
                 } catch {
                     return [];
                 }
-            },
-        );
+            }
 
-        const allCommits = (await Promise.all(commitPromises))
-            .flat()
-            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-            .slice(0, 30);
+            return [];
+        });
+
+        const allCommits = (await Promise.all(commitPromises)).flat().slice(0, 30);
 
         setCache('github:commits', allCommits, CACHE_TTL);
         res.json(allCommits);

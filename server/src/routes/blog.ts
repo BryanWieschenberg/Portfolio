@@ -4,6 +4,22 @@ import { validSlugs } from '../constants.js';
 
 const router: RouterType = Router();
 
+router.get('/latest', async (_req: Request, res: Response) => {
+    try {
+        const latestSlug = validSlugs[0];
+        if (!latestSlug) {
+            return res.status(404).json({ error: 'No posts found' });
+        }
+        const result = await pool.query('SELECT count FROM blog_views WHERE slug = $1', [
+            latestSlug,
+        ]);
+        res.json({ slug: latestSlug, views: result.rows[0]?.count ?? 0 });
+    } catch (err) {
+        console.error('Blog latest view error:', err);
+        res.status(500).json({ error: 'Failed to fetch latest post views' });
+    }
+});
+
 router.post('/:slug/view', async (req: Request, res: Response) => {
     try {
         const slug = req.params.slug as string;
@@ -46,7 +62,12 @@ router.post('/:slug/view', async (req: Request, res: Response) => {
 
 router.get('/:slug/views', async (req: Request, res: Response) => {
     try {
-        const { slug } = req.params;
+        const slug = req.params.slug as string;
+
+        if (!validSlugs.includes(slug)) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
         const result = await pool.query('SELECT count FROM blog_views WHERE slug = $1', [slug]);
         res.json({ views: result.rows[0]?.count ?? 0 });
     } catch (err) {

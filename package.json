@@ -5,8 +5,14 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently -n WEB,API -c blue,green \"pnpm --filter portfolio-frontend dev\" \"pnpm --filter portfolio-backend dev\"",
-    "dev:client": "pnpm --filter client dev",
-    "dev:server": "pnpm --filter server dev"
+    "build": "concurrently -n WEB,API -c blue,green \"pnpm --filter portfolio-frontend build\" \"pnpm --filter portfolio-backend build\"",
+    "start": "concurrently -n WEB,API -c blue,green \"pnpm --filter portfolio-frontend preview\" \"pnpm --filter portfolio-backend start\"",
+    "lint": "concurrently -n WEB,API -c blue,green \"pnpm --filter portfolio-frontend lint\" \"pnpm --filter portfolio-backend lint\"",
+    "format": "concurrently -n WEB,API -c blue,green \"pnpm --filter portfolio-frontend format\" \"pnpm --filter portfolio-backend format\"",
+    "lines": "cloc . --exclude-dir=dist,node_modules,.next --include-ext=ts,tsx --exclude-ext=d.ts,gen.ts",
+    "lines:large": "cloc . --exclude-dir=dist,node_modules,.next --include-ext=ts,tsx --exclude-ext=d.ts,gen.ts --by-file --csv | awk -F, '$5 >= 500 {print $2, $5}'",
+    "tree": "tree -I node_modules -I dist -I node_modules -I public",
+    "gitleaks": "gitleaks detect --source ."
   },
   "keywords": [],
   "author": "",

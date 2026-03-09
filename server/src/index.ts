@@ -16,6 +16,8 @@ const limiter = rateLimit({
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+app.set('trust proxy', 1);
+app.use(helmet());
 app.use(
     cors({
         origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
@@ -25,7 +27,6 @@ app.use(
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(limiter);
-app.use(helmet());
 
 app.use('/api/github', githubRoutes);
 app.use('/api/blog', blogRoutes);

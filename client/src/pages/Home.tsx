@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { projects } from '../constants';
+import { projects, blogPosts } from '../constants';
 import { FaLocationDot, FaFileLines, FaGithub, FaLinkedin } from 'react-icons/fa6';
 import { motion, AnimatePresence } from 'framer-motion';
 import SwipeReveal from '../components/SwipeReveal';
@@ -8,6 +8,27 @@ import { useTheme } from '../context/ThemeContext';
 import { PiArrowFatLinesRightFill } from 'react-icons/pi';
 import ProjectCard from '../components/ProjectCard';
 import { getAge } from '../lib/utils';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+interface ContributionDay {
+    date: string;
+    contributionCount: number;
+    color: string;
+}
+
+interface Commit {
+    sha: string;
+    message: string;
+    repo: string;
+    date: string;
+    url: string;
+}
+
+interface LatestBlogPost {
+    slug: string;
+    views: number;
+}
 
 function useLgUp() {
     const [isLgUp, setIsLgUp] = useState(false);
@@ -94,6 +115,33 @@ const Home: React.FC = () => {
     const navigate = useNavigate();
     const [isIntroComplete, setIsIntroComplete] = useState(false);
     const age = getAge();
+
+    const [githubData, setGithubData] = useState<{
+        totalContributions: number;
+        weeks: { contributionDays: ContributionDay[] }[];
+    } | null>(null);
+    const [commits, setCommits] = useState<Commit[]>([]);
+    const [latestBlog, setLatestBlog] = useState<LatestBlogPost | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [contribRes, commitRes, blogRes] = await Promise.all([
+                    fetch(`${API_URL}/api/github/contributions`),
+                    fetch(`${API_URL}/api/github/commits`),
+                    fetch(`${API_URL}/api/blog/latest`),
+                ]);
+
+                if (contribRes.ok) setGithubData(await contribRes.json());
+                if (commitRes.ok) setCommits(await commitRes.json());
+                if (blogRes.ok) setLatestBlog(await blogRes.json());
+            } catch (error) {
+                console.error('Error fetching home page data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const featuredProjects = projects.filter(
         (item) => item.name === 'Stellar Papers' || item.name === 'GoalGetter',
@@ -339,6 +387,191 @@ const Home: React.FC = () => {
                                     →
                                 </span>
                             </button>
+                        </motion.div>
+                    </motion.div>
+                </div>
+            )}
+
+            {isIntroComplete && (
+                <div className="container mx-auto px-4 lg:px-20 pb-24">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-100px' }}
+                        variants={containerVariants}
+                        className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto"
+                    >
+                        {/* Left Column: GitHub Activity */}
+                        <motion.div variants={itemVariants} className="flex flex-col gap-8">
+                            {/* Commit Heatmap */}
+                            <div
+                                className={`p-6 rounded-2xl ${theme === 'light' ? 'bg-slate-200/80 shadow-md' : 'bg-[#111318]/95 border border-slate-700/50 shadow-2xl'}`}
+                            >
+                                <h3 className="card-title text-2xl mb-4 flex items-center gap-2">
+                                    <FaGithub /> GitHub Activity
+                                </h3>
+                                {githubData ? (
+                                    <>
+                                        <p
+                                            className={`mb-4 text-sm font-medium ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
+                                        >
+                                            {githubData.totalContributions} contributions in the
+                                            last 90 days
+                                        </p>
+                                        <div className="flex gap-1 overflow-x-auto pb-2 scrollbar-hide">
+                                            {githubData.weeks.map((week, i) => (
+                                                <div
+                                                    key={i}
+                                                    className="flex flex-col gap-1 flex-shrink-0"
+                                                >
+                                                    {week.contributionDays.map((day, j) => (
+                                                        <div
+                                                            key={j}
+                                                            className="w-[10px] h-[10px] rounded-[2px]"
+                                                            style={{
+                                                                backgroundColor:
+                                                                    day.contributionCount > 0
+                                                                        ? day.color
+                                                                        : theme === 'light'
+                                                                          ? '#cbd5e1'
+                                                                          : '#1e293b',
+                                                            }}
+                                                            title={`${day.contributionCount} contributions on ${day.date}`}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="animate-pulse flex gap-1 overflow-hidden">
+                                        {[...Array(52)].map((_, i) => (
+                                            <div key={i} className="flex flex-col gap-1">
+                                                {[...Array(7)].map((_, j) => (
+                                                    <div
+                                                        key={j}
+                                                        className={`w-[10px] h-[10px] rounded-[2px] ${theme === 'light' ? 'bg-slate-300' : 'bg-slate-800'}`}
+                                                    />
+                                                ))}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Commit History */}
+                            <div
+                                className={`p-6 rounded-2xl flex flex-col ${theme === 'light' ? 'bg-slate-200/80 shadow-md' : 'bg-[#111318]/95 border border-slate-700/50 shadow-2xl'}`}
+                            >
+                                <h3 className="card-title text-2xl mb-4 flex items-center gap-2">
+                                    Recent Commits
+                                </h3>
+                                <div className="flex flex-col gap-3">
+                                    {commits.length > 0
+                                        ? commits.slice(0, 5).map((commit, i) => (
+                                              <a
+                                                  key={i}
+                                                  href={commit.url}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className={`block p-3 rounded-xl transition-all ${
+                                                      theme === 'light'
+                                                          ? 'bg-white hover:shadow-md'
+                                                          : 'bg-[#1a1f2e] hover:bg-[#252b3b]'
+                                                  }`}
+                                              >
+                                                  <h4 className="font-bold text-sm truncate">
+                                                      {commit.message}
+                                                  </h4>
+                                                  <p
+                                                      className={`text-xs mt-1 flex justify-between ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
+                                                  >
+                                                      <span className="truncate mr-2">
+                                                          {commit.repo}
+                                                      </span>
+                                                      <span>
+                                                          {new Date(
+                                                              commit.date,
+                                                          ).toLocaleDateString()}
+                                                      </span>
+                                                  </p>
+                                              </a>
+                                          ))
+                                        : [...Array(5)].map((_, i) => (
+                                              <div
+                                                  key={i}
+                                                  className={`h-[68px] rounded-xl animate-pulse ${theme === 'light' ? 'bg-white' : 'bg-[#1a1f2e]'}`}
+                                              />
+                                          ))}
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        {/* Right Column: Latest Blog Post */}
+                        <motion.div variants={itemVariants} className="flex flex-col">
+                            <div
+                                className={`p-6 rounded-2xl h-full flex flex-col ${theme === 'light' ? 'bg-slate-200/80 shadow-md' : 'bg-[#111318]/95 border border-slate-700/50 shadow-2xl'}`}
+                            >
+                                <h3 className="card-title text-2xl mb-4">Latest Blog Post</h3>
+                                {latestBlog && blogPosts.find((p) => p.slug === latestBlog.slug) ? (
+                                    (() => {
+                                        const post = blogPosts.find(
+                                            (p) => p.slug === latestBlog.slug,
+                                        )!;
+                                        return (
+                                            <div
+                                                onClick={() => navigate(`/blog/${post.slug}`)}
+                                                className={`group cursor-pointer relative flex flex-col flex-grow p-6 rounded-xl transition-all ${
+                                                    theme === 'light'
+                                                        ? 'bg-white hover:shadow-lg'
+                                                        : 'bg-[#1a1f2e] hover:bg-[#252b3b]'
+                                                }`}
+                                            >
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <span
+                                                        className={`px-2.5 py-1 rounded-md text-xs font-medium border ${
+                                                            theme === 'light'
+                                                                ? 'bg-slate-100 text-slate-600 border-slate-200'
+                                                                : 'bg-slate-800/50 text-slate-300 border-slate-600/50'
+                                                        }`}
+                                                    >
+                                                        {post.topic}
+                                                    </span>
+                                                    <p
+                                                        className={`text-xs font-medium ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
+                                                    >
+                                                        {post.date}
+                                                    </p>
+                                                </div>
+                                                <h4 className="text-2xl font-bold mb-4 group-hover:text-[#3c86ff] transition-colors">
+                                                    {post.title}
+                                                </h4>
+                                                <p
+                                                    className={`text-sm mb-6 flex-grow leading-relaxed ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
+                                                >
+                                                    {post.hook}
+                                                </p>
+                                                <div
+                                                    className={`mt-auto flex justify-between items-center text-sm font-medium pt-4 border-t ${
+                                                        theme === 'light'
+                                                            ? 'border-slate-100'
+                                                            : 'border-slate-700/50'
+                                                    }`}
+                                                >
+                                                    <span className="flex items-center gap-1.5">
+                                                        <FaFileLines /> {post.readMins} min read
+                                                    </span>
+                                                    <span>{latestBlog.views} views</span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })()
+                                ) : (
+                                    <div
+                                        className={`flex-grow rounded-xl animate-pulse ${theme === 'light' ? 'bg-white' : 'bg-[#1a1f2e]'}`}
+                                    />
+                                )}
+                            </div>
                         </motion.div>
                     </motion.div>
                 </div>
