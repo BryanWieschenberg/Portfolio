@@ -5,11 +5,17 @@ import cookieParser from 'cookie-parser';
 import { initDB } from './lib/db.js';
 import githubRoutes from './routes/github.js';
 import blogRoutes from './routes/blog.js';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 mins
+    max: 100, // per IP
+});
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
 app.use(
     cors({
         origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
@@ -17,18 +23,17 @@ app.use(
     }),
 );
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(limiter);
+app.use(helmet());
 
-// Routes
 app.use('/api/github', githubRoutes);
 app.use('/api/blog', blogRoutes);
 
-// Health check
 app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Start
 async function start() {
     await initDB();
     app.listen(PORT, () => {

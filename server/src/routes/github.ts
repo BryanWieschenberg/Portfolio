@@ -5,7 +5,7 @@ import { GitHubPushEvent } from '../types/github.js';
 const router: RouterType = Router();
 const GITHUB_API = 'https://api.github.com/graphql';
 const GITHUB_REST = 'https://api.github.com';
-const CACHE_TTL = 15 * 60 * 1000; // 15 minutes
+const CACHE_TTL = 15 * 60 * 1000; // 15 mins
 const USERNAME = 'BryanWieschenberg';
 
 async function githubGraphQL(query: string) {
@@ -40,7 +40,6 @@ async function githubREST(path: string) {
     return res.json();
 }
 
-// GET /api/github/contributions
 router.get('/contributions', async (_req, res) => {
     try {
         const cached = getCache('github:contributions');
@@ -76,7 +75,6 @@ router.get('/contributions', async (_req, res) => {
     }
 });
 
-// GET /api/github/commits
 router.get('/commits', async (_req, res) => {
     try {
         const cached = getCache('github:commits');
@@ -84,24 +82,40 @@ router.get('/commits', async (_req, res) => {
             return res.json(cached);
         }
 
-        // Fetch recent events (pushes) for the user
-        const events = await githubREST(`/users/${USERNAME}/events/public?per_page=100`);
+        const repos = await githubREST(`/users/${USERNAME}/repos?sort=pushed&per_page=10`);
 
-        const pushEvents = (events as GitHubPushEvent[])
-            .filter((e) => e.type === 'PushEvent')
-            .flatMap((e) =>
-                e.payload.commits.map((c) => ({
-                    sha: c.sha,
-                    message: c.message,
-                    repo: e.repo.name,
-                    date: e.created_at,
-                    url: `https://github.com/${e.repo.name}/commit/${c.sha}`,
-                })),
-            )
+        const commitPromises = (repos as { name: string; full_name: string }[]).map(
+            async (repo) => {
+                try {
+                    const commits = await githubREST(
+                        `/repos/${repo.full_name}/commits?author=${USERNAME}&per_page=5`,
+                    );
+                    return (
+                        commits as {
+                            sha: string;
+                            commit: { message: string; author: { date: string } };
+                            html_url: string;
+                        }[]
+                    ).map((c) => ({
+                        sha: c.sha,
+                        message: c.commit.message,
+                        repo: repo.full_name,
+                        date: c.commit.author.date,
+                        url: c.html_url,
+                    }));
+                } catch {
+                    return [];
+                }
+            },
+        );
+
+        const allCommits = (await Promise.all(commitPromises))
+            .flat()
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
             .slice(0, 30);
 
-        setCache('github:commits', pushEvents, CACHE_TTL);
-        res.json(pushEvents);
+        setCache('github:commits', allCommits, CACHE_TTL);
+        res.json(allCommits);
     } catch (err) {
         console.error('GitHub commits error:', err);
         res.status(500).json({ error: 'Failed to fetch commits' });
