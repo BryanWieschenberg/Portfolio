@@ -39,7 +39,7 @@ const experienceYears = [...new Set(experience.map((e) => extractYear(e.date)))]
 );
 
 // Project-specific filter values
-const projectTypes: ProjectType[] = ['Web App', 'CLI Tool', 'Automation'];
+const projectTypes: ProjectType[] = ['Web App', 'Desktop App', 'CLI Tool', 'Automation'];
 const projectStatuses: ProjectStatus[] = ['Completed', 'Maintained', 'In Progress'];
 const scaleValues: ProjectScale[] = ['S', 'M', 'L', 'XL'];
 const recencyOptions = ['Last 6 Months', 'Last Year', 'Last 2 Years'];

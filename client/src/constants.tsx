@@ -22,8 +22,8 @@ type SkillCategories = {
 };
 
 export type ProjectScale = 'S' | 'M' | 'L' | 'XL';
-export type ProjectType = 'Web App' | 'CLI Tool' | 'Automation';
-export type ProjectStatus = 'Completed' | 'Maintained' | 'In Progress';
+export type ProjectType = 'Web App' | 'CLI Tool' | 'Automation' | 'Desktop App';
+export type ProjectStatus = 'Completed' | 'Maintained' | 'In Development';
 
 export type Concepts =
     | 'Auth/Security'
@@ -57,6 +57,7 @@ export interface Project {
     feats: string;
     res: string;
     skills: SkillCategories;
+    indev?: boolean;
 }
 
 export interface Experience {
@@ -73,6 +74,7 @@ export interface Experience {
     feats: string;
     res: string;
     skills: SkillCategories;
+    indev?: boolean;
 }
 
 export type SkillCategory =
@@ -160,6 +162,59 @@ export interface BlogPost {
 }
 
 export const projects: Project[] = [
+    {
+        name: 'AskJet',
+        date: 'Feb. 2026 - Present',
+        scale: 'XL',
+        type: 'Web App',
+        status: 'In Development',
+        hook: 'Productivity platform powered by embedded AI agent, Jet, that proactively manages your tasks, calendar, notes, and email through LLM calling and persistent context memory.',
+        top_skills: ['React', 'TypeScript', 'FastAPI', 'Python', 'PostgreSQL'],
+        concepts: [
+            'Full-Stack',
+            'Frontend',
+            'Backend',
+            'DB Design',
+            'API Design',
+            'Auth/Security',
+            'AI/ML',
+            'Data Processing',
+            'Infra/DevOps',
+            'Real-Time',
+        ],
+        artifacts: [],
+        intro: '',
+        desc: '',
+        feats: '',
+        res: '',
+        skills: {
+            Frontend: {
+                React: '',
+                'TanStack Router': '',
+                'TanStack Query': '',
+                TypeScript: '',
+                'Tailwind CSS': '',
+                Motion: '',
+            },
+            Backend: {
+                FastAPI: '',
+                Python: '',
+                'Better Auth': '',
+            },
+            Data: {
+                PostgreSQL: '',
+                SQL: '',
+            },
+            External: {
+                'Anthropic SDK': '',
+                'Server-Sent Events': '',
+            },
+            Deployment: {
+                AWS: '',
+            },
+        },
+        indev: true,
+    },
     {
         name: 'Stellar Papers',
         date: 'Feb. 2026',
@@ -338,6 +393,57 @@ export const projects: Project[] = [
         },
     },
     {
+        name: 'Portfolio Website',
+        date: 'Jan. 2025 - Mar. 2025',
+        span: '3 months',
+        github: 'https://github.com/BryanWieschenberg/portfolio',
+        scale: 'L',
+        type: 'Web App',
+        status: 'Completed',
+        hook: 'Interactive portfolio experience designed to showcase my projects, experiences, skills, and thoughts with a cool aesthetic and fluid animations.',
+        top_skills: ['React', 'TypeScript', 'Node.js', 'Express.js', 'PostgreSQL'],
+        concepts: ['Full-Stack', 'Frontend', 'Backend', 'DB Design'],
+        artifacts: [
+            'The Landing Page',
+            'View Projects',
+            'Advanced Filters',
+            'Detailed Project Pages',
+            'Skills Overview',
+            'Surprise Interactions',
+        ],
+        intro: 'I wanted a space where I could show my work, who I am, and have a place to voice all of my thoughts. So I built this website!',
+        desc: 'A digital showcase built as a web application. It uses easily digestible visuals to communicate everyone you’d want to know about me, all in one place.',
+        feats: '• Polished Environment: Interact with practically every UI element and enjoy a wealth of micro-animations. Both light and dark themes are supported.\n• Detailed Showcasing: Detailed project and experience pages, advanced sorting and filtering, blog posts, and rich media interactions\n• Robust Security: CORS, Helmet header protection, and rate limiting baked in\n• Optimized Performance: Optimized background rendering and optimized build strategies',
+        res: '• Engaging UX: Polished, interactive elements that actively encourage visitors to explore deeper\n• Instant Load Times: Fast initial load time through optimized build pipelines\n• Airtight Security: Protected APIs with multiple measures in place to ensure safety and stability',
+        skills: {
+            Frontend: {
+                React: 'Component-based UI handles the complex interactive state of the application layouts',
+                TypeScript: 'Type safety to catch type errors at build time',
+                Vite: 'Frontend tooling to provide optimized builds',
+                'Tailwind CSS': 'Utility-first CSS for rapid UI styling',
+                Motion: 'Smooth animations and micro-interactions make the UI feel polished and responsive',
+            },
+            Backend: {
+                'Node.js': 'Runtime used for server-side execution',
+                'Express.js': 'Minimalist web framework serving the standalone API endpoints',
+                TypeScript: 'Type safety for API logic & data handling',
+            },
+            Data: {
+                PostgreSQL:
+                    'Relational database used to ensure data integrity across application systems',
+                SQL: 'Querying the PostgreSQL database',
+            },
+            External: {
+                Neon: 'Database platform used to securely host the PostgreSQL database',
+                Formspree: 'Reliable email delivery for contact form transactions',
+            },
+            Deployment: {
+                Vercel: 'Used to deploy the frontend with serverless hosting and built-in CI/CD and edge caching',
+                Railway: 'Used to deploy the backend Node.js server',
+            },
+        },
+    },
+    {
         name: 'When2Meet Analyzer',
         date: 'Nov. 2025',
         span: '2 weeks',
@@ -362,6 +468,33 @@ export const projects: Project[] = [
                 Pandas: 'Data analysis library used to structure availability data and perform scheduling calculations',
                 CSV: 'Portable schedule report output compatible with Excel and spreadsheet tools',
                 JSON: 'Human-readable configuration format allowing constraints and scoring weights to be adjusted without modifying code',
+            },
+        },
+    },
+    {
+        name: 'QuizWiz',
+        date: 'Oct. 2025',
+        span: '1 week',
+        github: 'https://github.com/BryanWieschenberg/QuizWiz',
+        scale: 'S',
+        type: 'Desktop App',
+        status: 'Completed',
+        hook: 'Responsive flashcard study tool with session persistence, mastery tracking, and customizable study modes.',
+        top_skills: ['Python', 'PyGame'],
+        concepts: ['Frontend', 'Data Processing'],
+        artifacts: ['Using the App'],
+        intro: 'Studying for exams meant staring at static notes or using heavily paywalled web apps, and I wanted something fast, free, and actually built around how I study. So I built the QuizWiz.',
+        desc: "A desktop flashcard study tool that lets you load any subject from a CSV, track your mastery in real time, and pick up exactly where you left off. It's fully local, responds instantly, and puts you in control of your own academic success.",
+        feats: '• Session Persistence: Automatically saves study state on exit and restores it on relaunch, preserving card progress, mastery counts, and user settings\n• Progress HUD: Overlay displays cards studied, mastered count, and contextual status messages throughout each session\n• Flexible Modes: Toggle Term-first or Definition-first display, and enable/disable shuffle between rounds without restarting the app\n• Responsive Layout: Dynamic UI that cleanly handles window resizing',
+        res: '• Persistent Progress: Session state is always saved, so no studied cards are ever lost between runs\n• Fully Portable: Load any subject by editing a single CSV, no configuration or code changes needed\n• Instant Interactions: All interactions and HUD updates render instantly with no perceptible lag',
+        skills: {
+            Core: {
+                Python: 'Primary language powering all app logic, input handling, and state management',
+                PyGame: 'Rendering library driving the responsive canvas, card animations, and real-time UI updates',
+            },
+            Data: {
+                CSV: 'File format for defining card decks, allowing subject swapping without touching any code',
+                JSON: 'Serialization format for saving and restoring complete session state between runs',
             },
         },
     },

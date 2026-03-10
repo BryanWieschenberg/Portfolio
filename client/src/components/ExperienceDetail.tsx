@@ -31,7 +31,11 @@ const ExperienceDetail: React.FC = () => {
     const exp = experience[expIndex];
 
     // const prevExp = experience[(expIndex - 1 + experience.length) % experience.length];
-    const nextExp = experience[(expIndex + 1) % experience.length];
+    let nextIndex = (expIndex + 1) % experience.length;
+    while (experience[nextIndex]?.indev && nextIndex !== expIndex) {
+        nextIndex = (nextIndex + 1) % experience.length;
+    }
+    const nextExp = experience[nextIndex];
 
     const handleNavigate = (targetRole: string) => {
         navigate(`/work/experience/${normalizeTitle(targetRole)}`);

@@ -24,14 +24,18 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, variants })
     return (
         <motion.div
             variants={variants}
-            whileHover={{ scale: 1.03 }}
-            onClick={() => navigate(`/work/experience/${slug}`)}
-            style={{ cursor: 'pointer' }}
+            whileHover={experience.indev ? {} : { scale: 1.03 }}
+            onClick={experience.indev ? undefined : () => navigate(`/work/experience/${slug}`)}
+            style={{ cursor: experience.indev ? 'default' : 'pointer' }}
             className={`group h-full relative p-[1px] rounded-2xl transition-shadow duration-500
                 ${
                     theme === 'light'
-                        ? 'bg-slate-200/80 shadow-md hover:shadow-[0_0_25px_rgba(100,116,139,0.3)]'
-                        : 'bg-gradient-to-br from-[#1a1f2e] via-[#252b3b] to-[#1a1f2e] shadow-2xl hover:shadow-[0_0_30px_rgba(148,163,184,0.15)]'
+                        ? experience.indev
+                            ? 'bg-slate-200/80 shadow-md'
+                            : 'bg-slate-200/80 shadow-md hover:shadow-[0_0_25px_rgba(100,116,139,0.3)]'
+                        : experience.indev
+                          ? 'bg-gradient-to-br from-[#1a1f2e] via-[#252b3b] to-[#1a1f2e] shadow-2xl'
+                          : 'bg-gradient-to-br from-[#1a1f2e] via-[#252b3b] to-[#1a1f2e] shadow-2xl hover:shadow-[0_0_30px_rgba(148,163,184,0.15)]'
                 } 
                 overflow-hidden`}
         >
@@ -45,7 +49,13 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, variants })
                     ease: 'easeInOut',
                 }}
                 className={`absolute inset-0 bg-gradient-to-r from-transparent z-0 pointer-events-none
-                    ${theme === 'light' ? 'via-slate-300/20' : 'via-slate-400/10'}`}
+                    ${
+                        experience.indev
+                            ? 'transparent'
+                            : theme === 'light'
+                              ? 'via-slate-300/20'
+                              : 'via-slate-400/10'
+                    }`}
             ></motion.div>
 
             <div

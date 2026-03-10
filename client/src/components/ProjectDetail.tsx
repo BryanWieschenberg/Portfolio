@@ -32,8 +32,17 @@ const ProjectDetail: React.FC = () => {
     const projectIndex = projects.findIndex((p) => normalizeTitle(p.name) === slug);
     const project = projects[projectIndex];
 
-    const prevProject = projects[(projectIndex - 1 + projects.length) % projects.length];
-    const nextProject = projects[(projectIndex + 1) % projects.length];
+    let prevIndex = (projectIndex - 1 + projects.length) % projects.length;
+    while (projects[prevIndex]?.indev && prevIndex !== projectIndex) {
+        prevIndex = (prevIndex - 1 + projects.length) % projects.length;
+    }
+    const prevProject = projects[prevIndex];
+
+    let nextIndex = (projectIndex + 1) % projects.length;
+    while (projects[nextIndex]?.indev && nextIndex !== projectIndex) {
+        nextIndex = (nextIndex + 1) % projects.length;
+    }
+    const nextProject = projects[nextIndex];
 
     const handleNavigate = (targetSlug: string) => {
         navigate(`/work/projects/${normalizeTitle(targetSlug)}`);
