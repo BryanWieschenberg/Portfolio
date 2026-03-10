@@ -16,15 +16,16 @@ import SwipeReveal from '../components/SwipeReveal';
 import ProjectCard from '../components/ProjectCard';
 import ExperienceCard from '../components/ExperienceCard';
 import { FaChevronUp, FaChevronDown, FaFilter, FaTimes, FaSearch } from 'react-icons/fa';
-import { HiSparkles } from 'react-icons/hi2';
-import { FaBriefcase } from 'react-icons/fa';
+import { FaLaptopCode, FaBuilding } from 'react-icons/fa';
 
 type Tab = 'projects' | 'experience';
 type SortKey = 'featured' | 'newest' | 'alphabetical';
 type SortDir = 'asc' | 'desc';
 
 // Extract all unique skill names from the skills constant
-const allSkillNames = Object.values(skills).flatMap((list) => list.map((s) => s.name));
+const allSkillNames = Object.entries(skills)
+    .filter(([category]) => category !== 'AI Tooling' && category !== 'Soft Skills')
+    .flatMap(([, list]) => list.map((s) => s.name));
 const uniqueSkillNames = [...new Set(allSkillNames)].sort();
 
 // Extract all years from project and experience dates
@@ -40,7 +41,7 @@ const experienceYears = [...new Set(experience.map((e) => extractYear(e.date)))]
 
 // Project-specific filter values
 const projectTypes: ProjectType[] = ['Web App', 'Desktop App', 'CLI Tool', 'Automation'];
-const projectStatuses: ProjectStatus[] = ['Completed', 'Maintained', 'In Progress'];
+const projectStatuses: ProjectStatus[] = ['Completed', 'Maintained', 'In Development'];
 const scaleValues: ProjectScale[] = ['S', 'M', 'L', 'XL'];
 const recencyOptions = ['Last 6 Months', 'Last Year', 'Last 2 Years'];
 const conceptValues: Concepts[] = [
@@ -444,14 +445,14 @@ const Work: React.FC = () => {
                             onClick={() => setActiveTab('projects')}
                             className={`toggle-btn flex items-center gap-2 ${activeTab === 'projects' ? 'active' : ''}`}
                         >
-                            <HiSparkles size={14} />
+                            <FaLaptopCode size={16} />
                             Projects
                         </button>
                         <button
                             onClick={() => setActiveTab('experience')}
                             className={`toggle-btn flex items-center gap-2 ${activeTab === 'experience' ? 'active' : ''}`}
                         >
-                            <FaBriefcase size={13} />
+                            <FaBuilding size={14} />
                             Experience
                         </button>
                     </div>

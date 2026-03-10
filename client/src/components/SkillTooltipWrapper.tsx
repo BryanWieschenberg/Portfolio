@@ -6,10 +6,12 @@ export default function SkillTooltipWrapper({
     children,
     content,
     theme,
+    compact,
 }: {
     children: React.ReactNode;
     content: React.ReactNode;
     theme: 'light' | 'dark';
+    compact?: boolean;
 }) {
     const [hover, setHover] = useState(false);
     const [rect, setRect] = useState<{ top: number; left: number; width: number } | null>(null);
@@ -86,11 +88,15 @@ export default function SkillTooltipWrapper({
                                 }
                             >
                                 <div
-                                    className={`portal-tooltip-inner p-3 text-sm font-normal rounded-xl shadow-2xl whitespace-normal text-left border ${
+                                    className={`portal-tooltip-inner font-normal rounded-xl shadow-2xl whitespace-normal text-left border ${
+                                        compact
+                                            ? 'px-3 py-1.5 text-xs w-max whitespace-nowrap'
+                                            : 'p-3 text-sm w-[90vw] max-w-[320px] lg:w-max lg:min-w-[200px] lg:max-w-[280px]'
+                                    } ${
                                         theme === 'light'
                                             ? 'bg-white text-slate-700 border-slate-200/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)]'
                                             : 'bg-[#111318] text-slate-300 border-slate-700/80 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]'
-                                    } w-[90vw] max-w-[320px] lg:w-max lg:min-w-[200px] lg:max-w-[280px]`}
+                                    }`}
                                 >
                                     {content}
                                 </div>

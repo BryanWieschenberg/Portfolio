@@ -1,1 +1,1 @@
-export const validSlugs = ['graduation', 'hacktcnj', 'ai', 'goalgetter'];
+export const validSlugs = ['hacktcnj', 'ai', 'goalgetter'];

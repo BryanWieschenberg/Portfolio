@@ -250,7 +250,7 @@ const About: React.FC = () => {
     }, [projects, experience]);
 
     const subheading = 'section-subheading-lg';
-    const divider = 'divider-lg';
+    const divider = 'divider';
 
     return (
         <>

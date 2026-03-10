@@ -100,7 +100,7 @@ const SwipeReveal: React.FC<SwipeRevealProps> = ({
 
                 <motion.div
                     style={{ clipPath }}
-                    className="absolute inset-0 z-[91] pointer-events-none overflow-visible whitespace-nowrap"
+                    className="absolute inset-0 z-[91] overflow-visible whitespace-nowrap"
                 >
                     {children}
                 </motion.div>

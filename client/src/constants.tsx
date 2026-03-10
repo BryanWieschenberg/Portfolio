@@ -410,6 +410,7 @@ export const projects: Project[] = [
             'Detailed Project Pages',
             'Skills Overview',
             'Surprise Interactions',
+            'Recursion...',
         ],
         intro: 'I wanted a space where I could show my work, who I am, and have a place to voice all of my thoughts. So I built this website!',
         desc: 'A digital showcase built as a web application. It uses easily digestible visuals to communicate everyone you’d want to know about me, all in one place.',
@@ -842,23 +843,15 @@ export const skills: Record<SkillCategory, Skill[]> = {
 
 export const blogPosts: BlogPost[] = [
     {
-        title: "I'm About to Graduate...",
-        slug: 'graduation',
-        date: '3/12/2026',
-        readMins: '10',
-        topic: 'Career',
-        hook: '...',
-    },
-    {
-        title: 'My HackTCNJ Experience',
+        title: 'My HackTCNJ 2026 Experience',
         slug: 'hacktcnj',
         date: '3/2/2026',
         readMins: '10',
         topic: 'Project',
-        hook: '...',
+        hook: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
     },
     {
-        title: 'My Honest Thoughts on AI and the Future of Software Engineering',
+        title: 'The Future of Software Engineering',
         slug: 'ai',
         date: '2/27/2026',
         readMins: '10',

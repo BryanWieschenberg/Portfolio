@@ -9,7 +9,6 @@ import ProjectDetail from './components/ProjectDetail';
 import ExperienceDetail from './components/ExperienceDetail';
 import Blog from './pages/Blog';
 import GoalGetterBlog from './pages/blog/GoalGetter';
-import GraduationBlog from './pages/blog/Graduation';
 import HackTCNJBlog from './pages/blog/HackTCNJ';
 import AIBlog from './pages/blog/AI';
 import InvalidBlog from './components/InvalidBlog';
@@ -85,7 +84,6 @@ const App: React.FC = () => (
                         <Route path="/work/experience/:slug" element={<ExperienceDetail />} />
                         <Route path="/blog" element={<Blog />} />
                         <Route path="/blog/goalgetter" element={<GoalGetterBlog />} />
-                        <Route path="/blog/graduation" element={<GraduationBlog />} />
                         <Route path="/blog/hacktcnj" element={<HackTCNJBlog />} />
                         <Route path="/blog/ai" element={<AIBlog />} />
                         <Route path="/blog/*" element={<InvalidBlog />} />

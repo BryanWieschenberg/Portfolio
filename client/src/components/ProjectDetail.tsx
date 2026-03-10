@@ -155,7 +155,7 @@ const ProjectDetail: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3 }}
                     onClick={() => navigate('/work')}
-                    className="btn-back group"
+                    className="btn-back group !mb-0 py-1"
                 >
                     <FaArrowLeft className="transform transition-transform duration-300 group-hover:-translate-x-1" />
                     <span>Back to Work</span>
@@ -720,7 +720,7 @@ const ProjectDetail: React.FC = () => {
                     >
                         <div className="flex flex-col items-start text-right">
                             <span className="text-[10px] uppercase tracking-widest opacity-50 font-bold mb-0.5">
-                                Next Project
+                                Next
                             </span>
                             <div className="flex items-center gap-2">
                                 <span className="font-bold text-sm sm:text-base">

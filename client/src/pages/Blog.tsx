@@ -3,18 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from '../components/SwipeReveal';
-import {
-    FaArrowRight,
-    FaClock,
-    FaTag,
-    FaChevronUp,
-    FaChevronDown,
-    FaFilter,
-    FaTimes,
-    FaSearch,
-    FaEye,
-} from 'react-icons/fa';
+import { FaChevronUp, FaChevronDown, FaFilter, FaTimes, FaSearch } from 'react-icons/fa';
 import { blogPosts, BlogTopic } from '../constants';
+import { formatDisplayDate } from '../lib/utils';
 
 type SortKey = 'recency' | 'views';
 type SortDir = 'asc' | 'desc';
@@ -43,25 +34,6 @@ function parseDateToTimestamp(dateStr: string): number {
         }
     }
     return 0;
-}
-
-function formatDisplayDate(dateStr: string): string {
-    const parts = dateStr.split('/');
-    if (parts.length !== 3) {
-        return dateStr;
-    }
-    const month = parseInt(parts[0], 10) - 1;
-    const day = parseInt(parts[1], 10);
-    const year = parseInt(parts[2], 10);
-    const d = new Date(year, month, day);
-    if (isNaN(d.getTime())) {
-        return dateStr;
-    }
-    return d.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
 }
 
 const Blog: React.FC = () => {
@@ -246,7 +218,7 @@ const Blog: React.FC = () => {
                 </motion.p>
             </div>
 
-            <div className="container mx-auto px-4 lg:px-20 pt-8 lg:pt-12 pb-20 max-w-[1000px]">
+            <div className="container mx-auto px-4 lg:px-20 pt-8 lg:pt-12 pb-20">
                 {/* Toggle + Controls */}
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
@@ -420,31 +392,48 @@ const Blog: React.FC = () => {
                                 initial="hidden"
                                 animate="visible"
                                 variants={containerVariants}
-                                className="space-y-6"
+                                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                             >
                                 {filteredPosts.map((post) => (
                                     <motion.article
                                         key={post.slug}
                                         variants={itemVariants}
-                                        whileHover={{ x: 6 }}
+                                        whileHover={{ scale: 1.05 }}
                                         onClick={() => navigate(`/blog/${post.slug}`)}
-                                        className="group cursor-pointer relative"
-                                    >
-                                        <div
-                                            className={`absolute left-0 top-0 bottom-0 w-[3px] rounded-full transition-all duration-500
+                                        className={`group h-full cursor-pointer relative p-[1px] rounded-2xl transition-shadow duration-500
                                             ${
                                                 theme === 'light'
-                                                    ? 'bg-slate-200 group-hover:bg-gradient-to-b group-hover:from-blue-400 group-hover:to-cyan-400'
-                                                    : 'bg-slate-700 group-hover:bg-gradient-to-b group-hover:from-[#3c86ff] group-hover:to-[#69f1ff]'
-                                            }`}
-                                        />
+                                                    ? 'bg-slate-200/80 shadow-md hover:shadow-[0_0_25px_rgba(100,116,139,0.3)]'
+                                                    : 'bg-gradient-to-br from-[#1a1f2e] via-[#252b3b] to-[#1a1f2e] shadow-2xl hover:shadow-[0_0_30px_rgba(148,163,184,0.15)]'
+                                            }
+                                            overflow-hidden flex flex-col`}
+                                    >
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            whileHover={{ opacity: 1 }}
+                                            animate={{ opacity: [0, 0.3, 0] }}
+                                            transition={{
+                                                duration: 2,
+                                                repeat: Infinity,
+                                                ease: 'easeInOut',
+                                            }}
+                                            className={`absolute inset-0 bg-gradient-to-r from-transparent z-0 pointer-events-none
+                                                ${
+                                                    theme === 'light'
+                                                        ? 'via-slate-300/20'
+                                                        : 'via-slate-400/10'
+                                                }`}
+                                        ></motion.div>
 
-                                        <div className="pl-6 py-4 flex flex-col sm:flex-row gap-6 sm:items-center">
-                                            <div className="shrink-0 w-full sm:w-40 md:w-48 aspect-video rounded-lg overflow-hidden flex items-center justify-center bg-slate-100 dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700/50">
+                                        <div
+                                            className={`relative z-10 rounded-2xl h-full flex flex-col
+                                            ${theme === 'light' ? 'bg-white' : 'bg-[#111318]/95 border border-slate-700/50'}`}
+                                        >
+                                            <div className="w-full aspect-video rounded-t-2xl overflow-hidden flex items-center justify-center bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700/50 shrink-0">
                                                 <img
                                                     src={`/artifacts/blog/${post.slug}.png`}
                                                     alt={post.title}
-                                                    className="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+                                                    className="w-full h-full object-cover"
                                                     onError={(e) => {
                                                         const parent = (e.target as HTMLElement)
                                                             .parentElement;
@@ -455,43 +444,38 @@ const Blog: React.FC = () => {
                                                 />
                                             </div>
 
-                                            <div className="flex-1">
-                                                <div className="flex flex-wrap items-center gap-3 mb-2">
-                                                    <span className="blog-meta">
-                                                        <FaClock className="text-[10px]" />
-                                                        {formatDisplayDate(post.date)} •{' '}
-                                                        {post.readMins} mins
-                                                    </span>
-                                                    <span className="blog-meta">
-                                                        <FaEye className="text-[10px]" />
-                                                        {views[post.slug]?.toLocaleString() ||
-                                                            0}{' '}
-                                                        {views[post.slug] === 1 ? 'view' : 'views'}
-                                                    </span>
-                                                    <span className="blog-tag">
-                                                        <FaTag className="text-[8px]" />
-                                                        {post.topic}
-                                                    </span>
+                                            <div className="p-6 -mt-3 flex flex-col flex-1">
+                                                <div className="flex justify-end mb-1">
+                                                    <p
+                                                        className={`text-xs font-semibold tracking-wider ${
+                                                            theme === 'light'
+                                                                ? 'text-slate-500'
+                                                                : 'text-slate-400'
+                                                        }`}
+                                                    >
+                                                        {formatDisplayDate(post.date)}{' '}
+                                                        <span className="font-normal">
+                                                            ({post.readMins} mins) •{' '}
+                                                            {views[post.slug]?.toLocaleString() ||
+                                                                0}{' '}
+                                                            {views[post.slug] === 1
+                                                                ? 'view'
+                                                                : 'views'}
+                                                        </span>
+                                                    </p>
                                                 </div>
 
-                                                <h2 className="card-title text-xl lg:text-2xl">
-                                                    {post.title}
-                                                </h2>
-                                                <p className="card-text lg:text-base mb-3 leading-relaxed mt-2 line-clamp-2">
+                                                <div className="flex justify-between items-start min-h-[4rem]">
+                                                    <h3 className="card-title text-2xl">
+                                                        {post.title}
+                                                    </h3>
+                                                </div>
+
+                                                <p className="card-text flex-grow break-words">
                                                     {post.hook}
                                                 </p>
-
-                                                <span className="link-arrow mt-2">
-                                                    Read Post
-                                                    <FaArrowRight className="transform transition-transform duration-300 group-hover:translate-x-1 text-xs" />
-                                                </span>
                                             </div>
                                         </div>
-
-                                        <div
-                                            className={`ml-6 h-[1px]
-                                            ${theme === 'light' ? 'bg-slate-100' : 'bg-slate-800'}`}
-                                        />
                                     </motion.article>
                                 ))}
                             </motion.div>

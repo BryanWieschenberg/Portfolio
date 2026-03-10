@@ -7,7 +7,8 @@ import SwipeReveal from '../components/SwipeReveal';
 import { useTheme } from '../context/ThemeContext';
 import { PiArrowFatLinesRightFill } from 'react-icons/pi';
 import ProjectCard from '../components/ProjectCard';
-import { getAge } from '../lib/utils';
+import { getAge, formatDisplayDate } from '../lib/utils';
+import SkillTooltipWrapper from '../components/SkillTooltipWrapper';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -122,6 +123,20 @@ const Home: React.FC = () => {
     } | null>(null);
     const [commits, setCommits] = useState<Commit[]>([]);
     const [latestBlog, setLatestBlog] = useState<LatestBlogPost | null>(null);
+    const githubScrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (githubData && isIntroComplete && githubScrollRef.current) {
+            // A short delay ensures the DOM has painted all the little squares
+            // and the container width is accurate before we scroll to the end.
+            const timeoutId = setTimeout(() => {
+                if (githubScrollRef.current) {
+                    githubScrollRef.current.scrollLeft = githubScrollRef.current.scrollWidth;
+                }
+            }, 50);
+            return () => clearTimeout(timeoutId);
+        }
+    }, [githubData, isIntroComplete]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -132,9 +147,15 @@ const Home: React.FC = () => {
                     fetch(`${API_URL}/api/blog/latest`),
                 ]);
 
-                if (contribRes.ok) setGithubData(await contribRes.json());
-                if (commitRes.ok) setCommits(await commitRes.json());
-                if (blogRes.ok) setLatestBlog(await blogRes.json());
+                if (contribRes.ok) {
+                    setGithubData(await contribRes.json());
+                }
+                if (commitRes.ok) {
+                    setCommits(await commitRes.json());
+                }
+                if (blogRes.ok) {
+                    setLatestBlog(await blogRes.json());
+                }
             } catch (error) {
                 console.error('Error fetching home page data:', error);
             }
@@ -164,7 +185,6 @@ const Home: React.FC = () => {
             y: 0,
             transition: {
                 duration: 0.6,
-                staggerChildren: 0.1,
             },
         },
     };
@@ -175,6 +195,45 @@ const Home: React.FC = () => {
     };
 
     const isLgUp = useLgUp();
+
+    const formatHeatmapHover = (count: number, dateStr: string) => {
+        const [year, month, day] = dateStr.split('-');
+        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        const fullMonthName = date.toLocaleString('default', { month: 'long' });
+        const dayNum = date.getDate();
+        let suffix = 'th';
+        if (dayNum === 1 || dayNum === 21 || dayNum === 31) {
+            suffix = 'st';
+        } else if (dayNum === 2 || dayNum === 22) {
+            suffix = 'nd';
+        } else if (dayNum === 3 || dayNum === 23) {
+            suffix = 'rd';
+        }
+
+        const countStr =
+            count === 0 ? 'No contributions' : `${count} contribution${count !== 1 ? 's' : ''}`;
+        return `${countStr} on ${fullMonthName} ${dayNum}${suffix}`;
+    };
+
+    const getHeatmapColor = (count: number, theme: string, defaultColor: string) => {
+        if (count === 0) {
+            return theme === 'light' ? '#cbd5e1' : '#1e293b';
+        }
+        if (theme === 'light') {
+            return defaultColor;
+        }
+
+        if (count <= 3) {
+            return '#0e4429';
+        }
+        if (count <= 6) {
+            return '#006d32';
+        }
+        if (count <= 10) {
+            return '#26a641';
+        }
+        return '#39d353';
+    };
 
     return (
         <>
@@ -207,9 +266,16 @@ const Home: React.FC = () => {
                                     ${theme === 'light' ? 'drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
                                 >
                                     Hi, I'm{' '}
-                                    <span className="relative bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] bg-clip-text text-transparent">
-                                        Bryan 👋
+                                    <span className="relative bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] bg-clip-text text-transparent pr-2">
+                                        Bryan
                                     </span>
+                                    <motion.span
+                                        className="inline-block cursor-grab origin-[70%_70%] bg-gradient-to-r from-[#69f1ff] to-[#6cf4ff] bg-clip-text text-transparent"
+                                        whileHover={{ rotate: [0, 25, 0] }}
+                                        transition={{ duration: 0.5, repeat: Infinity }}
+                                    >
+                                        👋
+                                    </motion.span>
                                 </h1>
                             </SwipeReveal>
                         </div>
@@ -401,12 +467,17 @@ const Home: React.FC = () => {
                         variants={containerVariants}
                         className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto"
                     >
-                        {/* Left Column: GitHub Activity */}
-                        <motion.div variants={itemVariants} className="flex flex-col gap-8">
+                        {/* Left Column: GitHub Activity & Commits */}
+                        <motion.div
+                            variants={itemVariants}
+                            className={`flex flex-col gap-8 p-6 rounded-2xl h-full ${
+                                theme === 'light'
+                                    ? 'bg-slate-200/80 shadow-md'
+                                    : 'bg-[#111318]/95 border border-slate-700/50 shadow-2xl'
+                            }`}
+                        >
                             {/* Commit Heatmap */}
-                            <div
-                                className={`p-6 rounded-2xl ${theme === 'light' ? 'bg-slate-200/80 shadow-md' : 'bg-[#111318]/95 border border-slate-700/50 shadow-2xl'}`}
-                            >
+                            <div>
                                 <h3 className="card-title text-2xl mb-4 flex items-center gap-2">
                                     <FaGithub /> GitHub Activity
                                 </h3>
@@ -418,29 +489,106 @@ const Home: React.FC = () => {
                                             {githubData.totalContributions} contributions in the
                                             last year
                                         </p>
-                                        <div className="flex gap-1 overflow-x-auto pb-2 scrollbar-hide">
-                                            {githubData.weeks.map((week, i) => (
-                                                <div
-                                                    key={i}
-                                                    className="flex flex-col gap-1 flex-shrink-0"
-                                                >
-                                                    {week.contributionDays.map((day, j) => (
+                                        <div className="flex">
+                                            {/* Y-axis logic */}
+                                            <div className="flex flex-col gap-1 mt-[18px] text-[10px] text-slate-400 mr-2 flex-shrink-0 font-medium">
+                                                <span className="h-[10px] leading-[10px] invisible">
+                                                    S
+                                                </span>
+                                                <span className="h-[10px] leading-[10px]">Mon</span>
+                                                <span className="h-[10px] leading-[10px] invisible">
+                                                    T
+                                                </span>
+                                                <span className="h-[10px] leading-[10px]">Wed</span>
+                                                <span className="h-[10px] leading-[10px] invisible">
+                                                    T
+                                                </span>
+                                                <span className="h-[10px] leading-[10px]">Fri</span>
+                                                <span className="h-[10px] leading-[10px] invisible">
+                                                    S
+                                                </span>
+                                            </div>
+
+                                            <div
+                                                ref={githubScrollRef}
+                                                className="flex flex-col overflow-x-auto pb-4 pt-1 -mt-1 scrollbar-hide flex-1"
+                                            >
+                                                {/* X-axis months */}
+                                                <div className="flex text-[10px] font-medium text-slate-400 mb-1 h-[14px]">
+                                                    {githubData.weeks.map((week, i) => {
+                                                        const firstDay = new Date(
+                                                            week.contributionDays[0].date +
+                                                                'T00:00:00',
+                                                        );
+                                                        const prevWeek =
+                                                            i > 0
+                                                                ? new Date(
+                                                                      githubData.weeks[i - 1]
+                                                                          .contributionDays[0]
+                                                                          .date + 'T00:00:00',
+                                                                  )
+                                                                : null;
+                                                        const isNewMonth =
+                                                            !prevWeek ||
+                                                            prevWeek.getMonth() !==
+                                                                firstDay.getMonth();
+
+                                                        return (
+                                                            <div
+                                                                key={`m-${i}`}
+                                                                className="flex-shrink-0 relative"
+                                                                style={{ width: '14px' }}
+                                                            >
+                                                                {isNewMonth && (
+                                                                    <span className="absolute left-0">
+                                                                        {firstDay.toLocaleString(
+                                                                            'default',
+                                                                            { month: 'short' },
+                                                                        )}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+
+                                                <div className="flex gap-1">
+                                                    {githubData.weeks.map((week, i) => (
                                                         <div
-                                                            key={j}
-                                                            className="w-[10px] h-[10px] rounded-[2px]"
-                                                            style={{
-                                                                backgroundColor:
-                                                                    day.contributionCount > 0
-                                                                        ? day.color
-                                                                        : theme === 'light'
-                                                                          ? '#cbd5e1'
-                                                                          : '#1e293b',
-                                                            }}
-                                                            title={`${day.contributionCount} contributions on ${day.date}`}
-                                                        />
+                                                            key={i}
+                                                            className="flex flex-col gap-1 flex-shrink-0"
+                                                        >
+                                                            {week.contributionDays.map((day, j) => (
+                                                                <SkillTooltipWrapper
+                                                                    key={j}
+                                                                    theme={theme}
+                                                                    compact={true}
+                                                                    content={
+                                                                        <div className="font-medium tracking-tight whitespace-nowrap">
+                                                                            {formatHeatmapHover(
+                                                                                day.contributionCount,
+                                                                                day.date,
+                                                                            )}
+                                                                        </div>
+                                                                    }
+                                                                >
+                                                                    <div
+                                                                        className="w-[10px] h-[10px] rounded-[2px]"
+                                                                        style={{
+                                                                            backgroundColor:
+                                                                                getHeatmapColor(
+                                                                                    day.contributionCount,
+                                                                                    theme,
+                                                                                    day.color,
+                                                                                ),
+                                                                        }}
+                                                                    />
+                                                                </SkillTooltipWrapper>
+                                                            ))}
+                                                        </div>
                                                     ))}
                                                 </div>
-                                            ))}
+                                            </div>
                                         </div>
                                     </>
                                 ) : (
@@ -460,13 +608,11 @@ const Home: React.FC = () => {
                             </div>
 
                             {/* Commit History */}
-                            <div
-                                className={`p-6 rounded-2xl flex flex-col ${theme === 'light' ? 'bg-slate-200/80 shadow-md' : 'bg-[#111318]/95 border border-slate-700/50 shadow-2xl'}`}
-                            >
+                            <div className="flex flex-col flex-1">
                                 <h3 className="card-title text-2xl mb-4 flex items-center gap-2">
                                     Recent Commits
                                 </h3>
-                                <div className="flex flex-col gap-3">
+                                <div className="flex flex-col gap-2">
                                     {commits.length > 0
                                         ? commits.slice(0, 5).map((commit, i) => (
                                               <a
@@ -474,7 +620,7 @@ const Home: React.FC = () => {
                                                   href={commit.url}
                                                   target="_blank"
                                                   rel="noopener noreferrer"
-                                                  className={`block p-3 rounded-xl transition-all ${
+                                                  className={`block py-2 px-3 rounded-xl transition-all ${
                                                       theme === 'light'
                                                           ? 'bg-white hover:shadow-md'
                                                           : 'bg-[#1a1f2e] hover:bg-[#252b3b]'
@@ -521,47 +667,81 @@ const Home: React.FC = () => {
                                         return (
                                             <div
                                                 onClick={() => navigate(`/blog/${post.slug}`)}
-                                                className={`group cursor-pointer relative flex flex-col flex-grow p-6 rounded-xl transition-all ${
-                                                    theme === 'light'
-                                                        ? 'bg-white hover:shadow-lg'
-                                                        : 'bg-[#1a1f2e] hover:bg-[#252b3b]'
-                                                }`}
-                                            >
-                                                <div className="flex justify-between items-start mb-4">
-                                                    <span
-                                                        className={`px-2.5 py-1 rounded-md text-xs font-medium border ${
-                                                            theme === 'light'
-                                                                ? 'bg-slate-100 text-slate-600 border-slate-200'
-                                                                : 'bg-slate-800/50 text-slate-300 border-slate-600/50'
-                                                        }`}
-                                                    >
-                                                        {post.topic}
-                                                    </span>
-                                                    <p
-                                                        className={`text-xs font-medium ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
-                                                    >
-                                                        {post.date}
-                                                    </p>
-                                                </div>
-                                                <h4 className="text-2xl font-bold mb-4 group-hover:text-[#3c86ff] transition-colors">
-                                                    {post.title}
-                                                </h4>
-                                                <p
-                                                    className={`text-sm mb-6 flex-grow leading-relaxed ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}
-                                                >
-                                                    {post.hook}
-                                                </p>
-                                                <div
-                                                    className={`mt-auto flex justify-between items-center text-sm font-medium pt-4 border-t ${
+                                                className={`group cursor-pointer relative p-[1px] rounded-2xl transition-shadow duration-500 mt-2 flex-grow
+                                                    ${
                                                         theme === 'light'
-                                                            ? 'border-slate-100'
-                                                            : 'border-slate-700/50'
-                                                    }`}
+                                                            ? 'bg-slate-200/80 shadow-md hover:shadow-[0_0_25px_rgba(100,116,139,0.3)]'
+                                                            : 'bg-gradient-to-br from-[#1a1f2e] via-[#252b3b] to-[#1a1f2e] shadow-2xl hover:shadow-[0_0_30px_rgba(148,163,184,0.15)]'
+                                                    }
+                                                    overflow-hidden flex flex-col`}
+                                            >
+                                                <motion.div
+                                                    initial={{ opacity: 0 }}
+                                                    whileHover={{ opacity: 1 }}
+                                                    animate={{ opacity: [0, 0.3, 0] }}
+                                                    transition={{
+                                                        duration: 2,
+                                                        repeat: Infinity,
+                                                        ease: 'easeInOut',
+                                                    }}
+                                                    className={`absolute inset-0 bg-gradient-to-r from-transparent z-0 pointer-events-none
+                                                        ${
+                                                            theme === 'light'
+                                                                ? 'via-slate-300/20'
+                                                                : 'via-slate-400/10'
+                                                        }`}
+                                                ></motion.div>
+
+                                                <div
+                                                    className={`relative z-10 rounded-2xl h-full flex flex-col
+                                                    ${theme === 'light' ? 'bg-white' : 'bg-[#111318]/95 border border-slate-700/50'}`}
                                                 >
-                                                    <span className="flex items-center gap-1.5">
-                                                        <FaFileLines /> {post.readMins} min read
-                                                    </span>
-                                                    <span>{latestBlog.views} views</span>
+                                                    <div className="w-full aspect-video rounded-t-2xl overflow-hidden flex items-center justify-center bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700/50 shrink-0">
+                                                        <img
+                                                            src={`/artifacts/blog/${post.slug}.png`}
+                                                            alt={post.title}
+                                                            className="w-full h-full object-cover"
+                                                            onError={(e) => {
+                                                                const parent = (
+                                                                    e.target as HTMLElement
+                                                                ).parentElement;
+                                                                if (parent) {
+                                                                    parent.style.display = 'none';
+                                                                }
+                                                            }}
+                                                        />
+                                                    </div>
+
+                                                    <div className="p-6 -mt-3 flex flex-col flex-1">
+                                                        <div className="flex justify-end mb-1">
+                                                            <p
+                                                                className={`text-xs font-semibold tracking-wider ${
+                                                                    theme === 'light'
+                                                                        ? 'text-slate-500'
+                                                                        : 'text-slate-400'
+                                                                }`}
+                                                            >
+                                                                {formatDisplayDate(post.date)}{' '}
+                                                                <span className="font-normal">
+                                                                    ({post.readMins} mins) •{' '}
+                                                                    {latestBlog.views.toLocaleString()}{' '}
+                                                                    {latestBlog.views === 1
+                                                                        ? 'view'
+                                                                        : 'views'}
+                                                                </span>
+                                                            </p>
+                                                        </div>
+
+                                                        <div className="flex justify-between items-start min-h-[4rem]">
+                                                            <h3 className="card-title text-2xl">
+                                                                {post.title}
+                                                            </h3>
+                                                        </div>
+
+                                                        <p className="card-text flex-grow break-words">
+                                                            {post.hook}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         );

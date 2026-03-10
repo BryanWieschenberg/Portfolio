@@ -115,7 +115,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variants }) => {
                 {/* Row 2: Date + Span */}
                 <div className="flex items-center mb-4">
                     <p
-                        className={`text-xs font-semibold tracking-wider uppercase ${
+                        className={`text-xs font-semibold tracking-wider ${
                             theme === 'light' ? 'text-slate-500' : 'text-slate-400'
                         }`}
                     >

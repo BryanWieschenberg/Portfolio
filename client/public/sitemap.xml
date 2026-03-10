@@ -4,10 +4,89 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-
 <url>
   <loc>https://bryanwieschenberg.com/</loc>
-  <lastmod>2025-03-04T18:39:38+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.00</priority>
 </url>
-
+<url>
+  <loc>https://bryanwieschenberg.com/about</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/work</loc>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/blog</loc>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/contact</loc>
+  <changefreq>yearly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/work/projects/askjet</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/work/projects/stellar-papers</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/work/projects/goalgetter</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/work/projects/streamline</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/work/projects/portfolio-website</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/work/projects/when2meet-analyzer</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/work/projects/quizwiz</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/work/experience/operations-manager</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/work/experience/machine-learning-researcher</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/blog/goalgetter</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/blog/hacktcnj</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://bryanwieschenberg.com/blog/ai</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.64</priority>
+</url>
 </urlset>

@@ -740,7 +740,7 @@ body {
    ═══════════════════════════════════════════════════════ */
 
 .date-meta {
-    @apply text-xs font-semibold tracking-wider uppercase;
+    @apply text-xs font-semibold tracking-wider;
 }
 .light .date-meta {
     @apply text-blue-500;
