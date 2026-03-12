@@ -21,6 +21,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 const Contact: React.FC = () => {
     const { theme } = useTheme();
     const [status, setStatus] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [isInitialLoad, setIsInitialLoad] = useState(true);
 
     useEffect(() => {
@@ -45,6 +46,7 @@ const Contact: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const form = e.currentTarget;
 
         const lastSubmitStr = localStorage.getItem('contact_last_submit');
         if (lastSubmitStr) {
@@ -57,7 +59,8 @@ const Contact: React.FC = () => {
         }
 
         setStatus('sending');
-        const formData = new FormData(e.currentTarget);
+        setErrorMessage('');
+        const formData = new FormData(form);
 
         try {
             const data = Object.fromEntries(formData.entries());
@@ -73,13 +76,21 @@ const Contact: React.FC = () => {
             if (response.ok) {
                 setStatus('success');
                 localStorage.setItem('contact_last_submit', Date.now().toString());
-                e.currentTarget.reset();
-            } else if (response.status === 429) {
-                setStatus('rate_limited');
+                form.reset();
             } else {
-                setStatus('error');
+                const errorData = await response.json().catch(() => ({}));
+                if (response.status === 429) {
+                    setStatus('rate_limited');
+                } else if (response.status >= 400 && response.status < 500 && errorData?.error) {
+                    setErrorMessage(errorData.error);
+                    setStatus('error');
+                } else {
+                    setErrorMessage('Oops, something went wrong! Try emailing me directly.');
+                    setStatus('error');
+                }
             }
         } catch {
+            setErrorMessage('Could not reach the server. Please try again later.');
             setStatus('error');
         }
     };
@@ -87,23 +98,23 @@ const Contact: React.FC = () => {
     const openTo = [
         {
             icon: <FaBriefcase />,
-            title: 'Full-time roles',
-            desc: 'SWE, backend, infra, or systems positions',
+            title: 'Full-Time Toles',
+            desc: 'Full-stack, backend, or DevOps roles',
         },
         {
             icon: <FaLaptopCode />,
-            title: 'Freelance & contract',
+            title: 'Freelance & Contract',
             desc: 'Technical projects with clear scope',
         },
         {
             icon: <FaHandshake />,
             title: 'Collaborations',
-            desc: 'Open-source, research, side projects',
+            desc: 'Open-source, research, and side projects',
         },
         {
             icon: <FaComments />,
             title: 'Just to chat',
-            desc: 'Tech, career, ideas — always down',
+            desc: 'Thoughts, advice, and ideas',
         },
     ];
 
@@ -152,7 +163,7 @@ const Contact: React.FC = () => {
                     transition={{ duration: 0.5, delay: 0.4 }}
                     className="page-subtitle"
                 >
-                    Collaboration makes everyone awesome:
+                    Teamwork makes the dream work:
                 </motion.p>
             </div>
 
@@ -235,14 +246,14 @@ const Contact: React.FC = () => {
                                     <span>Sent! I'll get back to you soon.</span>
                                 </motion.div>
                             )}
-                            {status === 'error' && (
+                            {status === 'error' && errorMessage && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     className="flex items-center gap-2 justify-center text-red-400 font-semibold"
                                 >
                                     <FaTimesCircle />
-                                    <span>Something went wrong — try emailing me directly.</span>
+                                    <span>{errorMessage}</span>
                                 </motion.div>
                             )}
                             {status === 'rate_limited' && (

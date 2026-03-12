@@ -25,7 +25,7 @@ app.use(
         credentials: true,
     }),
 );
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(limiter);
 
