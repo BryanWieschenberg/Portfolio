@@ -22,13 +22,11 @@ type Tab = 'projects' | 'experience';
 type SortKey = 'featured' | 'newest' | 'alphabetical';
 type SortDir = 'asc' | 'desc';
 
-// Extract all unique skill names from the skills constant
 const allSkillNames = Object.entries(skills)
     .filter(([category]) => category !== 'AI Tooling' && category !== 'Soft Skills')
     .flatMap(([, list]) => list.map((s) => s.name));
 const uniqueSkillNames = [...new Set(allSkillNames)].sort();
 
-// Extract all years from project and experience dates
 function extractYear(dateStr: string): number {
     const match = dateStr.match(/(\d{4})/);
     return match ? parseInt(match[1], 10) : 0;
@@ -39,7 +37,6 @@ const experienceYears = [...new Set(experience.map((e) => extractYear(e.date)))]
     (a, b) => b - a,
 );
 
-// Project-specific filter values
 const projectTypes: ProjectType[] = ['Web App', 'Desktop App', 'CLI Tool', 'Automation'];
 const projectStatuses: ProjectStatus[] = ['Completed', 'Maintained', 'In Development'];
 const scaleValues: ProjectScale[] = ['S', 'M', 'L', 'XL'];
@@ -57,7 +54,6 @@ const conceptValues: Concepts[] = [
     'Real-Time',
 ];
 
-// Parse date like "Sep. 2024 - Present" or "Jul. 2025 - Aug. 2025" into a sortable timestamp
 function parseDateToTimestamp(dateStr: string): number {
     const monthMap: Record<string, number> = {
         jan: 0,
@@ -88,7 +84,6 @@ function parseDateToTimestamp(dateStr: string): number {
 const Work: React.FC = () => {
     const { theme } = useTheme();
 
-    // Tab state
     const [activeTab, setActiveTab] = useState<Tab>('projects');
     const [isInitialLoad, setIsInitialLoad] = useState(true);
 
@@ -97,11 +92,9 @@ const Work: React.FC = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    // Sort state
     const [sortKey, setSortKey] = useState<SortKey>('featured');
     const [sortDir, setSortDir] = useState<SortDir>('desc');
 
-    // Filter state
     const [showFilters, setShowFilters] = useState(false);
     const [nameSearch, setNameSearch] = useState('');
     const [debouncedName, setDebouncedName] = useState('');
@@ -117,13 +110,11 @@ const Work: React.FC = () => {
 
     const skillDropdownRef = useRef<HTMLDivElement>(null);
 
-    // Debounce name search
     useEffect(() => {
         const timer = setTimeout(() => setDebouncedName(nameSearch), 300);
         return () => clearTimeout(timer);
     }, [nameSearch]);
 
-    // Close skill dropdown on outside click
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
             if (skillDropdownRef.current && !skillDropdownRef.current.contains(e.target as Node)) {
@@ -134,7 +125,6 @@ const Work: React.FC = () => {
         return () => document.removeEventListener('mousedown', handleClick);
     }, []);
 
-    // Toggle helpers
     const toggleChip = useCallback(
         <T,>(_: T[], val: T, setter: React.Dispatch<React.SetStateAction<T[]>>) => {
             setter((prev) => (prev.includes(val) ? prev.filter((v) => v !== val) : [...prev, val]));
@@ -177,7 +167,6 @@ const Work: React.FC = () => {
         selectedConcepts.length,
     );
 
-    // Filtered skills for dropdown
     const filteredDropdownSkills = useMemo(() => {
         if (!skillSearch) {
             return uniqueSkillNames;
@@ -186,17 +175,14 @@ const Work: React.FC = () => {
         return uniqueSkillNames.filter((s) => s.toLowerCase().includes(lower));
     }, [skillSearch]);
 
-    // Filter + sort projects
     const filteredProjects = useMemo(() => {
         let result = [...projects];
 
-        // Name filter
         if (debouncedName) {
             const lower = debouncedName.toLowerCase();
             result = result.filter((p) => p.name.toLowerCase().includes(lower));
         }
 
-        // Skills filter
         if (selectedSkills.length > 0) {
             result = result.filter((p) => {
                 const projectSkills = [
@@ -208,12 +194,10 @@ const Work: React.FC = () => {
             });
         }
 
-        // Type filter
         if (selectedTypes.length > 0) {
             result = result.filter((p) => selectedTypes.includes(p.type));
         }
 
-        // Team filter
         if (selectedTeam.length > 0) {
             result = result.filter((p) => {
                 const isTeam = !!p.role;
@@ -227,14 +211,12 @@ const Work: React.FC = () => {
             });
         }
 
-        // Scale filter
         if (selectedScales.length > 0) {
             result = result.filter(
                 (p) => p.scale !== undefined && selectedScales.includes(p.scale),
             );
         }
 
-        // Year filter
         if (selectedYears.length > 0) {
             const now = Date.now();
             const sixMonthsAgo = now - 6 * 30 * 24 * 60 * 60 * 1000;
@@ -264,21 +246,17 @@ const Work: React.FC = () => {
             });
         }
 
-        // Status filter
         if (selectedStatuses.length > 0) {
             result = result.filter((p) => selectedStatuses.includes(p.status));
         }
 
-        // Concepts filter
         if (selectedConcepts.length > 0) {
             result = result.filter(
                 (p) => p.concepts && selectedConcepts.some((c) => p.concepts!.includes(c)),
             );
         }
 
-        // Sort
         if (sortKey === 'featured') {
-            // featured = original order. If desc, reverse it
             if (sortDir === 'asc') {
                 result = result.reverse();
             }
@@ -308,7 +286,6 @@ const Work: React.FC = () => {
         sortDir,
     ]);
 
-    // Filter + sort experience
     const filteredExperience = useMemo(() => {
         let result = [...experience];
 
@@ -366,7 +343,6 @@ const Work: React.FC = () => {
             );
         }
 
-        // Sort
         if (sortKey === 'featured') {
             if (sortDir === 'asc') {
                 result = result.reverse();
@@ -432,14 +408,12 @@ const Work: React.FC = () => {
             </div>
 
             <div className="container mx-auto px-4 lg:px-20 pt-8 lg:pt-12 pb-8">
-                {/* Toggle + Controls */}
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.5 }}
                     className="flex flex-col items-center gap-6 mb-8"
                 >
-                    {/* Tab Toggle */}
                     <div className="toggle-pill">
                         <button
                             onClick={() => setActiveTab('projects')}
@@ -457,9 +431,7 @@ const Work: React.FC = () => {
                         </button>
                     </div>
 
-                    {/* Sort + Filter Row */}
                     <div className="flex flex-wrap items-center justify-center gap-2">
-                        {/* Sort buttons */}
                         <button
                             onClick={() => handleSort('featured')}
                             className={`sort-btn ${sortKey === 'featured' ? 'active' : ''}`}
@@ -483,7 +455,6 @@ const Work: React.FC = () => {
                             className={`w-px h-5 mx-1 ${theme === 'light' ? 'bg-slate-300' : 'bg-slate-600'}`}
                         />
 
-                        {/* Filter toggle */}
                         <button
                             onClick={() => setShowFilters(!showFilters)}
                             className={`sort-btn ${showFilters || hasActiveFilters ? 'active' : ''}`}
@@ -508,7 +479,6 @@ const Work: React.FC = () => {
                     </div>
                 </motion.div>
 
-                {/* Filter Panel */}
                 <AnimatePresence>
                     {showFilters && (
                         <motion.div
@@ -538,8 +508,6 @@ const Work: React.FC = () => {
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3">
-                                    {/* --- Row 1 --- */}
-                                    {/* Name search */}
                                     <div>
                                         <p className="filter-label">Name</p>
                                         <div className="relative">
@@ -562,7 +530,6 @@ const Work: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* Status (Projects only) or empty div (Experience) */}
                                     {activeTab === 'projects' ? (
                                         <div>
                                             <p className="filter-label">Status</p>
@@ -588,7 +555,6 @@ const Work: React.FC = () => {
                                         <div className="hidden md:block"></div>
                                     )}
 
-                                    {/* Skills Select Dropdown */}
                                     <div className="lg:row-span-4">
                                         <div ref={skillDropdownRef}>
                                             <div className="flex justify-between items-center mb-1">
@@ -692,7 +658,6 @@ const Work: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* Selected Skills */}
                                     <div className="lg:row-span-4">
                                         <div className="flex justify-between items-center mb-1">
                                             <p className="filter-label !mb-0">Selected Skills</p>
@@ -739,8 +704,6 @@ const Work: React.FC = () => {
                                         )}
                                     </div>
 
-                                    {/* --- Row 2 --- */}
-                                    {/* Year */}
                                     <div>
                                         <p className="filter-label">Year / Recency</p>
                                         <div className="flex flex-wrap gap-1.5">
@@ -777,7 +740,6 @@ const Work: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* Scale (Projects only) or empty div (Experience) */}
                                     {activeTab === 'projects' ? (
                                         <div>
                                             <p className="filter-label">Scale</p>
@@ -803,11 +765,8 @@ const Work: React.FC = () => {
                                         <div className="hidden md:block"></div>
                                     )}
 
-                                    {/* --- Row 3 --- */}
-                                    {/* Type & Team (Projects only) */}
                                     {activeTab === 'projects' && (
                                         <>
-                                            {/* Type */}
                                             <div>
                                                 <p className="filter-label">Type</p>
                                                 <div className="flex flex-wrap gap-1.5">
@@ -829,7 +788,6 @@ const Work: React.FC = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Team */}
                                             <div>
                                                 <p className="filter-label">Team</p>
                                                 <div className="flex flex-wrap gap-1.5">
@@ -853,7 +811,6 @@ const Work: React.FC = () => {
                                         </>
                                     )}
 
-                                    {/* --- Concepts --- */}
                                     <div className="lg:col-span-2">
                                         <p className="filter-label">Concepts</p>
                                         <div className="flex flex-wrap gap-1.5">
@@ -880,7 +837,6 @@ const Work: React.FC = () => {
                     )}
                 </AnimatePresence>
 
-                {/* Results */}
                 <AnimatePresence mode="wait">
                     {activeTab === 'projects' ? (
                         <motion.div

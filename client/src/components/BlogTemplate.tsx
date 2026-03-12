@@ -85,7 +85,6 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({ post, views = 0, children }
     return (
         <>
             <div className="container mx-auto px-4 lg:px-20 pt-8 lg:pt-12 max-w-[1200px]">
-                {/* Top Navigation */}
                 <div className="flex items-center justify-between mb-8 sm:mb-12">
                     <motion.button
                         initial={{ opacity: 0, x: -20 }}
@@ -143,7 +142,6 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({ post, views = 0, children }
                         </div>
                     </motion.div>
 
-                    {/* Hero Image */}
                     <motion.div variants={itemVariants} className="mb-12 max-w-4xl mx-auto">
                         <div
                             className={`relative rounded-2xl overflow-hidden shadow-lg border group aspect-video flex items-center justify-center bg-black/95 ${theme === 'light' ? 'border-slate-200' : 'border-slate-800'}`}
@@ -163,7 +161,6 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({ post, views = 0, children }
                 </motion.div>
             </div>
 
-            {/* CONTENT BODY */}
             <div className="container mx-auto px-4 lg:px-20 max-w-[1000px]">
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -174,7 +171,6 @@ const BlogTemplate: React.FC<BlogTemplateProps> = ({ post, views = 0, children }
                 </motion.div>
             </div>
 
-            {/* BOTTOM NAVIGATION */}
             <div className="container mx-auto px-4 lg:px-20 pb-16 max-w-[1200px]">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

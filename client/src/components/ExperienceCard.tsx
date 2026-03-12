@@ -62,7 +62,6 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, variants })
                 className={`relative z-10 rounded-2xl p-6 h-full flex flex-col
                 ${theme === 'light' ? 'bg-white' : 'bg-[#111318]/95 border border-slate-700/50'}`}
             >
-                {/* Row 1: Icon + Role & Company | GitHub */}
                 <div className="flex justify-between items-center mb-1">
                     <div className="flex items-center gap-3">
                         <img
@@ -86,7 +85,6 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, variants })
                     </div>
                 </div>
 
-                {/* Row 2: Date + Span */}
                 <div className="flex items-center mb-4">
                     <p
                         className={`text-xs font-semibold tracking-wider ${
@@ -101,10 +99,8 @@ const ExperienceCard: React.FC<ExperienceCardProps> = ({ experience, variants })
                     </p>
                 </div>
 
-                {/* Row 3: Hook */}
                 <p className="card-text mb-6 flex-grow">{experience.hook}</p>
 
-                {/* Row 4: Top skill badges with icons */}
                 <div
                     className={`mt-auto pt-4 border-t h-[82px] ${
                         theme === 'light' ? 'border-slate-200' : 'border-slate-700/50'

@@ -16,6 +16,8 @@ const Navbar: React.FC = () => {
     const workRef = useRef<HTMLDivElement>(null);
     const blogRef = useRef<HTMLDivElement>(null);
     const contactRef = useRef<HTMLDivElement>(null);
+    const isNavigating = useRef(false);
+    const prevPathname = useRef(location.pathname);
     const [lineStyle, setLineStyle] = React.useState<{ left: number; width: number }>({
         left: 0,
         width: 0,
@@ -51,9 +53,25 @@ const Navbar: React.FC = () => {
     };
 
     useEffect(() => {
-        updateLinePosition();
+        if (prevPathname.current !== location.pathname && lineStyle.width > 0) {
+            isNavigating.current = true;
+            prevPathname.current = location.pathname;
+        }
+
+        const rafId = requestAnimationFrame(() => {
+            updateLinePosition();
+        });
+        const timer = setTimeout(() => {
+            updateLinePosition();
+
+            setTimeout(() => {
+                isNavigating.current = false;
+            }, 350);
+        }, 100);
         window.addEventListener('resize', updateLinePosition);
         return () => {
+            cancelAnimationFrame(rafId);
+            clearTimeout(timer);
             window.removeEventListener('resize', updateLinePosition);
         };
     }, [location]);
@@ -202,17 +220,21 @@ const Navbar: React.FC = () => {
                     location.pathname === '/about' ||
                     isWorkActive ||
                     isBlogActive ||
-                    location.pathname === '/contact') && (
-                    <div
-                        className="absolute bg-blue-400"
-                        style={{
-                            bottom: 0,
-                            left: lineStyle.left,
-                            width: lineStyle.width,
-                            height: '2px',
-                        }}
-                    />
-                )}
+                    location.pathname === '/contact') &&
+                    lineStyle.width > 0 && (
+                        <div
+                            className="absolute bg-blue-400"
+                            style={{
+                                bottom: 0,
+                                left: lineStyle.left,
+                                width: lineStyle.width,
+                                height: '2px',
+                                ...(isNavigating.current
+                                    ? { transition: 'left 0.3s ease, width 0.3s ease' }
+                                    : {}),
+                            }}
+                        />
+                    )}
             </header>
         </div>
     );

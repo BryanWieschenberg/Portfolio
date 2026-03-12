@@ -11,10 +11,10 @@ interface Point {
 }
 
 const MESH_SIZE = 12;
-const STIFFNESS = 0.06; // More liquid snap back
-const DAMPING = 0.9; // Less friction for more "jiggle"
-const INTERACTION_RADIUS = 100; // Wider area of effect
-const PULL_STRENGTH = 0.25; // Base pull strength
+const STIFFNESS = 0.06;
+const DAMPING = 0.9;
+const INTERACTION_RADIUS = 100;
+const PULL_STRENGTH = 0.25;
 
 const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme }) => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -26,7 +26,6 @@ const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme 
     const [isHovered, setIsHovered] = useState(false);
     const mouseRef = useRef({ x: 0, y: 0, px: 0, py: 0, down: false });
 
-    // Initialize mesh
     const initMesh = useCallback((width: number, height: number) => {
         const mesh: Point[][] = [];
         for (let y = 0; y <= MESH_SIZE; y++) {
@@ -59,6 +58,33 @@ const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme 
         };
     }, [src, initMesh]);
 
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) {
+            return;
+        }
+
+        const observer = new ResizeObserver((entries) => {
+            const entry = entries[0];
+            const { width, height } = entry.contentRect;
+            if (
+                canvasRef.current &&
+                paintCanvasRef.current &&
+                imgRef.current &&
+                width > 0 &&
+                height > 0
+            ) {
+                canvasRef.current.width = width;
+                canvasRef.current.height = height;
+                paintCanvasRef.current.width = width;
+                paintCanvasRef.current.height = height;
+                initMesh(width, height);
+            }
+        });
+        observer.observe(container);
+        return () => observer.disconnect();
+    }, [initMesh]);
+
     const update = useCallback(() => {
         if (!meshRef.current.length) {
             return;
@@ -70,7 +96,6 @@ const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme 
             for (let x = 0; x <= MESH_SIZE; x++) {
                 const p = meshRef.current[y][x];
 
-                // Interaction: More like "grabbing" and "pulling"
                 if (down && !isPainting) {
                     const dx = mx - p.x;
                     const dy = my - p.y;
@@ -78,17 +103,14 @@ const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme 
                     if (dist < INTERACTION_RADIUS) {
                         const force = (1 - dist / INTERACTION_RADIUS) * PULL_STRENGTH;
 
-                        // 1. Vector force (pulls points toward the mouse)
                         p.vx += dx * force * 0.5;
                         p.vy += dy * force * 0.5;
 
-                        // 2. Velocity influence (drag effect)
                         p.vx += (mx - mouseRef.current.px) * force * 1.2;
                         p.vy += (my - mouseRef.current.py) * force * 1.2;
                     }
                 }
 
-                // Spring back to origin (with a bit more "slack")
                 const ax = (p.ox - p.x) * STIFFNESS;
                 const ay = (p.oy - p.y) * STIFFNESS;
 
@@ -112,17 +134,13 @@ const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme 
             return;
         }
 
-        // Clear and set background color to hide sub-pixel gaps
         ctx.fillStyle = theme === 'light' ? '#f8fafc' : '#0f172a';
         ctx.fillRect(0, 0, canvas!.width, canvas!.height);
-
-        // Turn off smoothing to prevent the "triangle seam" antialiasing issue
         ctx.imageSmoothingEnabled = false;
 
         const sw = img.width / MESH_SIZE;
         const sh = img.height / MESH_SIZE;
 
-        // Helper for accurate affine triangle mapping
         const drawTriangle = (
             tp1: Point,
             tp2: Point,
@@ -137,7 +155,6 @@ const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme 
             ctx.save();
             ctx.beginPath();
 
-            // Expand triangle vertices 1px outwards from center to prevent seams
             const cx = (tp1.x + tp2.x + tp3.x) / 3;
             const cy = (tp1.y + tp2.y + tp3.y) / 3;
 
@@ -210,7 +227,6 @@ const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme 
             }
         }
 
-        // Reset transform for paint overlay
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.drawImage(paintCanvasRef.current!, 0, 0);
     }, [theme]);
@@ -284,7 +300,6 @@ const InteractiveFace: React.FC<{ src: string; theme: string }> = ({ src, theme 
             <canvas ref={canvasRef} className="absolute inset-0 block pointer-events-none z-10" />
             <canvas ref={paintCanvasRef} className="absolute inset-0 block hidden" />
 
-            {/* Overlay Controls */}
             <AnimatePresence>
                 {isHovered && (
                     <motion.div

@@ -52,7 +52,7 @@ const Contact: React.FC = () => {
         if (lastSubmitStr) {
             const lastSubmit = parseInt(lastSubmitStr, 10);
             if (Date.now() - lastSubmit < 60 * 60 * 1000) {
-                // Rate limit: 1 hour
+                // Local rate limit: 1 hour
                 setStatus('rate_limited');
                 return;
             }

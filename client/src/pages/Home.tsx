@@ -45,74 +45,9 @@ function useLgUp() {
     return isLgUp;
 }
 
-const GooglyEyes: React.FC<{
-    mousePos: { x: number; y: number };
-    profileRef: React.RefObject<HTMLDivElement>;
-}> = ({ mousePos, profileRef }) => {
-    const [eyeOffsets, setEyeOffsets] = useState({ left: { x: 0, y: 0 }, right: { x: 0, y: 0 } });
-
-    useEffect(() => {
-        if (!profileRef.current) {
-            return;
-        }
-        const rect = profileRef.current.getBoundingClientRect();
-
-        const calculateOffset = (eyeXPercent: number, eyeYPercent: number) => {
-            const eyeX = rect.left + rect.width * eyeXPercent;
-            const eyeY = rect.top + rect.height * eyeYPercent;
-
-            const dx = mousePos.x - eyeX;
-            const dy = mousePos.y - eyeY;
-            const angle = Math.atan2(dy, dx);
-            const distance = Math.min(Math.sqrt(dx * dx + dy * dy) / 8, 10);
-
-            return {
-                x: Math.cos(angle) * distance,
-                y: Math.sin(angle) * distance,
-            };
-        };
-
-        setEyeOffsets({
-            left: calculateOffset(0.41, 0.42),
-            right: calculateOffset(0.59, 0.42),
-        });
-    }, [mousePos, profileRef]);
-
-    return (
-        <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            {/* Left Eye */}
-            <div
-                className="absolute w-4 h-4 lg:w-6 lg:h-6 rounded-full border-black flex items-center justify-center overflow-hidden shadow-inner"
-                style={{ left: '41%', top: '42%', transform: 'translate(-50%, -50%)' }}
-            >
-                <div
-                    className="w-2 h-2 lg:w-3 lg:h-3 bg-black rounded-full"
-                    style={{
-                        transform: `translate(${eyeOffsets.left.x / 2}px, ${eyeOffsets.left.y / 2}px)`,
-                    }}
-                />
-            </div>
-            {/* Right Eye */}
-            <div
-                className="absolute w-4 h-4 lg:w-6 lg:h-6 rounded-full flex items-center justify-center overflow-hidden shadow-inner"
-                style={{ left: '59%', top: '42%', transform: 'translate(-50%, -50%)' }}
-            >
-                <div
-                    className="w-2 h-2 lg:w-3 lg:h-3 bg-black rounded-full"
-                    style={{
-                        transform: `translate(${eyeOffsets.right.x / 2}px, ${eyeOffsets.right.y / 2}px)`,
-                    }}
-                />
-            </div>
-        </div>
-    );
-};
-
 const Home: React.FC = () => {
     const { theme } = useTheme();
     const featuredRef = useRef<HTMLDivElement>(null);
-    const profileRef = useRef<HTMLDivElement>(null);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const navigate = useNavigate();
     const [isIntroComplete, setIsIntroComplete] = useState(false);
     const age = getAge();
@@ -127,8 +62,6 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         if (githubData && isIntroComplete && githubScrollRef.current) {
-            // A short delay ensures the DOM has painted all the little squares
-            // and the container width is accurate before we scroll to the end.
             const timeoutId = setTimeout(() => {
                 if (githubScrollRef.current) {
                     githubScrollRef.current.scrollLeft = githubScrollRef.current.scrollWidth;
@@ -262,7 +195,7 @@ const Home: React.FC = () => {
                         <div className="mt-4">
                             <SwipeReveal onComplete={() => setIsIntroComplete(true)}>
                                 <h1
-                                    className={`text-5xl lg:text-8xl font-bold leading-tight text-center lg:text-left whitespace-nowrap 
+                                    className={`text-5xl lg:text-8xl font-bold leading-tight text-center lg:text-left whitespace-nowrap mb-3
                                     ${theme === 'light' ? 'drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
                                 >
                                     Hi, I'm{' '}
@@ -375,8 +308,6 @@ const Home: React.FC = () => {
                         <AnimatePresence>
                             {isIntroComplete && (
                                 <motion.div
-                                    ref={profileRef}
-                                    onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ duration: 0.5 }}
@@ -403,7 +334,6 @@ const Home: React.FC = () => {
                                         alt="Bryan"
                                         className="relative rounded-full border-4 border-[#3c86ff] object-cover w-64 h-64 lg:w-96 lg:h-96 transform transition duration-500 hover:scale-105 shadow-2xl z-10"
                                     />
-                                    <GooglyEyes mousePos={mousePos} profileRef={profileRef} />
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -467,7 +397,6 @@ const Home: React.FC = () => {
                         variants={containerVariants}
                         className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto"
                     >
-                        {/* Left Column: GitHub Activity & Commits */}
                         <motion.div
                             variants={itemVariants}
                             className={`flex flex-col gap-8 p-6 rounded-2xl h-full ${
@@ -476,7 +405,6 @@ const Home: React.FC = () => {
                                     : 'bg-[#111318]/95 border border-slate-700/50 shadow-2xl'
                             }`}
                         >
-                            {/* Commit Heatmap */}
                             <div>
                                 <h3 className="card-title text-2xl mb-4 flex items-center gap-2">
                                     <FaGithub /> GitHub Activity
@@ -490,7 +418,6 @@ const Home: React.FC = () => {
                                             last year
                                         </p>
                                         <div className="flex">
-                                            {/* Y-axis logic */}
                                             <div className="flex flex-col gap-1 mt-[18px] text-[10px] text-slate-400 mr-2 flex-shrink-0 font-medium">
                                                 <span className="h-[10px] leading-[10px] invisible">
                                                     S
@@ -513,7 +440,6 @@ const Home: React.FC = () => {
                                                 ref={githubScrollRef}
                                                 className="flex flex-col overflow-x-auto pb-4 pt-1 -mt-1 scrollbar-hide flex-1"
                                             >
-                                                {/* X-axis months */}
                                                 <div className="flex text-[10px] font-medium text-slate-400 mb-1 h-[14px]">
                                                     {githubData.weeks.map((week, i) => {
                                                         const firstDay = new Date(
@@ -607,7 +533,6 @@ const Home: React.FC = () => {
                                 )}
                             </div>
 
-                            {/* Commit History */}
                             <div className="flex flex-col flex-1">
                                 <h3 className="card-title text-2xl mb-4 flex items-center gap-2">
                                     Recent Commits
@@ -653,7 +578,6 @@ const Home: React.FC = () => {
                             </div>
                         </motion.div>
 
-                        {/* Right Column: Latest Blog Post */}
                         <motion.div variants={itemVariants} className="flex flex-col">
                             <div
                                 className={`p-6 rounded-2xl h-full flex flex-col ${theme === 'light' ? 'bg-slate-200/80 shadow-md' : 'bg-[#111318]/95 border border-slate-700/50 shadow-2xl'}`}

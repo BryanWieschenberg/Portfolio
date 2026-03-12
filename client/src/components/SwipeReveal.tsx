@@ -22,6 +22,7 @@ const SwipeReveal: React.FC<SwipeRevealProps> = ({
     const [containerWidth, setContainerWidth] = useState(0);
     const [isRevealPhase, setIsRevealPhase] = useState(false);
     const [isCircleVisible, setIsCircleVisible] = useState(true);
+    const [animationDone, setAnimationDone] = useState(false);
 
     const x = useMotionValue(0);
     const y = useMotionValue(0);
@@ -29,6 +30,9 @@ const SwipeReveal: React.FC<SwipeRevealProps> = ({
     const opacity = useMotionValue(0);
 
     const clipPath = useTransform(x, (currentX) => {
+        if (animationDone) {
+            return 'inset(0)';
+        }
         if (!isRevealPhase) {
             return 'inset(-100px 100% -100px -100px)';
         }
@@ -81,6 +85,7 @@ const SwipeReveal: React.FC<SwipeRevealProps> = ({
                 ease: [0.45, 0, 0.55, 1],
             });
 
+            setAnimationDone(true);
             setIsCircleVisible(false);
 
             if (onComplete) {

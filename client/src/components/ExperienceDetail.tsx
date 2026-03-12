@@ -23,14 +23,12 @@ const ExperienceDetail: React.FC = () => {
     const [expandedTech, setExpandedTech] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    // Lightbox State
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const [zoomLevel, setZoomLevel] = useState(1);
 
     const expIndex = experience.findIndex((e) => normalizeTitle(e.role) === slug);
     const exp = experience[expIndex];
 
-    // const prevExp = experience[(expIndex - 1 + experience.length) % experience.length];
     let nextIndex = (expIndex + 1) % experience.length;
     while (experience[nextIndex]?.indev && nextIndex !== expIndex) {
         nextIndex = (nextIndex + 1) % experience.length;
@@ -42,7 +40,6 @@ const ExperienceDetail: React.FC = () => {
         window.scrollTo(0, 0);
     };
 
-    // Reset gallery state when slug changes
     useEffect(() => {
         setCurrentImageIndex(0);
         setIsLightboxOpen(false);
@@ -71,7 +68,6 @@ const ExperienceDetail: React.FC = () => {
         (_, i) => `/artifacts/experience/${slug}/image${i + 1}.png`,
     );
 
-    // Helper to parse bullets and bold the prefix before the first colon
     const renderBullets = (text: string) => {
         if (!text) {
             return null;
@@ -161,14 +157,6 @@ const ExperienceDetail: React.FC = () => {
                     transition={{ duration: 0.3 }}
                     className="flex items-center gap-3"
                 >
-                    {/* <button
-                        onClick={() => handleNavigate(prevExp.role)}
-                        className="btn-nav-compact group"
-                        title={`Previous: ${prevExp.role}`}
-                    >
-                        <FaChevronLeft className="text-sm transform transition-transform duration-300 group-hover:-translate-x-0.5" />
-                        <span className="hidden sm:inline">Prev</span>
-                    </button> */}
                     <button
                         onClick={() => handleNavigate(nextExp.role)}
                         className="btn-nav-compact group"
@@ -181,7 +169,6 @@ const ExperienceDetail: React.FC = () => {
             </div>
 
             <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-                {/* Header */}
                 <motion.div variants={itemVariants} className="mb-10 text-center lg:text-left">
                     <div className="flex flex-col items-center lg:items-start">
                         <h1
@@ -216,7 +203,6 @@ const ExperienceDetail: React.FC = () => {
                     </div>
                 </motion.div>
 
-                {/* Artifact Gallery Carousel */}
                 {projectImages.length > 0 && (
                     <motion.div variants={itemVariants} className="mb-12 max-w-4xl mx-auto">
                         <div
@@ -239,7 +225,6 @@ const ExperienceDetail: React.FC = () => {
                                 />
                             </div>
 
-                            {/* Artifact Description Overlay (Main Gallery) */}
                             {exp.artifacts && exp.artifacts[currentImageIndex] && (
                                 <div className="absolute bottom-0 left-0 right-0 pb-8 pt-4 px-4 bg-gradient-to-t from-black/80 to-transparent pointer-events-none">
                                     <p className="text-white text-sm font-medium text-center drop-shadow-md">
@@ -271,7 +256,6 @@ const ExperienceDetail: React.FC = () => {
                                         <FaChevronRight />
                                     </button>
 
-                                    {/* Dots */}
                                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
                                         {projectImages.map((_, i) => (
                                             <button
@@ -288,7 +272,6 @@ const ExperienceDetail: React.FC = () => {
                 )}
             </motion.div>
 
-            {/* Intro */}
             {exp.intro && (
                 <motion.div variants={itemVariants} className="mb-12 max-w-4xl mx-auto">
                     <p
@@ -300,7 +283,6 @@ const ExperienceDetail: React.FC = () => {
             )}
 
             <div className="flex flex-col space-y-8 mb-12 max-w-4xl mx-auto">
-                {/* description */}
                 {exp.desc && (
                     <motion.div
                         initial="hidden"
@@ -320,7 +302,6 @@ const ExperienceDetail: React.FC = () => {
                     </motion.div>
                 )}
 
-                {/* Key Things Shipped */}
                 {exp.feats && (
                     <motion.div
                         initial="hidden"
@@ -338,7 +319,6 @@ const ExperienceDetail: React.FC = () => {
 
                 <div className="!mt-[4px]"></div>
 
-                {/* Results */}
                 {exp.res && (
                     <motion.div
                         initial="hidden"
@@ -356,7 +336,6 @@ const ExperienceDetail: React.FC = () => {
 
                 <div className="!mt-[6px]"></div>
 
-                {/* Tech Used */}
                 {exp.skills && Object.keys(exp.skills).length > 0 && (
                     <motion.div
                         initial="hidden"
@@ -536,7 +515,6 @@ const ExperienceDetail: React.FC = () => {
                 )}
             </div>
 
-            {/* Lightbox Modal */}
             <AnimatePresence>
                 {isLightboxOpen && (
                     <motion.div
@@ -546,7 +524,6 @@ const ExperienceDetail: React.FC = () => {
                         className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm"
                         onClick={() => setIsLightboxOpen(false)}
                     >
-                        {/* Close Button */}
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
@@ -557,7 +534,6 @@ const ExperienceDetail: React.FC = () => {
                             <FaTimes className="text-xl" />
                         </button>
 
-                        {/* Lightbox Navigation */}
                         {projectImages.length > 1 && (
                             <>
                                 <button
@@ -587,7 +563,6 @@ const ExperienceDetail: React.FC = () => {
                             </>
                         )}
 
-                        {/* Lightbox Info Bar (Position & Description) */}
                         <div className="absolute top-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-50 w-full px-4 max-w-2xl text-center">
                             <div className="bg-black/50 backdrop-blur-md border border-white/10 shadow-lg rounded-full px-4 py-1 text-white/90 text-sm font-medium">
                                 {currentImageIndex + 1} / {projectImages.length}
@@ -599,7 +574,6 @@ const ExperienceDetail: React.FC = () => {
                             )}
                         </div>
 
-                        {/* Zoom Controls */}
                         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/50 backdrop-blur-md border border-white/10 shadow-lg rounded-full px-6 py-3 z-50">
                             <button
                                 onClick={(e) => {
@@ -626,7 +600,6 @@ const ExperienceDetail: React.FC = () => {
                             </button>
                         </div>
 
-                        {/* Draggable & Zoomable Image */}
                         <div
                             className="w-full h-full flex items-center justify-center overflow-hidden"
                             onWheel={(e) => {
@@ -659,7 +632,6 @@ const ExperienceDetail: React.FC = () => {
                 )}
             </AnimatePresence>
 
-            {/* Bottom Navigation */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

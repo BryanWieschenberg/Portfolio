@@ -86,7 +86,6 @@ const About: React.FC = () => {
     const navigate = useNavigate();
     const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-    // Filter states
     const [showFilters, setShowFilters] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -96,7 +95,6 @@ const About: React.FC = () => {
     const [showUsedInDropdown, setShowUsedInDropdown] = useState(false);
     const usedInDropdownRef = React.useRef<HTMLDivElement>(null);
 
-    // Sort and View states
     const [sortBy, setSortBy] = useState<'featured' | 'proficiency' | 'used' | 'alphabetical'>(
         'featured',
     );
@@ -201,7 +199,7 @@ const About: React.FC = () => {
                 if (selectedUsedIn.length > 0) {
                     const usedInNames = [
                         ...skill.usedInProjects.map((p) => p.name),
-                        ...skill.usedInExperience.map((e) => e.role), // Using company or role
+                        ...skill.usedInExperience.map((e) => e.role),
                     ];
                     if (!selectedUsedIn.some((u) => usedInNames.includes(u))) {
                         return false;
@@ -278,7 +276,6 @@ const About: React.FC = () => {
                         variants={itemVariants}
                         className="flex flex-col gap-8 lg:gap-12 w-full !max-w-4xl mx-auto"
                     >
-                        {/* Top row with Image & First Text block */}
                         <div className="flex flex-col lg:flex-row gap-10 items-center lg:justify-between w-full">
                             <div className="flex-shrink-0">
                                 <div className="relative">
@@ -322,7 +319,6 @@ const About: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Bottom Text Row */}
                         <div className="w-full">
                             <p
                                 className={`text-lg lg:text-xl leading-relaxed lg:leading-relaxed text-center ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
@@ -455,9 +451,7 @@ const About: React.FC = () => {
                         </h2>
 
                         <div className="flex flex-col items-center gap-4">
-                            {/* Filter toggle & View toggles */}
                             <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3">
-                                {/* Sort buttons */}
                                 <div className="flex flex-wrap items-center gap-2">
                                     <button
                                         onClick={() => {
@@ -597,7 +591,6 @@ const About: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Filter Panel */}
                         <AnimatePresence>
                             {showFilters && (
                                 <motion.div
@@ -626,7 +619,6 @@ const About: React.FC = () => {
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3">
-                                            {/* Row 1 */}
                                             <div>
                                                 <p className="filter-label">Search</p>
                                                 <div className="relative">
@@ -736,7 +728,6 @@ const About: React.FC = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Selected Projects/Experience */}
                                             <div className="lg:row-span-3">
                                                 <p className="filter-label">Selected</p>
                                                 {selectedUsedIn.length > 0 && (
@@ -768,7 +759,6 @@ const About: React.FC = () => {
                                                 )}
                                             </div>
 
-                                            {/* Row 2 */}
                                             <div className="col-span-1 md:col-span-2">
                                                 <p className="filter-label">Category</p>
                                                 <div className="flex flex-wrap gap-1.5">
@@ -795,7 +785,6 @@ const About: React.FC = () => {
                             )}
                         </AnimatePresence>
 
-                        {/* Rendering Skills */}
                         {filteredSkillsList.length === 0 ? (
                             <div
                                 className={`py-12 text-center ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}

@@ -14,7 +14,6 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const recencyOptions = ['Last 6 Months', 'Last Year', 'Last 2 Years'];
 
-// Extract all years from blog dates
 function extractYear(dateStr: string): number {
     const match = dateStr.match(/(\d{4})/);
     return match ? parseInt(match[1], 10) : 0;
@@ -26,7 +25,7 @@ const topicValues: BlogTopic[] = ['Project', 'Career', 'Opinion'];
 function parseDateToTimestamp(dateStr: string): number {
     const parts = dateStr.split('/');
     if (parts.length === 3) {
-        const month = parseInt(parts[0], 10) - 1; // 0-indexed
+        const month = parseInt(parts[0], 10) - 1;
         const day = parseInt(parts[1], 10);
         const year = parseInt(parts[2], 10);
         if (!isNaN(month) && !isNaN(day) && !isNaN(year)) {
@@ -42,7 +41,6 @@ const Blog: React.FC = () => {
 
     const [views, setViews] = useState<Record<string, number>>({});
 
-    // Ensure initial items get delayed appropriately given page load
     const [isInitialLoad, setIsInitialLoad] = useState(true);
 
     useEffect(() => {
@@ -50,7 +48,6 @@ const Blog: React.FC = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    // Fetch views
     useEffect(() => {
         const fetchViews = async () => {
             try {
@@ -66,11 +63,9 @@ const Blog: React.FC = () => {
         fetchViews();
     }, []);
 
-    // Sort state
     const [sortKey, setSortKey] = useState<SortKey>('recency');
     const [sortDir, setSortDir] = useState<SortDir>('desc');
 
-    // Filter state
     const [showFilters, setShowFilters] = useState(false);
     const [nameSearch, setNameSearch] = useState('');
     const [debouncedName, setDebouncedName] = useState('');
@@ -114,7 +109,6 @@ const Blog: React.FC = () => {
     const filteredPosts = useMemo(() => {
         let result = [...blogPosts];
 
-        // Search text
         if (debouncedName) {
             const lower = debouncedName.toLowerCase();
             result = result.filter(
@@ -123,12 +117,10 @@ const Blog: React.FC = () => {
             );
         }
 
-        // Topic Filter
         if (selectedTopics.length > 0) {
             result = result.filter((p) => selectedTopics.includes(p.topic));
         }
 
-        // Recency Filter
         if (selectedYears.length > 0) {
             const now = Date.now();
             const sixMonthsAgo = now - 6 * 30 * 24 * 60 * 60 * 1000;
@@ -156,18 +148,14 @@ const Blog: React.FC = () => {
             });
         }
 
-        // Sorting
         result.sort((a, b) => {
             if (sortKey === 'recency') {
                 const diff = parseDateToTimestamp(b.date) - parseDateToTimestamp(a.date);
-                // b - a is descending (newest first). Flip it for ascending.
                 return sortDir === 'desc' ? diff : -diff;
             } else {
-                // views
                 const vA = views[a.slug] || 0;
                 const vB = views[b.slug] || 0;
                 const diff = vA - vB;
-                // typically views desc is largest first
                 return sortDir === 'asc' ? diff : -diff;
             }
         });
@@ -219,16 +207,13 @@ const Blog: React.FC = () => {
             </div>
 
             <div className="container mx-auto px-4 lg:px-20 pt-8 lg:pt-12 pb-20">
-                {/* Toggle + Controls */}
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.5 }}
                     className="flex flex-col items-center gap-6 mb-8"
                 >
-                    {/* Sort + Filter Row */}
                     <div className="flex flex-wrap items-center justify-center gap-2">
-                        {/* Sort buttons */}
                         <button
                             onClick={() => handleSort('recency')}
                             className={`sort-btn ${sortKey === 'recency' ? 'active' : ''}`}
@@ -246,7 +231,6 @@ const Blog: React.FC = () => {
                             className={`w-px h-5 mx-1 ${theme === 'light' ? 'bg-slate-300' : 'bg-slate-600'}`}
                         />
 
-                        {/* Filter toggle */}
                         <button
                             onClick={() => setShowFilters(!showFilters)}
                             className={`sort-btn ${showFilters || hasActiveFilters ? 'active' : ''}`}
@@ -266,7 +250,6 @@ const Blog: React.FC = () => {
                     </div>
                 </motion.div>
 
-                {/* Filter Panel */}
                 <AnimatePresence>
                     {showFilters && (
                         <motion.div
@@ -296,7 +279,6 @@ const Blog: React.FC = () => {
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3">
-                                    {/* Name search */}
                                     <div className="lg:col-span-2">
                                         <p className="filter-label">Search</p>
                                         <div className="relative">
@@ -315,7 +297,6 @@ const Blog: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* Topic */}
                                     <div className="lg:col-span-2">
                                         <p className="filter-label">Topic</p>
                                         <div className="flex flex-wrap gap-1.5">
@@ -337,7 +318,6 @@ const Blog: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* Recency */}
                                     <div className="lg:col-span-4">
                                         <p className="filter-label">Year / Recency</p>
                                         <div className="flex flex-wrap gap-1.5">
