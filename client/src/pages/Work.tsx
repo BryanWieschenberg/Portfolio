@@ -893,7 +893,8 @@ const Work: React.FC = () => {
                             {filteredProjects.length > 0 ? (
                                 <motion.div
                                     initial="hidden"
-                                    animate="visible"
+                                    whileInView="visible"
+                                    viewport={{ once: true, margin: '-50px' }}
                                     variants={containerVariants}
                                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                                 >
@@ -932,7 +933,8 @@ const Work: React.FC = () => {
                             {filteredExperience.length > 0 ? (
                                 <motion.div
                                     initial="hidden"
-                                    animate="visible"
+                                    whileInView="visible"
+                                    viewport={{ once: true, margin: '-50px' }}
                                     variants={containerVariants}
                                     className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6"
                                 >

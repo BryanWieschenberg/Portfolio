@@ -508,10 +508,10 @@ body {
     @apply w-full px-4 py-3 rounded-xl text-base transition-all duration-300 outline-none;
 }
 .light .form-input {
-    @apply bg-slate-50 text-slate-900 border border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-slate-400;
+    @apply bg-white text-slate-900 border border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 placeholder-slate-400;
 }
 .dark .form-input {
-    @apply bg-[#111b33] text-white border border-slate-700/50 focus:border-[#69f1ff]/50 focus:ring-2 focus:ring-[#69f1ff]/10 placeholder-slate-500;
+    @apply bg-[#111318] text-white border border-slate-700/50 focus:border-[#69f1ff]/50 focus:ring-2 focus:ring-[#69f1ff]/10 placeholder-slate-500;
 }
 
 /* ═══════════════════════════════════════════════════════

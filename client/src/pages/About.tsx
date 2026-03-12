@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
     skills,
     SkillCategory,
@@ -27,11 +27,7 @@ import {
     FaChevronUp,
     FaTable,
     FaThList,
-    FaEnvelope,
-    FaLinkedin,
-    FaFileAlt,
 } from 'react-icons/fa';
-import { FaGithub } from 'react-icons/fa6';
 
 interface SkillWithUsage extends Skill {
     category: SkillCategory;
@@ -87,6 +83,7 @@ const toggleChip = <T,>(list: T[], item: T, setList: React.Dispatch<React.SetSta
 
 const About: React.FC = () => {
     const { theme } = useTheme();
+    const navigate = useNavigate();
     const [isInitialLoad, setIsInitialLoad] = useState(true);
 
     // Filter states
@@ -178,7 +175,7 @@ const About: React.FC = () => {
         visible: {
             opacity: 1,
             y: 0,
-            transition: { duration: 0.6, ease: 'easeOut' },
+            transition: { duration: 0.6, ease: 'easeOut', delay: isInitialLoad ? 0.6 : 0 },
         },
     };
 
@@ -339,7 +336,13 @@ const About: React.FC = () => {
                         </div>
                     </motion.div>
 
-                    <div className={divider} />
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={sectionVariants}
+                        className={divider}
+                    />
 
                     <motion.div
                         initial="hidden"
@@ -429,7 +432,13 @@ const About: React.FC = () => {
                         </div>
                     </motion.div>
 
-                    <div className={divider} />
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={sectionVariants}
+                        className={divider}
+                    />
 
                     <motion.div
                         initial="hidden"
@@ -900,32 +909,40 @@ const About: React.FC = () => {
                                                                                 <div className="flex flex-wrap gap-1">
                                                                                     {skill.usedInProjects.map(
                                                                                         (p) => (
-                                                                                            <Link
+                                                                                            <span
                                                                                                 key={
                                                                                                     p.name
                                                                                                 }
-                                                                                                to={`/work/projects/${normalizeTitle(p.name)}`}
-                                                                                                className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-700/50 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
+                                                                                                onClick={() =>
+                                                                                                    navigate(
+                                                                                                        `/work/projects/${normalizeTitle(p.name)}`,
+                                                                                                    )
+                                                                                                }
+                                                                                                className={`cursor-pointer text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-700/50 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
                                                                                             >
                                                                                                 {
                                                                                                     p.name
                                                                                                 }
-                                                                                            </Link>
+                                                                                            </span>
                                                                                         ),
                                                                                     )}
                                                                                     {skill.usedInExperience.map(
                                                                                         (e) => (
-                                                                                            <Link
+                                                                                            <span
                                                                                                 key={
                                                                                                     e.role
                                                                                                 }
-                                                                                                to={`/work/experience/${normalizeTitle(e.role)}`}
-                                                                                                className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-700/50 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
+                                                                                                onClick={() =>
+                                                                                                    navigate(
+                                                                                                        `/work/experience/${normalizeTitle(e.role)}`,
+                                                                                                    )
+                                                                                                }
+                                                                                                className={`cursor-pointer text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-700/50 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
                                                                                             >
                                                                                                 {
                                                                                                     e.role
                                                                                                 }
-                                                                                            </Link>
+                                                                                            </span>
                                                                                         ),
                                                                                     )}
                                                                                 </div>
@@ -1101,24 +1118,32 @@ const About: React.FC = () => {
                                                                         <div className="flex flex-wrap gap-1.5">
                                                                             {skill.usedInProjects.map(
                                                                                 (p) => (
-                                                                                    <Link
+                                                                                    <span
                                                                                         key={p.name}
-                                                                                        to={`/work/projects/${normalizeTitle(p.name)}`}
-                                                                                        className={`text-xs px-2.5 py-1 rounded-md border transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
+                                                                                        onClick={() =>
+                                                                                            navigate(
+                                                                                                `/work/projects/${normalizeTitle(p.name)}`,
+                                                                                            )
+                                                                                        }
+                                                                                        className={`cursor-pointer text-xs px-2.5 py-1 rounded-md border transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
                                                                                     >
                                                                                         {p.name}
-                                                                                    </Link>
+                                                                                    </span>
                                                                                 ),
                                                                             )}
                                                                             {skill.usedInExperience.map(
                                                                                 (e) => (
-                                                                                    <Link
+                                                                                    <span
                                                                                         key={e.role}
-                                                                                        to={`/work/experience/${normalizeTitle(e.role)}`}
-                                                                                        className={`text-xs px-2.5 py-1 rounded-md border transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
+                                                                                        onClick={() =>
+                                                                                            navigate(
+                                                                                                `/work/experience/${normalizeTitle(e.role)}`,
+                                                                                            )
+                                                                                        }
+                                                                                        className={`cursor-pointer text-xs px-2.5 py-1 rounded-md border transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
                                                                                     >
                                                                                         {e.role}
-                                                                                    </Link>
+                                                                                    </span>
                                                                                 ),
                                                                             )}
                                                                         </div>
@@ -1136,7 +1161,13 @@ const About: React.FC = () => {
                         )}
                     </motion.div>
 
-                    <div className={divider} />
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={sectionVariants}
+                        className={divider}
+                    />
 
                     <motion.div
                         initial="hidden"
@@ -1198,7 +1229,13 @@ const About: React.FC = () => {
                         </div>
                     </motion.div>
 
-                    <div className={divider} />
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={sectionVariants}
+                        className={divider}
+                    />
 
                     <motion.div
                         initial="hidden"
@@ -1220,44 +1257,16 @@ const About: React.FC = () => {
                             to collaboration.
                         </p>
 
-                        <div className="flex flex-wrap justify-center items-center gap-4 mt-8">
-                            <a
-                                href="/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-110 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
+                        <div className="flex justify-center mt-8">
+                            <button
+                                onClick={() => navigate('/contact')}
+                                className="link-text group"
                             >
-                                <FaFileAlt />
-                                Resume
-                            </a>
-
-                            <a
-                                href="https://github.com/BryanWieschenberg"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-110 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
-                            >
-                                <FaGithub />
-                                GitHub
-                            </a>
-
-                            <a
-                                href="https://linkedin.com/in/BryanWieschenberg"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-110 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
-                            >
-                                <FaLinkedin />
-                                LinkedIn
-                            </a>
-
-                            <a
-                                href="mailto:bryan.wieschenberg@gmail.com"
-                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-110 ${theme === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300' : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'}`}
-                            >
-                                <FaEnvelope />
-                                Email
-                            </a>
+                                <span>Reach Out</span>
+                                <span className="transform transition-transform duration-300 group-hover:translate-x-2">
+                                    →
+                                </span>
+                            </button>
                         </div>
                     </motion.div>
                 </div>

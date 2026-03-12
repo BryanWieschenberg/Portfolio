@@ -671,7 +671,7 @@ const Home: React.FC = () => {
                                                     ${
                                                         theme === 'light'
                                                             ? 'bg-slate-200/80 shadow-md hover:shadow-[0_0_25px_rgba(100,116,139,0.3)]'
-                                                            : 'bg-gradient-to-br from-[#1a1f2e] via-[#252b3b] to-[#1a1f2e] shadow-2xl hover:shadow-[0_0_30px_rgba(148,163,184,0.15)]'
+                                                            : 'bg-gradient-to-br from-[#1a1f2e] via-[#252b3b] to-[#1a1f2e] shadow-2xl transition-transform duration-100 hover:scale-105 hover:shadow-[0_0_30px_rgba(148,163,184,0.15)]'
                                                     }
                                                     overflow-hidden flex flex-col`}
                                             >

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 import SwipeReveal from '../components/SwipeReveal';
@@ -16,45 +16,66 @@ import {
     FaLaptopCode,
 } from 'react-icons/fa';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
 const Contact: React.FC = () => {
     const { theme } = useTheme();
     const [status, setStatus] = useState('');
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-    const heading = 'section-heading';
+    useEffect(() => {
+        const timer = setTimeout(() => setIsInitialLoad(false), 700);
+        return () => clearTimeout(timer);
+    }, []);
+
     const divider = 'divider';
-
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.1 },
-        },
-    };
 
     const itemVariants = {
         hidden: { opacity: 0, y: 30 },
         visible: {
             opacity: 1,
             y: 0,
-            transition: { duration: 0.5, ease: 'easeOut' },
+            transition: {
+                duration: 0.6,
+                ease: 'easeOut',
+                delay: isInitialLoad ? 0.6 : 0,
+            },
         },
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        const lastSubmitStr = localStorage.getItem('contact_last_submit');
+        if (lastSubmitStr) {
+            const lastSubmit = parseInt(lastSubmitStr, 10);
+            if (Date.now() - lastSubmit < 60 * 60 * 1000) {
+                // Rate limit: 1 hour
+                setStatus('rate_limited');
+                return;
+            }
+        }
+
         setStatus('sending');
         const formData = new FormData(e.currentTarget);
 
         try {
-            const response = await fetch('https://formspree.io/f/xrbenbye', {
+            const data = Object.fromEntries(formData.entries());
+            const response = await fetch(`${API_URL}/api/contact`, {
                 method: 'POST',
-                body: formData,
-                headers: { Accept: 'application/json' },
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
             });
 
             if (response.ok) {
                 setStatus('success');
+                localStorage.setItem('contact_last_submit', Date.now().toString());
                 e.currentTarget.reset();
+            } else if (response.status === 429) {
+                setStatus('rate_limited');
             } else {
                 setStatus('error');
             }
@@ -105,6 +126,12 @@ const Contact: React.FC = () => {
             handle: 'Download PDF',
             url: '/attachments/Resume%20-%20Bryan%20Wieschenberg.pdf',
         },
+        {
+            icon: <FaEnvelope />,
+            label: 'Email',
+            handle: 'bryan.wieschenberg@gmail.com',
+            url: 'mailto:bryan.wieschenberg@gmail.com',
+        },
     ];
 
     const inputClass = 'form-input';
@@ -125,58 +152,19 @@ const Contact: React.FC = () => {
                     transition={{ duration: 0.5, delay: 0.4 }}
                     className="page-subtitle"
                 >
-                    I read every message. Seriously.
+                    Collaboration makes everyone awesome:
                 </motion.p>
             </div>
 
-            <div className="container mx-auto px-4 lg:px-20 pt-14 pb-20 max-w-4xl">
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    variants={containerVariants}
-                >
-                    <motion.div variants={itemVariants} className="text-center mb-2">
-                        <p className="meta-label mb-3">Fastest way to reach me</p>
-                        <a
-                            href="mailto:bryanwieschenberg@gmail.com"
-                            className={`inline-flex items-center gap-3 text-2xl lg:text-3xl font-bold transition-all duration-300 group
-                            ${theme === 'light' ? 'text-blue-600 hover:text-blue-800' : 'text-[#69f1ff] hover:text-white'}`}
-                        >
-                            <FaEnvelope className="flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
-                            <span className="border-b-2 border-transparent group-hover:border-current transition-all duration-300">
-                                bryanwieschenberg@gmail.com
-                            </span>
-                        </a>
-                    </motion.div>
-
-                    <div className={divider} />
-
-                    <motion.div variants={itemVariants} className="space-y-6">
-                        <h2 className={heading}>What I'm Open To</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
-                            {openTo.map((item, i) => (
-                                <div key={i} className="flex items-start gap-3">
-                                    <span className="mt-1 text-lg icon-accent">{item.icon}</span>
-                                    <div>
-                                        <h3 className="item-title">{item.title}</h3>
-                                        <p className="text-muted">{item.desc}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </motion.div>
-
-                    <div className={divider} />
-
-                    <motion.div variants={itemVariants} className="space-y-6">
-                        <h2 className={heading}>Send a Message</h2>
-                        <p
-                            className={`text-sm ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
-                        >
-                            Or fill this out and I'll get back to you within 24 hours.
-                        </p>
-
+            <div className="page-section -mt-2">
+                <div className="w-full !max-w-4xl mx-auto">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                        className="space-y-6"
+                    >
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
@@ -257,32 +245,118 @@ const Contact: React.FC = () => {
                                     <span>Something went wrong — try emailing me directly.</span>
                                 </motion.div>
                             )}
+                            {status === 'rate_limited' && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="flex items-center gap-2 justify-center text-yellow-500 font-semibold text-center"
+                                >
+                                    <FaTimesCircle />
+                                    <span>
+                                        You've already sent a message recently. Please try again
+                                        later.
+                                    </span>
+                                </motion.div>
+                            )}
                         </form>
                     </motion.div>
 
-                    <div className={divider} />
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                        className={divider}
+                    />
 
-                    <motion.div variants={itemVariants} className="space-y-6">
-                        <h2 className={heading}>Elsewhere</h2>
-                        <div className="flex flex-col sm:flex-row gap-4">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                        className="space-y-6"
+                    >
+                        <h2
+                            className={`text-4xl lg:text-6xl font-bold mb-8 text-center 
+                                ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                        >
+                            What I'm Open To
+                        </h2>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {openTo.map((item, i) => (
+                                <motion.div
+                                    key={i}
+                                    whileHover={{ scale: 1.05 }}
+                                    className={`leading-tight p-3 md:px-4 md:py-3 rounded-lg border flex items-center justify-start gap-3 text-left cursor-default
+                                        ${
+                                            theme === 'light'
+                                                ? 'bg-slate-50 border-slate-200 text-slate-700 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:border-blue-300'
+                                                : 'bg-slate-800/40 border-slate-700/50 text-slate-300 hover:shadow-[0_0_15px_rgba(96,165,250,0.2)] hover:border-blue-500/50'
+                                        }`}
+                                >
+                                    <span
+                                        className={`text-lg md:text-xl flex-shrink-0 ${theme === 'light' ? 'text-blue-500' : 'text-blue-400'}`}
+                                    >
+                                        {item.icon}
+                                    </span>
+                                    <div className="flex flex-col">
+                                        <h3 className="text-xs sm:text-sm font-bold">
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">
+                                            {item.desc}
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                        className={divider}
+                    />
+
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-50px' }}
+                        variants={itemVariants}
+                        className="space-y-6"
+                    >
+                        <h2
+                            className={`text-4xl lg:text-6xl font-bold mb-8 text-center 
+                                ${theme === 'light' ? 'text-slate-900 drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'text-white drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
+                        >
+                            Elsewhere
+                        </h2>
+
+                        <div className="flex flex-wrap justify-center items-center gap-4">
                             {socials.map((s, i) => (
-                                <a
+                                <motion.a
                                     key={i}
                                     href={s.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="social-link group"
+                                    whileHover={{ scale: 1.1 }}
+                                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-colors duration-300 
+                                        ${
+                                            theme === 'light'
+                                                ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300'
+                                                : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'
+                                        }`}
                                 >
-                                    <span className="social-icon">{s.icon}</span>
-                                    <div>
-                                        <p className="item-title text-sm">{s.label}</p>
-                                        <p className="text-muted-xs">{s.handle}</p>
-                                    </div>
-                                </a>
+                                    <span className="text-xl flex-shrink-0">{s.icon}</span>
+                                    <span className="text-sm">{s.label}</span>
+                                </motion.a>
                             ))}
                         </div>
                     </motion.div>
-                </motion.div>
+                </div>
             </div>
 
             <br />
