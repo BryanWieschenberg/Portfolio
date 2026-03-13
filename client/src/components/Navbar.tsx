@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { IoPersonCircleOutline, IoPersonCircle } from 'react-icons/io5';
 import { MdWork, MdWorkOutline, MdOutlineContactless, MdContactless } from 'react-icons/md';
-import { RiQuillPenFill, RiQuillPenLine } from 'react-icons/ri';
+// import { RiQuillPenFill, RiQuillPenLine } from 'react-icons/ri';
 import { GoHome, GoHomeFill } from 'react-icons/go';
 import { IoSunny, IoMoon } from 'react-icons/io5';
 import { useTheme } from '../context/ThemeContext';
@@ -110,7 +110,7 @@ const Navbar: React.FC = () => {
                         className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex space-x-3 lg:space-x-10 text-lg ${theme === 'light' ? 'text-blue-600' : 'text-blue-300'}`}
                     >
                         <ul
-                            className={`flex flex-wrap space-x-1.5 lg:space-x-8 text-lg ${theme === 'light' ? 'text-blue-600' : 'text-blue-300'}`}
+                            className={`flex flex-wrap space-x-4 lg:space-x-10 text-lg ${theme === 'light' ? 'text-blue-600' : 'text-blue-300'}`}
                         >
                             <li>
                                 <div
@@ -166,7 +166,7 @@ const Navbar: React.FC = () => {
                                     </span>
                                 </div>
                             </li>
-                            <li>
+                            {/* <li>
                                 <div
                                     ref={blogRef}
                                     onClick={(e) => handleNavigation(e, '/blog')}
@@ -181,7 +181,7 @@ const Navbar: React.FC = () => {
                                         Blog
                                     </span>
                                 </div>
-                            </li>
+                            </li> */}
                             <li>
                                 <div
                                     ref={contactRef}

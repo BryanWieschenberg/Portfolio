@@ -793,10 +793,9 @@ const About: React.FC = () => {
                             </div>
                         ) : viewMode === 'compact' ? (
                             <motion.div
-                                key="compact-view"
+                                key={`compact-${filteredSkillsList.map((s) => s.name).join(',')}`}
                                 initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: '-50px' }}
+                                animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, ease: 'easeOut' }}
                                 className={`w-full rounded-xl border flex flex-col ${theme === 'light' ? 'bg-white border-slate-200' : 'bg-[#0f1117] border-slate-800'}`}
                             >
@@ -830,158 +829,152 @@ const About: React.FC = () => {
                                                 }}
                                                 className="flex-1 p-2 flex flex-wrap gap-1 md:gap-1.5 items-center"
                                             >
-                                                <AnimatePresence mode="popLayout">
-                                                    {catSkills.map((skill, _) => (
-                                                        <motion.div
-                                                            variants={{
-                                                                hidden: { opacity: 0, y: 15 },
-                                                                visible: { opacity: 1, y: 0 },
-                                                            }}
-                                                            transition={{
-                                                                duration: 0.25,
-                                                                ease: 'easeOut',
-                                                            }}
-                                                            exit={{ opacity: 0, scale: 0.9 }}
-                                                            layout
-                                                            key={skill.name}
-                                                            className="h-fit"
-                                                        >
-                                                            <SkillTooltipWrapper
-                                                                theme={theme}
-                                                                content={
-                                                                    <>
-                                                                        <div className="flex items-start justify-between mb-2">
-                                                                            <h4
-                                                                                className={`font-bold text-base ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
-                                                                            >
-                                                                                {skill.name}
-                                                                            </h4>
-                                                                            <span
-                                                                                className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${
-                                                                                    skill.proficiency ===
-                                                                                    'Advanced'
-                                                                                        ? theme ===
-                                                                                          'light'
-                                                                                            ? 'bg-green-100 text-green-700'
-                                                                                            : 'bg-green-900/50 text-green-400'
-                                                                                        : skill.proficiency ===
-                                                                                            'Proficient'
-                                                                                          ? theme ===
-                                                                                            'light'
-                                                                                              ? 'bg-blue-100 text-blue-700'
-                                                                                              : 'bg-blue-900/50 text-blue-400'
-                                                                                          : theme ===
-                                                                                              'light'
-                                                                                            ? 'bg-slate-100 text-slate-700'
-                                                                                            : 'bg-slate-700/50 text-slate-300'
-                                                                                }`}
-                                                                            >
-                                                                                {skill.proficiency}
-                                                                            </span>
-                                                                        </div>
-                                                                        <p
-                                                                            className={`text-xs leading-relaxed whitespace-normal ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'} ${skill.usedInProjects.length > 0 || skill.usedInExperience.length > 0 ? 'mb-3' : ''}`}
+                                                {catSkills.map((skill, _) => (
+                                                    <motion.div
+                                                        variants={{
+                                                            hidden: { opacity: 0, y: 15 },
+                                                            visible: { opacity: 1, y: 0 },
+                                                        }}
+                                                        transition={{
+                                                            duration: 0.25,
+                                                            ease: 'easeOut',
+                                                        }}
+                                                        key={skill.name}
+                                                        className="h-fit"
+                                                    >
+                                                        <SkillTooltipWrapper
+                                                            theme={theme}
+                                                            content={
+                                                                <>
+                                                                    <div className="flex items-start justify-between mb-2">
+                                                                        <h4
+                                                                            className={`font-bold text-base ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
                                                                         >
-                                                                            {skill.description}
-                                                                        </p>
+                                                                            {skill.name}
+                                                                        </h4>
+                                                                        <span
+                                                                            className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full ${
+                                                                                skill.proficiency ===
+                                                                                'Advanced'
+                                                                                    ? theme ===
+                                                                                      'light'
+                                                                                        ? 'bg-green-100 text-green-700'
+                                                                                        : 'bg-green-900/50 text-green-400'
+                                                                                    : skill.proficiency ===
+                                                                                        'Proficient'
+                                                                                      ? theme ===
+                                                                                        'light'
+                                                                                          ? 'bg-blue-100 text-blue-700'
+                                                                                          : 'bg-blue-900/50 text-blue-400'
+                                                                                      : theme ===
+                                                                                          'light'
+                                                                                        ? 'bg-slate-100 text-slate-700'
+                                                                                        : 'bg-slate-700/50 text-slate-300'
+                                                                            }`}
+                                                                        >
+                                                                            {skill.proficiency}
+                                                                        </span>
+                                                                    </div>
+                                                                    <p
+                                                                        className={`text-xs leading-relaxed whitespace-normal ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'} ${skill.usedInProjects.length > 0 || skill.usedInExperience.length > 0 ? 'mb-3' : ''}`}
+                                                                    >
+                                                                        {skill.description}
+                                                                    </p>
 
-                                                                        {(skill.usedInProjects
-                                                                            .length > 0 ||
-                                                                            skill.usedInExperience
-                                                                                .length > 0) && (
-                                                                            <div>
-                                                                                <p
-                                                                                    className={`text-[10px] font-semibold uppercase tracking-wider mb-1.5 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
-                                                                                >
-                                                                                    Used In:
-                                                                                </p>
-                                                                                <div className="flex flex-wrap gap-1">
-                                                                                    {skill.usedInProjects.map(
-                                                                                        (p) => (
-                                                                                            <span
-                                                                                                key={
-                                                                                                    p.name
-                                                                                                }
-                                                                                                onClick={() =>
-                                                                                                    navigate(
-                                                                                                        `/work/projects/${normalizeTitle(p.name)}`,
-                                                                                                    )
-                                                                                                }
-                                                                                                className={`cursor-pointer text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-700/50 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
-                                                                                            >
-                                                                                                {
-                                                                                                    p.name
-                                                                                                }
-                                                                                            </span>
-                                                                                        ),
-                                                                                    )}
-                                                                                    {skill.usedInExperience.map(
-                                                                                        (e) => (
-                                                                                            <span
-                                                                                                key={
-                                                                                                    e.role
-                                                                                                }
-                                                                                                onClick={() =>
-                                                                                                    navigate(
-                                                                                                        `/work/experience/${normalizeTitle(e.role)}`,
-                                                                                                    )
-                                                                                                }
-                                                                                                className={`cursor-pointer text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-700/50 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
-                                                                                            >
-                                                                                                {
-                                                                                                    e.role
-                                                                                                }
-                                                                                            </span>
-                                                                                        ),
-                                                                                    )}
-                                                                                </div>
+                                                                    {(skill.usedInProjects.length >
+                                                                        0 ||
+                                                                        skill.usedInExperience
+                                                                            .length > 0) && (
+                                                                        <div>
+                                                                            <p
+                                                                                className={`text-[10px] font-semibold uppercase tracking-wider mb-1.5 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
+                                                                            >
+                                                                                Used In:
+                                                                            </p>
+                                                                            <div className="flex flex-wrap gap-1">
+                                                                                {skill.usedInProjects.map(
+                                                                                    (p) => (
+                                                                                        <span
+                                                                                            key={
+                                                                                                p.name
+                                                                                            }
+                                                                                            onClick={() =>
+                                                                                                navigate(
+                                                                                                    `/work/projects/${normalizeTitle(p.name)}`,
+                                                                                                )
+                                                                                            }
+                                                                                            className={`cursor-pointer text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-700/50 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
+                                                                                        >
+                                                                                            {p.name}
+                                                                                        </span>
+                                                                                    ),
+                                                                                )}
+                                                                                {skill.usedInExperience.map(
+                                                                                    (e) => (
+                                                                                        <span
+                                                                                            key={
+                                                                                                e.role
+                                                                                            }
+                                                                                            onClick={() =>
+                                                                                                navigate(
+                                                                                                    `/work/experience/${normalizeTitle(e.role)}`,
+                                                                                                )
+                                                                                            }
+                                                                                            className={`cursor-pointer text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-700/50 border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
+                                                                                        >
+                                                                                            {e.role}
+                                                                                        </span>
+                                                                                    ),
+                                                                                )}
                                                                             </div>
-                                                                        )}
-                                                                    </>
-                                                                }
+                                                                        </div>
+                                                                    )}
+                                                                </>
+                                                            }
+                                                        >
+                                                            <div
+                                                                className={`px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 hover:cursor-default ${
+                                                                    theme === 'light'
+                                                                        ? 'bg-slate-100 text-slate-600 border-slate-200 hover:border-slate-300'
+                                                                        : 'bg-slate-800/50 text-slate-300 border-slate-600/50 hover:border-slate-500'
+                                                                }`}
                                                             >
-                                                                <div
-                                                                    className={`px-2.5 py-1 rounded-md text-xs font-medium border whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 hover:cursor-default ${
-                                                                        theme === 'light'
-                                                                            ? 'bg-slate-100 text-slate-600 border-slate-200 hover:border-slate-300'
-                                                                            : 'bg-slate-800/50 text-slate-300 border-slate-600/50 hover:border-slate-500'
-                                                                    }`}
-                                                                >
-                                                                    <img
-                                                                        src={getSkillIconPath(
-                                                                            skill.name,
-                                                                            theme,
-                                                                        )}
-                                                                        alt={skill.name}
-                                                                        className="w-[18px] h-[18px] object-contain flex-shrink-0"
-                                                                        onError={(e) => {
-                                                                            const img =
-                                                                                e.target as HTMLImageElement;
-                                                                            const fallback =
-                                                                                getSkillIconFallback(
-                                                                                    skill.name,
-                                                                                );
-                                                                            img.src =
-                                                                                img.src.endsWith(
-                                                                                    fallback,
-                                                                                )
-                                                                                    ? '/skills/default.png'
-                                                                                    : fallback;
-                                                                        }}
-                                                                    />
-                                                                    {skill.name}
-                                                                </div>
-                                                            </SkillTooltipWrapper>
-                                                        </motion.div>
-                                                    ))}
-                                                </AnimatePresence>
+                                                                <img
+                                                                    src={getSkillIconPath(
+                                                                        skill.name,
+                                                                        theme,
+                                                                    )}
+                                                                    alt={skill.name}
+                                                                    className="w-[18px] h-[18px] object-contain flex-shrink-0"
+                                                                    onError={(e) => {
+                                                                        const img =
+                                                                            e.target as HTMLImageElement;
+                                                                        const fallback =
+                                                                            getSkillIconFallback(
+                                                                                skill.name,
+                                                                            );
+                                                                        img.src = img.src.endsWith(
+                                                                            fallback,
+                                                                        )
+                                                                            ? '/skills/default.png'
+                                                                            : fallback;
+                                                                    }}
+                                                                />
+                                                                {skill.name}
+                                                            </div>
+                                                        </SkillTooltipWrapper>
+                                                    </motion.div>
+                                                ))}
                                             </motion.div>
                                         </div>
                                     );
                                 })}
                             </motion.div>
                         ) : (
-                            <div key="expanded-view" className="flex flex-col gap-12 lg:gap-16">
+                            <div
+                                key={`expanded-${filteredSkillsList.map((s) => s.name).join(',')}`}
+                                className="flex flex-col gap-12 lg:gap-16"
+                            >
                                 {allCategories.map((cat) => {
                                     const catSkills = filteredSkillsList.filter(
                                         (s) => s.category === cat,
@@ -1007,8 +1000,7 @@ const About: React.FC = () => {
 
                                             <motion.div
                                                 initial="hidden"
-                                                whileInView="visible"
-                                                viewport={{ once: true, margin: '-50px' }}
+                                                animate="visible"
                                                 variants={{
                                                     visible: {
                                                         transition: { staggerChildren: 0.03 },
@@ -1016,132 +1008,125 @@ const About: React.FC = () => {
                                                 }}
                                                 className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6"
                                             >
-                                                <AnimatePresence mode="popLayout">
-                                                    {catSkills.map((skill, _) => (
-                                                        <motion.div
-                                                            variants={{
-                                                                hidden: { opacity: 0, y: 15 },
-                                                                visible: { opacity: 1, y: 0 },
-                                                            }}
-                                                            transition={{
-                                                                duration: 0.3,
-                                                                ease: 'easeOut',
-                                                            }}
-                                                            exit={{ opacity: 0, scale: 0.9 }}
-                                                            layout
-                                                            key={skill.name}
-                                                            className={`flex flex-col gap-4 p-5 md:p-6 rounded-xl border transition-all hover:shadow-md hover:-translate-y-1 ${theme === 'light' ? 'bg-white border-slate-200 hover:border-blue-300' : 'bg-[#151821] border-slate-800 hover:border-blue-500/30 hover:shadow-blue-500/5'}`}
-                                                        >
-                                                            <div className="flex gap-4 items-center">
-                                                                <div
-                                                                    className={`w-12 h-12 flex-shrink-0 rounded-lg flex items-center justify-center border shadow-sm ${theme === 'light' ? 'bg-slate-50 border-slate-100' : 'bg-slate-800/50 border-slate-700/50'}`}
-                                                                >
-                                                                    <img
-                                                                        src={getSkillIconPath(
-                                                                            skill.name,
-                                                                            theme,
-                                                                        )}
-                                                                        alt={skill.name}
-                                                                        className="w-8 h-8 object-contain"
-                                                                        onError={(e) => {
-                                                                            const img =
-                                                                                e.target as HTMLImageElement;
-                                                                            const fallback =
-                                                                                getSkillIconFallback(
-                                                                                    skill.name,
-                                                                                );
-                                                                            img.src =
-                                                                                img.src.endsWith(
-                                                                                    fallback,
-                                                                                )
-                                                                                    ? '/skills/default.png'
-                                                                                    : fallback;
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                                <div>
-                                                                    <h3
-                                                                        className={`text-lg font-bold ${theme === 'light' ? 'text-slate-800' : 'text-slate-200'}`}
-                                                                    >
-                                                                        {skill.name}
-                                                                    </h3>
-                                                                    <span
-                                                                        className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full mt-1 inline-block ${
-                                                                            skill.proficiency ===
-                                                                            'Advanced'
-                                                                                ? theme === 'light'
-                                                                                    ? 'bg-green-100 text-green-700'
-                                                                                    : 'bg-green-900/50 text-green-400'
-                                                                                : skill.proficiency ===
-                                                                                    'Proficient'
-                                                                                  ? theme ===
-                                                                                    'light'
-                                                                                      ? 'bg-blue-100 text-blue-700'
-                                                                                      : 'bg-blue-900/50 text-blue-400'
-                                                                                  : theme ===
-                                                                                      'light'
-                                                                                    ? 'bg-slate-100 text-slate-700'
-                                                                                    : 'bg-slate-700/50 text-slate-300'
-                                                                        }`}
-                                                                    >
-                                                                        {skill.proficiency}
-                                                                    </span>
-                                                                </div>
+                                                {catSkills.map((skill, _) => (
+                                                    <motion.div
+                                                        variants={{
+                                                            hidden: { opacity: 0, y: 15 },
+                                                            visible: { opacity: 1, y: 0 },
+                                                        }}
+                                                        transition={{
+                                                            duration: 0.3,
+                                                            ease: 'easeOut',
+                                                        }}
+                                                        key={skill.name}
+                                                        className={`flex flex-col gap-4 p-5 md:p-6 rounded-xl border transition-all hover:shadow-md hover:-translate-y-1 ${theme === 'light' ? 'bg-white border-slate-200 hover:border-blue-300' : 'bg-[#151821] border-slate-800 hover:border-blue-500/30 hover:shadow-blue-500/5'}`}
+                                                    >
+                                                        <div className="flex gap-4 items-center">
+                                                            <div
+                                                                className={`w-12 h-12 flex-shrink-0 rounded-lg flex items-center justify-center border shadow-sm ${theme === 'light' ? 'bg-slate-50 border-slate-100' : 'bg-slate-800/50 border-slate-700/50'}`}
+                                                            >
+                                                                <img
+                                                                    src={getSkillIconPath(
+                                                                        skill.name,
+                                                                        theme,
+                                                                    )}
+                                                                    alt={skill.name}
+                                                                    className="w-8 h-8 object-contain"
+                                                                    onError={(e) => {
+                                                                        const img =
+                                                                            e.target as HTMLImageElement;
+                                                                        const fallback =
+                                                                            getSkillIconFallback(
+                                                                                skill.name,
+                                                                            );
+                                                                        img.src = img.src.endsWith(
+                                                                            fallback,
+                                                                        )
+                                                                            ? '/skills/default.png'
+                                                                            : fallback;
+                                                                    }}
+                                                                />
                                                             </div>
-                                                            <div className="flex-1 space-y-3">
-                                                                <p
-                                                                    className={`text-sm leading-relaxed ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
+                                                            <div>
+                                                                <h3
+                                                                    className={`text-lg font-bold ${theme === 'light' ? 'text-slate-800' : 'text-slate-200'}`}
                                                                 >
-                                                                    {skill.description}
-                                                                </p>
+                                                                    {skill.name}
+                                                                </h3>
+                                                                <span
+                                                                    className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full mt-1 inline-block ${
+                                                                        skill.proficiency ===
+                                                                        'Advanced'
+                                                                            ? theme === 'light'
+                                                                                ? 'bg-green-100 text-green-700'
+                                                                                : 'bg-green-900/50 text-green-400'
+                                                                            : skill.proficiency ===
+                                                                                'Proficient'
+                                                                              ? theme === 'light'
+                                                                                  ? 'bg-blue-100 text-blue-700'
+                                                                                  : 'bg-blue-900/50 text-blue-400'
+                                                                              : theme === 'light'
+                                                                                ? 'bg-slate-100 text-slate-700'
+                                                                                : 'bg-slate-700/50 text-slate-300'
+                                                                    }`}
+                                                                >
+                                                                    {skill.proficiency}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex-1 space-y-3">
+                                                            <p
+                                                                className={`text-sm leading-relaxed ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}
+                                                            >
+                                                                {skill.description}
+                                                            </p>
 
-                                                                {(skill.usedInProjects.length > 0 ||
-                                                                    skill.usedInExperience.length >
-                                                                        0) && (
-                                                                    <div className="pt-2">
-                                                                        <p
-                                                                            className={`text-[10px] font-semibold uppercase tracking-wider mb-2 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
-                                                                        >
-                                                                            Used In:
-                                                                        </p>
-                                                                        <div className="flex flex-wrap gap-1.5">
-                                                                            {skill.usedInProjects.map(
-                                                                                (p) => (
-                                                                                    <span
-                                                                                        key={p.name}
-                                                                                        onClick={() =>
-                                                                                            navigate(
-                                                                                                `/work/projects/${normalizeTitle(p.name)}`,
-                                                                                            )
-                                                                                        }
-                                                                                        className={`cursor-pointer text-xs px-2.5 py-1 rounded-md border transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
-                                                                                    >
-                                                                                        {p.name}
-                                                                                    </span>
-                                                                                ),
-                                                                            )}
-                                                                            {skill.usedInExperience.map(
-                                                                                (e) => (
-                                                                                    <span
-                                                                                        key={e.role}
-                                                                                        onClick={() =>
-                                                                                            navigate(
-                                                                                                `/work/experience/${normalizeTitle(e.role)}`,
-                                                                                            )
-                                                                                        }
-                                                                                        className={`cursor-pointer text-xs px-2.5 py-1 rounded-md border transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
-                                                                                    >
-                                                                                        {e.role}
-                                                                                    </span>
-                                                                                ),
-                                                                            )}
-                                                                        </div>
+                                                            {(skill.usedInProjects.length > 0 ||
+                                                                skill.usedInExperience.length >
+                                                                    0) && (
+                                                                <div className="pt-2">
+                                                                    <p
+                                                                        className={`text-[10px] font-semibold uppercase tracking-wider mb-2 ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}
+                                                                    >
+                                                                        Used In:
+                                                                    </p>
+                                                                    <div className="flex flex-wrap gap-1.5">
+                                                                        {skill.usedInProjects.map(
+                                                                            (p) => (
+                                                                                <span
+                                                                                    key={p.name}
+                                                                                    onClick={() =>
+                                                                                        navigate(
+                                                                                            `/work/projects/${normalizeTitle(p.name)}`,
+                                                                                        )
+                                                                                    }
+                                                                                    className={`cursor-pointer text-xs px-2.5 py-1 rounded-md border transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
+                                                                                >
+                                                                                    {p.name}
+                                                                                </span>
+                                                                            ),
+                                                                        )}
+                                                                        {skill.usedInExperience.map(
+                                                                            (e) => (
+                                                                                <span
+                                                                                    key={e.role}
+                                                                                    onClick={() =>
+                                                                                        navigate(
+                                                                                            `/work/experience/${normalizeTitle(e.role)}`,
+                                                                                        )
+                                                                                    }
+                                                                                    className={`cursor-pointer text-xs px-2.5 py-1 rounded-md border transition-colors ${theme === 'light' ? 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-blue-600 hover:border-blue-200' : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-blue-400 hover:border-blue-500/50'}`}
+                                                                                >
+                                                                                    {e.role}
+                                                                                </span>
+                                                                            ),
+                                                                        )}
                                                                     </div>
-                                                                )}
-                                                            </div>
-                                                        </motion.div>
-                                                    ))}
-                                                </AnimatePresence>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </motion.div>
+                                                ))}
                                             </motion.div>
                                         </div>
                                     );

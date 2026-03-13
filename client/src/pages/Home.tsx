@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { projects, blogPosts } from '../constants';
+import { projects } from '../constants';
 import { FaLocationDot, FaFileLines, FaGithub, FaLinkedin } from 'react-icons/fa6';
 import { motion, AnimatePresence } from 'framer-motion';
 import SwipeReveal from '../components/SwipeReveal';
 import { useTheme } from '../context/ThemeContext';
 import { PiArrowFatLinesRightFill } from 'react-icons/pi';
 import ProjectCard from '../components/ProjectCard';
-import { getAge, formatDisplayDate } from '../lib/utils';
+import { getAge } from '../lib/utils';
 import SkillTooltipWrapper from '../components/SkillTooltipWrapper';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -26,10 +26,10 @@ interface Commit {
     url: string;
 }
 
-interface LatestBlogPost {
-    slug: string;
-    views: number;
-}
+// interface LatestBlogPost {
+//     slug: string;
+//     views: number;
+// }
 
 function useLgUp() {
     const [isLgUp, setIsLgUp] = useState(false);
@@ -47,7 +47,7 @@ function useLgUp() {
 
 const Home: React.FC = () => {
     const { theme } = useTheme();
-    const featuredRef = useRef<HTMLDivElement>(null);
+
     const navigate = useNavigate();
     const [isIntroComplete, setIsIntroComplete] = useState(false);
     const age = getAge();
@@ -57,7 +57,6 @@ const Home: React.FC = () => {
         weeks: { contributionDays: ContributionDay[] }[];
     } | null>(null);
     const [commits, setCommits] = useState<Commit[]>([]);
-    const [latestBlog, setLatestBlog] = useState<LatestBlogPost | null>(null);
     const githubScrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -74,10 +73,10 @@ const Home: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [contribRes, commitRes, blogRes] = await Promise.all([
+                const [contribRes, commitRes] = await Promise.all([
                     fetch(`${API_URL}/api/github/contributions`),
                     fetch(`${API_URL}/api/github/commits`),
-                    fetch(`${API_URL}/api/blog/latest`),
+                    // fetch(`${API_URL}/api/blog/latest`),
                 ]);
 
                 if (contribRes.ok) {
@@ -85,9 +84,6 @@ const Home: React.FC = () => {
                 }
                 if (commitRes.ok) {
                     setCommits(await commitRes.json());
-                }
-                if (blogRes.ok) {
-                    setLatestBlog(await blogRes.json());
                 }
             } catch (error) {
                 console.error('Error fetching home page data:', error);
@@ -100,11 +96,6 @@ const Home: React.FC = () => {
     const featuredProjects = projects.filter(
         (item) => item.name === 'Stellar Papers' || item.name === 'GoalGetter',
     );
-
-    const scrollToFeatured = (e: React.MouseEvent) => {
-        e.preventDefault();
-        featuredRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
 
     const ContactMe = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -188,22 +179,24 @@ const Home: React.FC = () => {
             </AnimatePresence>
 
             <div
-                className={`main-content relative z-[95] flex flex-col lg:flex-row items-center justify-center pt-8 lg:pt-12 w-full transition-all duration-300 ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
+                className={`main-content relative z-[95] flex flex-col lg:flex-row items-center justify-center pt-6 lg:pt-10 w-full transition-all duration-300 ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
             >
                 <div className="flex flex-col lg:flex-row items-center justify-center container mx-auto px-4 lg:px-20 max-w-7xl">
                     <div className="text-center lg:text-left lg:w-3/5 flex flex-col items-center lg:items-start">
                         <div className="mt-4">
                             <SwipeReveal onComplete={() => setIsIntroComplete(true)}>
                                 <h1
-                                    className={`text-5xl lg:text-8xl font-bold leading-tight text-center lg:text-left whitespace-nowrap mb-3
+                                    className={`text-5xl lg:text-8xl font-bold leading-tight text-center lg:text-left whitespace-nowrap mb-3 pt-2
                                     ${theme === 'light' ? 'drop-shadow-[4px_4px_2px_rgba(80,140,255,0.45)]' : 'drop-shadow-[7px_7px_1.5px_rgba(30,30,160,1)]'}`}
                                 >
                                     Hi, I'm{' '}
-                                    <span className="relative bg-gradient-to-r from-[#3c86ff] to-[#69f1ff] bg-clip-text text-transparent pr-2">
+                                    <span
+                                        className={`relative bg-clip-text text-transparent pr-2 bg-gradient-to-r ${theme === 'light' ? 'from-[#00a3ff] to-[#2563eb]' : 'from-[#3c86ff] to-[#69f1ff]'}`}
+                                    >
                                         Bryan
                                     </span>
                                     <motion.span
-                                        className="inline-block cursor-grab origin-[70%_70%] bg-gradient-to-r from-[#69f1ff] to-[#6cf4ff] bg-clip-text text-transparent"
+                                        className={`inline-block cursor-grab origin-[70%_70%] bg-clip-text text-transparent bg-gradient-to-r ${theme === 'light' ? 'from-[#2f6aeb] to-[#2563eb]' : 'from-[#69f1ff] to-[#6cf4ff]'}`}
                                         whileHover={{ rotate: [0, 25, 0] }}
                                         transition={{ duration: 0.5, repeat: Infinity }}
                                     >
@@ -260,7 +253,10 @@ const Home: React.FC = () => {
                                         transition={{ duration: 0.4 }}
                                         className="mt-8 flex flex-row justify-center lg:justify-start space-x-4 w-full"
                                     >
-                                        <button onClick={scrollToFeatured} className="btn-primary">
+                                        <button
+                                            onClick={() => navigate('/work')}
+                                            className="btn-primary"
+                                        >
                                             View Work
                                         </button>
                                         <button onClick={ContactMe} className="btn-outline">
@@ -342,7 +338,7 @@ const Home: React.FC = () => {
             </div>
 
             {isIntroComplete && (
-                <div ref={featuredRef} className="container mx-auto px-4 lg:px-20 pt-24 pb-16">
+                <div className="container mx-auto px-4 lg:px-20 pt-24 pb-16">
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
@@ -395,7 +391,7 @@ const Home: React.FC = () => {
                         whileInView="visible"
                         viewport={{ once: true, margin: '-100px' }}
                         variants={containerVariants}
-                        className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto"
+                        className="w-fit mx-auto"
                     >
                         <motion.div
                             variants={itemVariants}
@@ -575,106 +571,6 @@ const Home: React.FC = () => {
                                               />
                                           ))}
                                 </div>
-                            </div>
-                        </motion.div>
-
-                        <motion.div variants={itemVariants} className="flex flex-col">
-                            <div
-                                className={`p-6 rounded-2xl h-full flex flex-col ${theme === 'light' ? 'bg-slate-200/80 shadow-md' : 'bg-[#111318]/95 border border-slate-700/50 shadow-2xl'}`}
-                            >
-                                <h3 className="card-title text-2xl mb-4">Latest Blog Post</h3>
-                                {latestBlog && blogPosts.find((p) => p.slug === latestBlog.slug) ? (
-                                    (() => {
-                                        const post = blogPosts.find(
-                                            (p) => p.slug === latestBlog.slug,
-                                        )!;
-                                        return (
-                                            <div
-                                                onClick={() => navigate(`/blog/${post.slug}`)}
-                                                className={`group cursor-pointer relative p-[1px] rounded-2xl transition-shadow duration-500 mt-2 flex-grow
-                                                    ${
-                                                        theme === 'light'
-                                                            ? 'bg-slate-200/80 shadow-md hover:shadow-[0_0_25px_rgba(100,116,139,0.3)]'
-                                                            : 'bg-gradient-to-br from-[#1a1f2e] via-[#252b3b] to-[#1a1f2e] shadow-2xl transition-transform duration-100 hover:scale-105 hover:shadow-[0_0_30px_rgba(148,163,184,0.15)]'
-                                                    }
-                                                    overflow-hidden flex flex-col`}
-                                            >
-                                                <motion.div
-                                                    initial={{ opacity: 0 }}
-                                                    whileHover={{ opacity: 1 }}
-                                                    animate={{ opacity: [0, 0.3, 0] }}
-                                                    transition={{
-                                                        duration: 2,
-                                                        repeat: Infinity,
-                                                        ease: 'easeInOut',
-                                                    }}
-                                                    className={`absolute inset-0 bg-gradient-to-r from-transparent z-0 pointer-events-none
-                                                        ${
-                                                            theme === 'light'
-                                                                ? 'via-slate-300/20'
-                                                                : 'via-slate-400/10'
-                                                        }`}
-                                                ></motion.div>
-
-                                                <div
-                                                    className={`relative z-10 rounded-2xl h-full flex flex-col
-                                                    ${theme === 'light' ? 'bg-white' : 'bg-[#111318]/95 border border-slate-700/50'}`}
-                                                >
-                                                    <div className="w-full aspect-video rounded-t-2xl overflow-hidden flex items-center justify-center bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700/50 shrink-0">
-                                                        <img
-                                                            src={`/artifacts/blog/${post.slug}.png`}
-                                                            alt={post.title}
-                                                            className="w-full h-full object-cover"
-                                                            onError={(e) => {
-                                                                const parent = (
-                                                                    e.target as HTMLElement
-                                                                ).parentElement;
-                                                                if (parent) {
-                                                                    parent.style.display = 'none';
-                                                                }
-                                                            }}
-                                                        />
-                                                    </div>
-
-                                                    <div className="p-6 -mt-3 flex flex-col flex-1">
-                                                        <div className="flex justify-end mb-1">
-                                                            <p
-                                                                className={`text-xs font-semibold tracking-wider ${
-                                                                    theme === 'light'
-                                                                        ? 'text-slate-500'
-                                                                        : 'text-slate-400'
-                                                                }`}
-                                                            >
-                                                                {formatDisplayDate(post.date)}{' '}
-                                                                <span className="font-normal">
-                                                                    ({post.readMins} mins) •{' '}
-                                                                    {latestBlog.views.toLocaleString()}{' '}
-                                                                    {latestBlog.views === 1
-                                                                        ? 'view'
-                                                                        : 'views'}
-                                                                </span>
-                                                            </p>
-                                                        </div>
-
-                                                        <div className="flex justify-between items-start min-h-[4rem]">
-                                                            <h3 className="card-title text-2xl">
-                                                                {post.title}
-                                                            </h3>
-                                                        </div>
-
-                                                        <p className="card-text flex-grow break-words">
-                                                            {post.hook}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        );
-                                    })()
-                                ) : (
-                                    <div
-                                        className={`flex-grow rounded-xl animate-pulse ${theme === 'light' ? 'bg-white' : 'bg-[#1a1f2e]'}`}
-                                    />
-                                )}
                             </div>
                         </motion.div>
                     </motion.div>

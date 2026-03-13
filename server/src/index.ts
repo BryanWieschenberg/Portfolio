@@ -4,7 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { initDB } from './lib/db.js';
 import githubRoutes from './routes/github.js';
-import blogRoutes from './routes/blog.js';
+// import blogRoutes from './routes/blog.js';
 import contactRoutes from './routes/contact.js';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
@@ -30,8 +30,8 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(limiter);
 
 app.use('/api/github', githubRoutes);
-app.use('/api/blog', blogRoutes);
 app.use('/api/contact', contactRoutes);
+// app.use('/api/blog', blogRoutes);
 
 app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });

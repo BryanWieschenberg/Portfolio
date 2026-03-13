@@ -64,7 +64,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, variants }) => {
                 ${theme === 'light' ? 'bg-white' : 'bg-[#111318]/95 border border-slate-700/50'}`}
             >
                 <div className="flex justify-between items-center mb-1">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 mt-1 mb-2">
                         <img
                             src={`/artifacts/projects/${slug}/icon.png`}
                             alt={`${project.name} logo`}

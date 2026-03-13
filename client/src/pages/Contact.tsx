@@ -357,8 +357,8 @@ const Contact: React.FC = () => {
                                     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-colors duration-300 
                                         ${
                                             theme === 'light'
-                                                ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300'
-                                                : 'bg-[#1e2330] text-slate-300 hover:text-white border border-slate-700 hover:border-slate-500'
+                                                ? 'bg-slate-100 text-slate-700 border border-slate-300'
+                                                : 'bg-[#1e2330] text-slate-300 border border-slate-700 hover:border-slate-500'
                                         }`}
                                 >
                                     <span className="text-xl flex-shrink-0">{s.icon}</span>

@@ -843,23 +843,7 @@ export const skills: Record<SkillCategory, Skill[]> = {
 
 export const blogPosts: BlogPost[] = [
     {
-        title: 'My HackTCNJ 2026 Experience',
-        slug: 'hacktcnj',
-        date: '3/2/2026',
-        readMins: '10',
-        topic: 'Project',
-        hook: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-    },
-    {
-        title: 'The Future of Software Engineering',
-        slug: 'ai',
-        date: '2/27/2026',
-        readMins: '10',
-        topic: 'Opinion',
-        hook: '...',
-    },
-    {
-        title: 'The Making of GoalGetter: My First Production App',
+        title: 'GoalGetter: The Making of My First Production App',
         slug: 'goalgetter',
         date: '2/23/2026',
         readMins: '10',

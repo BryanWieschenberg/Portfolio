@@ -1,1 +1,1 @@
-export const validSlugs = ['hacktcnj', 'ai', 'goalgetter'];
+export const validSlugs = [];
