@@ -14,11 +14,11 @@ _A visual showcase of my work as an engineer._
 
 ## Overview
 
-This portfolio website provides a comprehensive look at my projects, experience, skills, and thoughts captured through blog posts. It uses polished visuals and animations, and a lightweight backend to add additional features to enhance the viewing experience.
+This portfolio website provides a comprehensive look at my projects, experience, and skills. It uses polished visuals and animations, and a lightweight backend to add additional features to enhance the viewing experience.
 
 ## Key Features
 
-- **Everything in One Place:** An easily explorable UI allowing easy exploration of detailed work pages, advanced sorting and filtering, and blog posts. Both light and dark themes are supported.
+- **Everything in One Place:** An easily explorable UI allowing easy exploration of detailed work pages, and advanced sorting and filtering. Both light and dark themes are supported.
 - **Polished Environment:** Interact with practically every UI element and enjoy a wealth of micro-animations that make the app feel truly alive.
 - **Optimized Performance:** Smooth rendering capabilities powered by natively optimized visuals and optimized build strategies.
 - **Rock-Solid Security:** Protected API endpoints to ensure safety and stability.

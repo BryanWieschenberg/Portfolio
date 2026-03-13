@@ -414,7 +414,7 @@ export const projects: Project[] = [
         ],
         intro: 'I wanted a space where I could show my work, who I am, and have a place to voice all of my thoughts. So I built this website!',
         desc: 'A digital showcase built as a web application. It uses easily digestible visuals to communicate everyone you’d want to know about me, all in one place.',
-        feats: '• Polished Environment: Interact with practically every UI element and enjoy a wealth of micro-animations. Both light and dark themes are supported.\n• Detailed Showcasing: Detailed project and experience pages, advanced sorting and filtering, blog posts, and rich media interactions\n• Robust Security: CORS, Helmet header protection, and rate limiting baked in\n• Optimized Performance: Optimized background rendering and optimized build strategies',
+        feats: '• Polished Environment: Interact with practically every UI element and enjoy a wealth of micro-animations. Both light and dark themes are supported.\n• Detailed Showcasing: Detailed project and experience pages, advanced sorting and filtering, and rich media interactions\n• Robust Security: CORS, Helmet header protection, and rate limiting baked in\n• Optimized Performance: Optimized background rendering and optimized build strategies',
         res: '• Engaging UX: Polished, interactive elements that actively encourage visitors to explore deeper\n• Instant Load Times: Fast initial load time through optimized build pipelines\n• Airtight Security: Protected APIs with multiple measures in place to ensure safety and stability',
         skills: {
             Frontend: {
