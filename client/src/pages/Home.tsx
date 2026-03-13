@@ -61,12 +61,22 @@ const Home: React.FC = () => {
 
     useEffect(() => {
         if (githubData && isIntroComplete && githubScrollRef.current) {
-            const timeoutId = setTimeout(() => {
+            const scrollToEnd = () => {
                 if (githubScrollRef.current) {
                     githubScrollRef.current.scrollLeft = githubScrollRef.current.scrollWidth;
                 }
-            }, 50);
-            return () => clearTimeout(timeoutId);
+            };
+
+            // Initial scroll
+            const timeoutId = setTimeout(scrollToEnd, 100);
+
+            // Also listen for resize to keep it right-aligned if it was at the end
+            window.addEventListener('resize', scrollToEnd);
+
+            return () => {
+                clearTimeout(timeoutId);
+                window.removeEventListener('resize', scrollToEnd);
+            };
         }
     }, [githubData, isIntroComplete]);
 
@@ -391,11 +401,11 @@ const Home: React.FC = () => {
                         whileInView="visible"
                         viewport={{ once: true, margin: '-100px' }}
                         variants={containerVariants}
-                        className="w-fit mx-auto"
+                        className="w-full lg:w-fit mx-auto"
                     >
                         <motion.div
                             variants={itemVariants}
-                            className={`flex flex-col gap-8 p-6 rounded-2xl h-full ${
+                            className={`flex flex-col gap-8 p-6 rounded-2xl h-full max-w-full ${
                                 theme === 'light'
                                     ? 'bg-slate-200/80 shadow-md'
                                     : 'bg-[#111318]/95 border border-slate-700/50 shadow-2xl'
@@ -413,7 +423,7 @@ const Home: React.FC = () => {
                                             {githubData.totalContributions} contributions in the
                                             last year
                                         </p>
-                                        <div className="flex">
+                                        <div className="flex min-w-0">
                                             <div className="flex flex-col gap-1 mt-[18px] text-[10px] text-slate-400 mr-2 flex-shrink-0 font-medium">
                                                 <span className="h-[10px] leading-[10px] invisible">
                                                     S
@@ -434,7 +444,7 @@ const Home: React.FC = () => {
 
                                             <div
                                                 ref={githubScrollRef}
-                                                className="flex flex-col overflow-x-auto pb-4 pt-1 -mt-1 scrollbar-hide flex-1"
+                                                className="flex flex-col overflow-x-auto pb-4 pt-1 -mt-1 flex-1"
                                             >
                                                 <div className="flex text-[10px] font-medium text-slate-400 mb-1 h-[14px]">
                                                     {githubData.weeks.map((week, i) => {
