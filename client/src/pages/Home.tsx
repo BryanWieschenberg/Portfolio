@@ -206,7 +206,7 @@ const Home: React.FC = () => {
                                         Bryan
                                     </span>
                                     <motion.span
-                                        className={`inline-block cursor-grab origin-[70%_70%] bg-clip-text text-transparent bg-gradient-to-r ${theme === 'light' ? 'from-[#2f6aeb] to-[#2563eb]' : 'from-[#69f1ff] to-[#6cf4ff]'}`}
+                                        className={`inline-block cursor-grab origin-[70%_70%] bg-clip-text text-transparent bg-gradient-to-r py-1 ${theme === 'light' ? 'from-[#2f6aeb] to-[#2563eb]' : 'from-[#69f1ff] to-[#6cf4ff]'}`}
                                         whileHover={{ rotate: [0, 25, 0] }}
                                         transition={{ duration: 0.5, repeat: Infinity }}
                                     >
