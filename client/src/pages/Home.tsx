@@ -191,7 +191,7 @@ const Home: React.FC = () => {
             <div
                 className={`main-content relative z-[95] flex flex-col lg:flex-row items-center justify-center pt-6 lg:pt-10 w-full transition-all duration-300 ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}
             >
-                <div className="flex flex-col lg:flex-row items-center justify-center container mx-auto px-4 lg:px-20 max-w-7xl">
+                <div className="flex flex-col lg:flex-row items-center justify-center container mx-auto px-4 lg:px-20 max-w-6xl lg:gap-20">
                     <div className="text-center lg:text-left lg:w-3/5 flex flex-col items-center lg:items-start">
                         <div className="mt-4">
                             <SwipeReveal onComplete={() => setIsIntroComplete(true)}>
@@ -310,7 +310,7 @@ const Home: React.FC = () => {
                         </AnimatePresence>
                     </div>
 
-                    <div className="flex justify-center items-center mt-12 lg:mt-0 lg:w-2/5 w-full">
+                    <div className="flex justify-center items-center mt-12 lg:mt-0 lg:w-2/5 w-full shrink-0">
                         <AnimatePresence>
                             {isIntroComplete && (
                                 <motion.div
@@ -405,7 +405,7 @@ const Home: React.FC = () => {
                     >
                         <motion.div
                             variants={itemVariants}
-                            className={`flex flex-col gap-8 p-6 rounded-2xl h-full max-w-full ${
+                            className={`flex flex-col gap-8 p-6 rounded-2xl h-full max-w-full overflow-hidden ${
                                 theme === 'light'
                                     ? 'bg-slate-200/80 shadow-md'
                                     : 'bg-[#111318]/95 border border-slate-700/50 shadow-2xl'
@@ -539,7 +539,7 @@ const Home: React.FC = () => {
                                 )}
                             </div>
 
-                            <div className="flex flex-col flex-1">
+                            <div className="flex flex-col flex-1 w-0 min-w-full overflow-hidden">
                                 <h3 className="card-title text-2xl mb-4 flex items-center gap-2">
                                     Recent Commits
                                 </h3>
@@ -551,7 +551,7 @@ const Home: React.FC = () => {
                                                   href={commit.url}
                                                   target="_blank"
                                                   rel="noopener noreferrer"
-                                                  className={`block py-2 px-3 rounded-xl transition-all ${
+                                                  className={`block py-2 px-3 rounded-xl transition-all overflow-hidden min-w-0 ${
                                                       theme === 'light'
                                                           ? 'bg-white hover:shadow-md'
                                                           : 'bg-[#1a1f2e] hover:bg-[#252b3b]'
