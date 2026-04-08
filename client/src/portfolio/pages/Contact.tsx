@@ -98,7 +98,7 @@ const Contact: React.FC = () => {
     const openTo = [
         {
             icon: <FaBriefcase />,
-            title: 'Full-Time Toles',
+            title: 'Full-Time Roles',
             desc: 'Full-stack, backend, or DevOps roles',
         },
         {
